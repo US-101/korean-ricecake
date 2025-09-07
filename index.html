@@ -3,125 +3,161 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>韓文發音點擊練習（GitHub Pages 版）</title>
+<title>韓文發音點擊練習 v2（每字母 3 個單字）</title>
 <style>
-  :root{--bg:#f7f7f8;--card:#ffffff;--text:#1f2328;--muted:#6a737d;--border:#e5e7eb;}
+  :root{--bg:#f7f7f8;--card:#ffffff;--text:#1f2328;--muted:#6a737d;--border:#e5e7eb;--chip:#eef2ff;}
   *{box-sizing:border-box}
   body{margin:0;font-family:ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text);}
   header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,#fff,rgba(255,255,255,.85));backdrop-filter:blur(6px);border-bottom:1px solid var(--border);}
-  .wrap{max-width:1000px;margin:0 auto;padding:16px 20px;}
+  .wrap{max-width:1100px;margin:0 auto;padding:16px 20px;}
   h1{font-size:20px;margin:0 0 8px 0;}
   .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:14px;}
   .control{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;}
-  .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));padding:20px;}
-  button.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;cursor:pointer;transition:transform .05s ease, box-shadow .15s ease;width:100%;text-align:left}
-  .card:active{transform:scale(.98)}
-  .tag{font-size:12px;color:#0f172a;background:#e2e8f0;padding:2px 6px;border-radius:8px;display:inline-block;margin-bottom:8px;}
-  .symbol{font-size:40px;line-height:1;margin:4px 0 6px 0;}
-  .roman{font-size:12px;color:var(--muted);}
-  .example{margin-top:8px;font-size:16px;}
-  .example small{color:var(--muted);font-size:12px;}
-  .legend{font-size:13px;color:var(--muted);margin-top:4px;}
+  .legend{font-size:13px;color:var(--muted);margin:16px 0 0;}
+  .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));padding:16px 0 24px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
+  .hdr{display:flex;align-items:center;justify-content:space-between}
+  .tag{font-size:12px;color:#0f172a;background:#e2e8f0;padding:2px 6px;border-radius:8px;display:inline-block;}
+  .symbolWrap{cursor:pointer}
+  .symbol{font-size:40px;line-height:1;margin:0}
+  .roman{font-size:12px;color:var(--muted);text-align:right}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .chip{border:1px solid var(--border);background:var(--chip);padding:8px 10px;border-radius:999px;cursor:pointer;font-size:14px;display:inline-flex;gap:6px;align-items:baseline}
+  .chip small{font-size:12px;color:var(--muted)}
   footer{padding:24px;text-align:center;color:var(--muted);font-size:12px;}
-  .hint{font-size:12px;color:var(--muted);margin-top:10px;}
   .warn{background:#fff3cd;color:#8a6d3b;border:1px solid #ffeeba;padding:10px 12px;border-radius:10px;margin:8px 0;font-size:13px;}
 </style>
 </head>
 <body>
 <header>
   <div class="wrap">
-    <h1>韓文發音點擊練習</h1>
-    <div class="warn">若點擊沒有聲音：請先點「測試語音」喚醒語音引擎，並確認裝置未靜音。</div>
+    <h1>韓文發音點擊練習 v2（每字母 3 個單字）</h1>
+    <div class="warn">提示：點卡片右上的字母可聽單一音節；下方三個「單字籽粒」可各自發音。若無聲音，先點「測試語音」。</div>
     <div class="controls">
       <label class="control"><input type="checkbox" id="slowRate" />慢速播放</label>
       <label class="control"><input type="checkbox" id="repeatTwice" />重複兩次</label>
-      <button class="control" id="testVoice" title="測試目前語音">測試語音（안녕하세요）</button>
-      <span class="hint">點任何卡片即可朗讀；子音唸「示例字」，母音唸「母音音節（如 아, 야）」。</span>
+      <button class="control" id="testVoice">測試語音（안녕하세요）</button>
     </div>
   </div>
 </header>
 
 <main class="wrap">
   <section>
-    <div class="legend">子音（點擊唸例字）</div>
-    <div class="grid" id="consonants">
-      <button class="card" data-say="가"><div class="tag">子音</div><div class="symbol">ㄱ</div><div class="roman">g/k</div><div class="example"><b>가다</b> <small>（去）</small></div></button>
-      <button class="card" data-say="나"><div class="tag">子音</div><div class="symbol">ㄴ</div><div class="roman">n</div><div class="example"><b>나라</b> <small>（國家）</small></div></button>
-      <button class="card" data-say="다"><div class="tag">子音</div><div class="symbol">ㄷ</div><div class="roman">d/t</div><div class="example"><b>다리</b> <small>（腿/橋）</small></div></button>
-      <button class="card" data-say="라"><div class="tag">子音</div><div class="symbol">ㄹ</div><div class="roman">r/l</div><div class="example"><b>라디오</b> <small>（收音機）</small></div></button>
-      <button class="card" data-say="마"><div class="tag">子音</div><div class="symbol">ㅁ</div><div class="roman">m</div><div class="example"><b>머리</b> <small>（頭）</small></div></button>
-      <button class="card" data-say="바"><div class="tag">子音</div><div class="symbol">ㅂ</div><div class="roman">b/p</div><div class="example"><b>바다</b> <small>（海）</small></div></button>
-      <button class="card" data-say="사"><div class="tag">子音</div><div class="symbol">ㅅ</div><div class="roman">s</div><div class="example"><b>사람</b> <small>（人）</small></div></button>
-      <button class="card" data-say="아"><div class="tag">子音</div><div class="symbol">ㅇ</div><div class="roman">ng/Ø</div><div class="example"><b>아이</b> <small>（小孩）</small></div></button>
-      <button class="card" data-say="자"><div class="tag">子音</div><div class="symbol">ㅈ</div><div class="roman">j</div><div class="example"><b>자다</b> <small>（睡覺）</small></div></button>
-      <button class="card" data-say="차"><div class="tag">子音</div><div class="symbol">ㅊ</div><div class="roman">ch</div><div class="example"><b>차</b> <small>（車）</small></div></button>
-      <button class="card" data-say="카"><div class="tag">子音</div><div class="symbol">ㅋ</div><div class="roman">k</div><div class="example"><b>코</b> <small>（鼻子）</small></div></button>
-      <button class="card" data-say="타"><div class="tag">子音</div><div class="symbol">ㅌ</div><div class="roman">t</div><div class="example"><b>토마토</b> <small>（番茄）</small></div></button>
-      <button class="card" data-say="파"><div class="tag">子音</div><div class="symbol">ㅍ</div><div class="roman">p</div><div class="example"><b>피자</b> <small>（披薩）</small></div></button>
-      <button class="card" data-say="하"><div class="tag">子音</div><div class="symbol">ㅎ</div><div class="roman">h</div><div class="example"><b>하늘</b> <small>（天空）</small></div></button>
-    </div>
+    <div class="legend">子音</div>
+    <div class="grid" id="consonants"></div>
   </section>
-
   <section>
-    <div class="legend">母音（點擊唸母音音節）</div>
-    <div class="grid" id="vowels">
-      <button class="card" data-say="아"><div class="tag">母音</div><div class="symbol">ㅏ</div><div class="roman">a</div><div class="example"><b>사과</b> <small>（蘋果）</small></div></button>
-      <button class="card" data-say="야"><div class="tag">母音</div><div class="symbol">ㅑ</div><div class="roman">ya</div><div class="example"><b>야구</b> <small>（棒球）</small></div></button>
-      <button class="card" data-say="어"><div class="tag">母音</div><div class="symbol">ㅓ</div><div class="roman">eo</div><div class="example"><b>서울</b> <small>（首爾）</small></div></button>
-      <button class="card" data-say="여"><div class="tag">母音</div><div class="symbol">ㅕ</div><div class="roman">yeo</div><div class="example"><b>여자</b> <small>（女人）</small></div></button>
-      <button class="card" data-say="오"><div class="tag">母音</div><div class="symbol">ㅗ</div><div class="roman">o</div><div class="example"><b>오이</b> <small>（小黃瓜）</small></div></button>
-      <button class="card" data-say="요"><div class="tag">母音</div><div class="symbol">ㅛ</div><div class="roman">yo</div><div class="example"><b>요리</b> <small>（料理）</small></div></button>
-      <button class="card" data-say="우"><div class="tag">母音</div><div class="symbol">ㅜ</div><div class="roman">u</div><div class="example"><b>우유</b> <small>（牛奶）</small></div></button>
-      <button class="card" data-say="유"><div class="tag">母音</div><div class="symbol">ㅠ</div><div class="roman">yu</div><div class="example"><b>유리</b> <small>（玻璃）</small></div></button>
-      <button class="card" data-say="으"><div class="tag">母音</div><div class="symbol">ㅡ</div><div class="roman">eu</div><div class="example"><b>그늘</b> <small>（陰影）</small></div></button>
-      <button class="card" data-say="이"><div class="tag">母音</div><div class="symbol">ㅣ</div><div class="roman">i</div><div class="example"><b>이름</b> <small>（名字）</small></div></button>
-    </div>
+    <div class="legend">母音</div>
+    <div class="grid" id="vowels"></div>
   </section>
 </main>
 
-<footer>Web Speech API 語音合成（ko-KR）。若無聲音，請用 Safari/Chrome 並允許音訊；iOS 需先點「測試語音」喚醒。</footer>
+<footer>Web Speech API（ko-KR）。iPhone 請先點「測試語音」以解鎖。</footer>
 
 <script>
-(function(){
-  function pickKoreanVoice(){
-    const voices = speechSynthesis.getVoices();
-    const ko = voices.filter(v => /ko|Korean/i.test(v.lang));
-    return ko[0] || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ko'));
+const data = {
+  consonants: [
+    {sym:"ㄱ", roman:"g/k", say:"가", words:[["가다","去"],["고기","肉"],["가족","家族"]]},
+    {sym:"ㄴ", roman:"n",   say:"나", words:[["나라","國家"],["노래","歌曲"],["눈","眼睛"]]},
+    {sym:"ㄷ", roman:"d/t", say:"다", words:[["다리","腿/橋"],["도서관","圖書館"],["달","月亮"]]},
+    {sym:"ㄹ", roman:"r/l", say:"라", words:[["라디오","收音機"],["로봇","機器人"],["리본","緞帶"]]},
+    {sym:"ㅁ", roman:"m",   say:"마", words:[["머리","頭"],["물","水"],["멀다","遠"]]},
+    {sym:"ㅂ", roman:"b/p", say:"바", words:[["바다","海"],["바보","傻瓜"],["빵","麵包"]]},
+    {sym:"ㅅ", roman:"s",   say:"사", words:[["사람","人"],["사과","蘋果"],["시간","時間"]]},
+    {sym:"ㅇ", roman:"ng/Ø",say:"아", words:[["아이","小孩"],["얼굴","臉"],["운동","運動"]]},
+    {sym:"ㅈ", roman:"j",   say:"자", words:[["자다","睡覺"],["지갑","錢包"],["전화","電話"]]},
+    {sym:"ㅊ", roman:"ch",  say:"차", words:[["차","車"],["친구","朋友"],["책","書"]]},
+    {sym:"ㅋ", roman:"k",   say:"카", words:[["코","鼻子"],["카페","咖啡館"],["쿠키","餅乾"]]},
+    {sym:"ㅌ", roman:"t",   say:"타", words:[["토마토","番茄"],["티셔츠","T恤"],["토끼","兔子"]]},
+    {sym:"ㅍ", roman:"p",   say:"파", words:[["피자","披薩"],["포도","葡萄"],["편지","信"]]},
+    {sym:"ㅎ", roman:"h",   say:"하", words:[["하늘","天空"],["학교","學校"],["하루","一天"]]}
+  ],
+  vowels: [
+    {sym:"ㅏ", roman:"a",  say:"아", words:[["아기","嬰兒"],["바다","海"],["사탕","糖果"]]},
+    {sym:"ㅑ", roman:"ya", say:"야", words:[["야구","棒球"],["약","藥"],["양말","襪子"]]},
+    {sym:"ㅓ", roman:"eo", say:"어", words:[["서울","首爾"],["버스","公車"],["전화","電話"]]},
+    {sym:"ㅕ", roman:"yeo",say:"여", words:[["여자","女人"],["여행","旅行"],["영화","電影"]]},
+    {sym:"ㅗ", roman:"o",  say:"오", words:[["오이","小黃瓜"],["손","手"],["도로","道路"]]},
+    {sym:"ㅛ", roman:"yo", say:"요", words:[["요리","料理"],["교실","教室"],["표","票"]]},
+    {sym:"ㅜ", roman:"u",  say:"우", words:[["우유","牛奶"],["문","門"],["구두","皮鞋"]]},
+    {sym:"ㅠ", roman:"yu", say:"유", words:[["유리","玻璃"],["휴지","衛生紙"],["규칙","規則"]]},
+    {sym:"ㅡ", roman:"eu", say:"으", words:[["은행","銀行"],["으깨다","壓碎"],["으레","理所當然"]]},
+    {sym:"ㅣ", roman:"i",  say:"이", words:[["이름","名字"],["시간","時間"],["비","雨"]]}
+  ]
+};
+
+function card(item, kind){
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.innerHTML = `
+    <div class="hdr">
+      <span class="tag">${kind}</span>
+      <div class="symbolWrap" data-say="${item.say}" title="點我發音：${item.say}">
+        <div class="symbol">${item.sym}</div>
+        <div class="roman">${item.roman}</div>
+      </div>
+    </div>
+    <div class="chips"></div>
+  `;
+  const chips = el.querySelector('.chips');
+  item.words.forEach(([kr, zh]) => {
+    const b = document.createElement('button');
+    b.className = 'chip';
+    b.setAttribute('data-say', kr);
+    b.innerHTML = `<b>${kr}</b> <small>（${zh}）</small>`;
+    chips.appendChild(b);
+  });
+  return el;
+}
+
+function render(){
+  const c = document.getElementById('consonants');
+  const v = document.getElementById('vowels');
+  data.consonants.forEach(it => c.appendChild(card(it,'子音')));
+  data.vowels.forEach(it => v.appendChild(card(it,'母音')));
+}
+
+let voice = null;
+function pickKoreanVoice(){
+  const list = speechSynthesis.getVoices();
+  const ko = list.filter(v => /ko|Korean/i.test(v.lang));
+  return ko[0] || list.find(v => v.lang && v.lang.toLowerCase().startsWith('ko'));
+}
+function speak(t){
+  const u = new SpeechSynthesisUtterance(t);
+  voice = voice || pickKoreanVoice();
+  if(voice) u.voice = voice;
+  u.lang = 'ko-KR';
+  u.rate = document.getElementById('slowRate').checked ? 0.75 : 1.0;
+  const twice = document.getElementById('repeatTwice').checked;
+  if(twice){
+    u.onend = () => {
+      const u2 = new SpeechSynthesisUtterance(t);
+      if(voice) u2.voice = voice;
+      u2.lang = 'ko-KR'; u2.rate = u.rate;
+      speechSynthesis.speak(u2);
+    };
   }
-  let voice = null;
-  function speak(t){
-    const u = new SpeechSynthesisUtterance(t);
-    voice = voice || pickKoreanVoice();
-    if(voice) u.voice = voice;
-    u.lang = 'ko-KR';
-    u.rate = document.getElementById('slowRate').checked ? 0.75 : 1.0;
-    const twice = document.getElementById('repeatTwice').checked;
-    if(twice){
-      u.onend = () => {
-        const u2 = new SpeechSynthesisUtterance(t);
-        if(voice) u2.voice = voice;
-        u2.lang = 'ko-KR'; u2.rate = u.rate;
-        speechSynthesis.speak(u2);
-      };
-    }
-    speechSynthesis.speak(u);
-  }
-  document.getElementById('testVoice').addEventListener('click', () => speak('안녕하세요'));
-  document.addEventListener('click', e => {
-    const btn = e.target.closest('button.card');
-    if(!btn) return;
-    const say = btn.getAttribute('data-say');
-    if(say) speak(say);
-  }, false);
-  // iOS unlock
-  document.addEventListener('touchstart', function once(){
-    const u = new SpeechSynthesisUtterance('');
-    speechSynthesis.speak(u);
-    document.removeEventListener('touchstart', once);
-  }, {passive:true});
-  // in case voices load late
-  window.speechSynthesis.onvoiceschanged = () => { voice = pickKoreanVoice(); };
-})();
+  speechSynthesis.speak(u);
+}
+
+document.addEventListener('click', (e) => {
+  const chip = e.target.closest('.chip');
+  if(chip){ speak(chip.getAttribute('data-say')); return; }
+  const sym = e.target.closest('.symbolWrap');
+  if(sym){ speak(sym.getAttribute('data-say')); return; }
+});
+document.getElementById('testVoice').addEventListener('click', ()=>speak('안녕하세요'));
+window.speechSynthesis.onvoiceschanged = () => { voice = pickKoreanVoice(); };
+
+// iOS unlock
+document.addEventListener('touchstart', function once(){
+  const u = new SpeechSynthesisUtterance('');
+  speechSynthesis.speak(u);
+  document.removeEventListener('touchstart', once);
+},{passive:true});
+
+render();
 </script>
 </body>
 </html>
