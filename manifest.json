@@ -1,8 +1,8 @@
 {
   "name": "韓文學習",
   "short_name": "韓文學習",
-  "start_url": "/index.html",
-  "scope": "/",
+  "start_url": "/korean-pronunciation/index.html",
+  "scope": "/korean-pronunciation/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
