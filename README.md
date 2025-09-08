@@ -1,9 +1,11 @@
-# 韓文發音點擊練習
+# 韓文學習網站（多頁版）
+- `index.html`：發音練習（每字母 3 單字，可發音）
+- `travel.html`：旅遊會話（分類句庫，可發音）
+- `styles.css`：共用樣式
 
-- 直接把 `index.html` 上傳到 GitHub Repo 的根目錄。
-- 打開 **Settings → Pages**：
-  - 架設來源 Source 選 **Deploy from a branch**
-  - Branch 選 **main**，Folder 選 **/** (root)
-- 儲存後，幾十秒後就能在 `https://<你的帳號>.github.io/<repo 名稱>/` 使用。
+## 發佈到 GitHub Pages
+1. 把三個檔案上傳到 repo 根目錄。
+2. Settings → Pages：Source = Deploy from a branch；Branch = main；Folder = /(root)。
+3. 網址：`https://<你的帳號>.github.io/<repo 名稱>/`（發音頁），`.../travel.html`（旅遊會話頁）。
 
-> iOS 初次進入請先點「測試語音（안녕하세요）」喚醒語音合成。
+> iOS 請先按「測試語音」喚醒語音合成；若沒聲音，確認裝置未靜音。

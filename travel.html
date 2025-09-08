@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>韓文學習｜旅遊會話</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>韓文學習｜旅遊會話</h1>
+    <div class="nav">
+      <a href="index.html">發音練習</a>
+      <a class="active" href="travel.html">旅遊會話</a>
+    </div>
+    <div class="controls">
+      <label class="control"><input type="checkbox" id="slowRate" />慢速播放</label>
+      <label class="control"><input type="checkbox" id="repeatTwice" />重複兩次</label>
+      <button class="control" id="testVoice">測試語音（안녕하세요）</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="section">
+    <div class="legend">機場/入境</div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
+      <div class="phrase">
+        <div class="row"><span class="krl">출구는 어디예요?</span><button class="btn" data-say="출구는 어디예요?">發音</button></div>
+        <div class="zh">出口在哪裡？</div>
+      </div>
+      <div class="phrase">
+        <div class="row"><span class="krl">환전하는 곳이 있어요?</span><button class="btn" data-say="환전하는 곳이 있어요?">發音</button></div>
+        <div class="zh">有換錢的地方嗎？</div>
+      </div>
+      <div class="phrase">
+        <div class="row"><span class="krl">유심은 어디서 사요?</span><button class="btn" data-say="유심은 어디서 사요?">發音</button></div>
+        <div class="zh">SIM卡在哪裡買？</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="legend">交通/問路</div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
+      <div class="phrase">
+        <div class="row"><span class="krl">이 버스는 시내에 가요?</span><button class="btn" data-say="이 버스는 시내에 가요?">發音</button></div>
+        <div class="zh">這班公車有到市區嗎？</div>
+      </div>
+      <div class="phrase">
+        <div class="row"><span class="krl">지하철역은 어디에 있어요?</span><button class="btn" data-say="지하철역은 어디에 있어요?">發音</button></div>
+        <div class="zh">地鐵站在哪裡？</div>
+      </div>
+      <div class="phrase">
+        <div class="row"><span class="krl">카카오택시로 불러 주세요.</span><button class="btn" data-say="카카오택시로 불러 주세요.">發音</button></div>
+        <div class="zh">請幫我叫 Kakao 計程車。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="legend">餐廳/點餐</div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
+      <div class="phrase">
+        <div class="row"><span class="krl">추천 메뉴가 뭐예요?</span><button class="btn" data-say="추천 메뉴가 뭐예요?">發音</button></div>
+        <div class="zh">有推薦的餐點嗎？</div>
+      </div>
+      <div class="phrase">
+        <div class="row"><span class="krl">덜 매운 걸로 해 주세요.</span><button class="btn" data-say="덜 매운 걸로 해 주세요.">發音</button></div>
+        <div class="zh">可以做不那麼辣嗎？</div>
+      </div>
+      <div class="phrase">
+        <div class="row"><span class="krl">계산서 따로 해 주세요.</span><button class="btn" data-say="계산서 따로 해 주세요.">發音</button></div>
+        <div class="zh">請分開結帳。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="legend">購物/結帳</div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
+      <div class="phrase">
+        <div class="row"><span class="krl">이거 다른 색 있어요?</span><button class="btn" data-say="이거 다른 색 있어요?">發音</button></div>
+        <div class="zh">這個有別的顏色嗎？</div>
+      </div>
+      <div class="phrase">
+        <div class="row"><span class="krl">카드 결제 돼요?</span><button class="btn" data-say="카드 결제 돼요?">發音</button></div>
+        <div class="zh">可以刷卡嗎？</div>
+      </div>
+      <div class="phrase">
+        <div class="row"><span class="krl">면세 환급은 어디서 받아요?</span><button class="btn" data-say="면세 환급은 어디서 받아요?">發音</button></div>
+        <div class="zh">退稅在哪裡辦？</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="legend">緊急/求助</div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
+      <div class="phrase">
+        <div class="row"><span class="krl">도와 주세요!</span><button class="btn" data-say="도와 주세요!">發音</button></div>
+        <div class="zh">請幫幫我！</div>
+      </div>
+      <div class="phrase">
+        <div class="row"><span class="krl">여기 병원이 가까워요?</span><button class="btn" data-say="여기 병원이 가까워요?">發音</button></div>
+        <div class="zh">附近有醫院嗎？</div>
+      </div>
+      <div class="phrase">
+        <div class="row"><span class="krl">여권을 잃어버렸어요.</span><button class="btn" data-say="여권을 잃어버렸어요.">發音</button></div>
+        <div class="zh">我把護照弄丟了。</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>GitHub Pages / Web Speech API（ko-KR）。</footer>
+
+<script>
+function pickKoreanVoice(){
+  const list = speechSynthesis.getVoices();
+  const ko = list.filter(v => /ko|Korean/i.test(v.lang));
+  return ko[0] || list.find(v => v.lang && v.lang.toLowerCase().startsWith('ko'));
+}
+let voice = null;
+function speak(t){
+  const u = new SpeechSynthesisUtterance(t);
+  voice = voice || pickKoreanVoice();
+  if(voice) u.voice = voice;
+  u.lang = 'ko-KR';
+  u.rate = document.getElementById('slowRate').checked ? 0.85 : 1.0;
+  const twice = document.getElementById('repeatTwice').checked;
+  if(twice){
+    u.onend = () => {
+      const u2 = new SpeechSynthesisUtterance(t);
+      if(voice) u2.voice = voice;
+      u2.lang = 'ko-KR'; u2.rate = u.rate;
+      speechSynthesis.speak(u2);
+    };
+  }
+  speechSynthesis.speak(u);
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-say]');
+  if(b) speak(b.getAttribute('data-say'));
+});
+document.getElementById('testVoice').addEventListener('click', ()=>speak('안녕하세요'));
+window.speechSynthesis.onvoiceschanged = () => { voice = pickKoreanVoice(); };
+document.addEventListener('touchstart', function once(){
+  speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+  document.removeEventListener('touchstart', once);
+},{passive:true});
+</script>
+
+</body>
+</html>

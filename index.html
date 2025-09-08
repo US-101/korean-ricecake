@@ -3,36 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>韓文發音點擊練習 v2（每字母 3 個單字）</title>
-<style>
-  :root{--bg:#f7f7f8;--card:#ffffff;--text:#1f2328;--muted:#6a737d;--border:#e5e7eb;--chip:#eef2ff;}
-  *{box-sizing:border-box}
-  body{margin:0;font-family:ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text);}
-  header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,#fff,rgba(255,255,255,.85));backdrop-filter:blur(6px);border-bottom:1px solid var(--border);}
-  .wrap{max-width:1100px;margin:0 auto;padding:16px 20px;}
-  h1{font-size:20px;margin:0 0 8px 0;}
-  .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:14px;}
-  .control{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;}
-  .legend{font-size:13px;color:var(--muted);margin:16px 0 0;}
-  .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));padding:16px 0 24px;}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
-  .hdr{display:flex;align-items:center;justify-content:space-between}
-  .tag{font-size:12px;color:#0f172a;background:#e2e8f0;padding:2px 6px;border-radius:8px;display:inline-block;}
-  .symbolWrap{cursor:pointer}
-  .symbol{font-size:40px;line-height:1;margin:0}
-  .roman{font-size:12px;color:var(--muted);text-align:right}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-  .chip{border:1px solid var(--border);background:var(--chip);padding:8px 10px;border-radius:999px;cursor:pointer;font-size:14px;display:inline-flex;gap:6px;align-items:baseline}
-  .chip small{font-size:12px;color:var(--muted)}
-  footer{padding:24px;text-align:center;color:var(--muted);font-size:12px;}
-  .warn{background:#fff3cd;color:#8a6d3b;border:1px solid #ffeeba;padding:10px 12px;border-radius:10px;margin:8px 0;font-size:13px;}
-</style>
+<title>韓文學習｜發音練習</title>
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 <header>
   <div class="wrap">
-    <h1>韓文發音點擊練習 v2（每字母 3 個單字）</h1>
-    <div class="warn">提示：點卡片右上的字母可聽單一音節；下方三個「單字籽粒」可各自發音。若無聲音，先點「測試語音」。</div>
+    <h1>韓文學習｜發音練習</h1>
+    <div class="nav">
+      <a class="active" href="index.html">發音練習</a>
+      <a href="travel.html">旅遊會話</a>
+    </div>
+    <div class="warn">提示：點字母可聽音節；下方三個單字可各自發音。若無聲音，先點「測試語音」。</div>
     <div class="controls">
       <label class="control"><input type="checkbox" id="slowRate" />慢速播放</label>
       <label class="control"><input type="checkbox" id="repeatTwice" />重複兩次</label>
@@ -52,7 +34,7 @@
   </section>
 </main>
 
-<footer>Web Speech API（ko-KR）。iPhone 請先點「測試語音」以解鎖。</footer>
+<footer>GitHub Pages / Web Speech API（ko-KR）。</footer>
 
 <script>
 const data = {
@@ -149,8 +131,6 @@ document.addEventListener('click', (e) => {
 });
 document.getElementById('testVoice').addEventListener('click', ()=>speak('안녕하세요'));
 window.speechSynthesis.onvoiceschanged = () => { voice = pickKoreanVoice(); };
-
-// iOS unlock
 document.addEventListener('touchstart', function once(){
   const u = new SpeechSynthesisUtterance('');
   speechSynthesis.speak(u);
