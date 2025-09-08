@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>韓文學習｜旅遊會話（餐廳・購物・問路）</title>
+<title>旅遊會話（餐廳・購物・問路）｜卡通英文模式</title>
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -23,8 +23,13 @@
         </select>
       </label>
       <label class="control"><input type="checkbox" id="repeatTwice" />重複兩次</label>
+      <label class="control"><input type="checkbox" id="cartoonEn" />英文卡通模式</label>
+      <span class="small">（卡通模式：pitch↑、更活潑）</span>
+      <label>英文聲音
+        <select id="voiceEn" class="select"><option>載入中…</option></select>
+      </label>
       <button class="control" id="testKo">測試韓文（안녕하세요）</button>
-      <button class="control" id="testEn">測試英文（Hello）</button>
+      <button class="control" id="testEn">測試英文（Hello there!）</button>
     </div>
   </div>
 </header>
@@ -174,7 +179,7 @@
             <button class="btn" data-say-ko="오른쪽으로 가세요.">右</button>
             <button class="btn" data-say-ko="왼쪽으로 가세요.">左</button>
             <button class="btn" data-say-ko="쭉 가세요.">直</button>
-            <button class="btn" data-say-en="Go right / Go left / Go straight.">英</button>
+            <button class="btn" data-say-en="Go right. Go left. Go straight.">英</button>
           </span>
         </div>
         <div class="eng">Go right. / Go left. / Go straight.</div>
@@ -195,26 +200,53 @@ function pickVoice(regex, fallback){
   return list.find(v => (v.lang||"").toLowerCase().startsWith(fallback)) || null;
 }
 let voiceKo=null, voiceEn=null;
+
+function populateEnglishVoices(){
+  const sel = document.getElementById('voiceEn');
+  sel.innerHTML = "";
+  const list = speechSynthesis.getVoices().filter(v => /en/i.test(v.lang||""));
+  if(!list.length){ sel.innerHTML = "<option>找不到英文語音</option>"; return; }
+  list.forEach((v,i)=>{
+    const opt = document.createElement('option');
+    opt.value = v.name;
+    opt.textContent = v.name + " ("+v.lang+")";
+    sel.appendChild(opt);
+    if(i===0) sel.value = v.name;
+  });
+}
+
 function rate(){ return parseFloat(document.getElementById('rate').value||'0.75'); }
 function repeatHook(u, text, lang, voice){
   if(document.getElementById('repeatTwice').checked){
-    u.onend = ()=>{ const u2=new SpeechSynthesisUtterance(text); if(voice) u2.voice=voice; u2.lang=lang; u2.rate=u.rate; speechSynthesis.speak(u2); };
+    u.onend = ()=>{ const u2=new SpeechSynthesisUtterance(text); if(voice) u2.voice=voice; u2.lang=lang; u2.rate=u.rate; u2.pitch=u.pitch; speechSynthesis.speak(u2); };
   }
 }
+
 function speakKO(text){
   const u = new SpeechSynthesisUtterance(text);
-  voiceKo = voiceKo || pickVoice(/ko|korean/i, 'ko');
+  voiceKo = voiceKo || pickVoice(/ko|korean/i,'ko');
   if(voiceKo) u.voice = voiceKo;
-  u.lang = 'ko-KR'; u.rate = rate();
+  u.lang = 'ko-KR';
+  u.rate = rate();
   repeatHook(u, text, 'ko-KR', voiceKo);
   speechSynthesis.speak(u);
 }
+
 function speakEN(text){
+  const sel = document.getElementById('voiceEn');
+  const chosenName = sel && sel.value;
+  const voices = speechSynthesis.getVoices();
+  voiceEn = voices.find(v => v.name === chosenName) || voiceEn || pickVoice(/en/i,'en');
   const u = new SpeechSynthesisUtterance(text);
-  voiceEn = voiceEn || pickVoice(/en|english/i, 'en');
   if(voiceEn) u.voice = voiceEn;
   u.lang = (voiceEn && voiceEn.lang) ? voiceEn.lang : 'en-US';
   u.rate = rate();
+  if(document.getElementById('cartoonEn').checked){
+    u.pitch = 1.6;   // 提高音高
+    if(u.rate > 0.8) u.rate = 0.85; // 稍慢一點，卡通感
+  } else {
+    u.pitch = 1.0;
+  }
   repeatHook(u, text, u.lang, voiceEn);
   speechSynthesis.speak(u);
 }
@@ -224,12 +256,15 @@ document.addEventListener('click', e => {
   const n = e.target.closest('[data-say-en]'); if(n){ speakEN(n.getAttribute('data-say-en')); return; }
 });
 document.getElementById('testKo').addEventListener('click', ()=>speakKO('안녕하세요'));
-document.getElementById('testEn').addEventListener('click', ()=>speakEN('Hello'));
-window.speechSynthesis.onvoiceschanged = () => { voiceKo = pickVoice(/ko|korean/i,'ko'); voiceEn = pickVoice(/en/i,'en'); };
+document.getElementById('testEn').addEventListener('click', ()=>speakEN('Hello there! I am so happy to see you!'));
+window.speechSynthesis.onvoiceschanged = () => { populateEnglishVoices(); voiceKo = pickVoice(/ko|korean/i,'ko'); voiceEn = pickVoice(/en/i,'en'); };
 document.addEventListener('touchstart', function once(){
   speechSynthesis.speak(new SpeechSynthesisUtterance(''));
   document.removeEventListener('touchstart', once);
 },{passive:true});
+
+// Initialize
+populateEnglishVoices();
 </script>
 
 </body>

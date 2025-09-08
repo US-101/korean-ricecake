@@ -37,3 +37,4 @@ footer{padding:24px;text-align:center;color:var(--muted);font-size:12px}
 .size-grid{display:flex;flex-wrap:wrap;gap:8px}
 .size-chip{padding:8px 10px;border:1px solid var(--border);border-radius:999px;background:#fff;cursor:pointer}
 hr.div{border:none;border-top:1px dashed var(--border);margin:8px 0}
+.small{font-size:12px;color:var(--muted)}

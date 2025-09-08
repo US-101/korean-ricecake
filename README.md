@@ -1,13 +1,14 @@
-# 韓文學習網站 v3
-- `index.html`：發音練習（每字母 3 單字）—新增播放速度選單：超慢 ×0.5 / 慢 ×0.75 / 正常 ×1.0
-- `travel.html`：旅遊會話只保留「餐廳、購物（擴充）、問路」，每句含韓/中/英；韓文與英文皆可點發音
+# 韓文學習網站 v3（卡通英文模式）
+- `index.html`：發音練習（KR TTS；速度 0.5/0.75/1.0；重複兩次）
+- `travel.html`：餐廳/購物/問路（韓中英）；英文新增：
+  - 「英文卡通模式」切換（提高 pitch、微調語速）
+  - 英文 voice 下拉選單（可選擇裝置上可用的英文聲音）
 - `styles.css`：共用樣式
 
-## 發佈到 GitHub Pages
-1. 上傳三個檔案到 repo 根目錄（覆蓋舊檔）。
-2. Settings → Pages：Source = Deploy from a branch；Branch = main；Folder = /(root)。
-3. 網址：
-   - 發音練習：`https://<你的帳號>.github.io/<repo>/`
-   - 旅遊會話：`https://<你的帳號>.github.io/<repo>/travel.html`
+## 使用
+1. 將三個檔案上傳至 GitHub Pages repo 根目錄（覆蓋舊檔）。
+2. 開啟 `.../travel.html` 測試英文：
+   - 勾選「英文卡通模式」→ 再按英語按鈕（或測試英文）。
+   - 若清單沒有英文聲音，請在裝置安裝/下載英文 TTS 聲音後重新整理頁面。
 
-> iOS：請先按「測試韓文／測試英文」喚醒語音合成；若沒聲音，確認裝置未靜音。
+> 完全免費；不使用外部付費 API。卡通效果受限於系統 TTS 可調參數（pitch/voice）。
