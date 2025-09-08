@@ -3,149 +3,229 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>韓文學習｜旅遊會話</title>
+<title>韓文學習｜旅遊會話（餐廳・購物・問路）</title>
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 <header>
   <div class="wrap">
-    <h1>韓文學習｜旅遊會話</h1>
+    <h1>旅遊會話（餐廳・購物・問路）</h1>
     <div class="nav">
       <a href="index.html">發音練習</a>
       <a class="active" href="travel.html">旅遊會話</a>
     </div>
     <div class="controls">
-      <label class="control"><input type="checkbox" id="slowRate" />慢速播放</label>
+      <label>播放速度
+        <select id="rate" class="select">
+          <option value="0.5">超慢 ×0.5</option>
+          <option value="0.75" selected>慢 ×0.75</option>
+          <option value="1.0">正常 ×1.0</option>
+        </select>
+      </label>
       <label class="control"><input type="checkbox" id="repeatTwice" />重複兩次</label>
-      <button class="control" id="testVoice">測試語音（안녕하세요）</button>
+      <button class="control" id="testKo">測試韓文（안녕하세요）</button>
+      <button class="control" id="testEn">測試英文（Hello）</button>
     </div>
   </div>
 </header>
 
 <main class="wrap">
-  <section class="section">
-    <div class="legend">機場/入境</div>
-    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
-      <div class="phrase">
-        <div class="row"><span class="krl">출구는 어디예요?</span><button class="btn" data-say="출구는 어디예요?">發音</button></div>
-        <div class="zh">出口在哪裡？</div>
-      </div>
-      <div class="phrase">
-        <div class="row"><span class="krl">환전하는 곳이 있어요?</span><button class="btn" data-say="환전하는 곳이 있어요?">發音</button></div>
-        <div class="zh">有換錢的地方嗎？</div>
-      </div>
-      <div class="phrase">
-        <div class="row"><span class="krl">유심은 어디서 사요?</span><button class="btn" data-say="유심은 어디서 사요?">發音</button></div>
-        <div class="zh">SIM卡在哪裡買？</div>
-      </div>
-    </div>
-  </section>
 
   <section class="section">
-    <div class="legend">交通/問路</div>
-    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
+    <div class="legend">🍽️ 餐廳 / 點餐</div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(360px,1fr))">
       <div class="phrase">
-        <div class="row"><span class="krl">이 버스는 시내에 가요?</span><button class="btn" data-say="이 버스는 시내에 가요?">發音</button></div>
-        <div class="zh">這班公車有到市區嗎？</div>
-      </div>
-      <div class="phrase">
-        <div class="row"><span class="krl">지하철역은 어디에 있어요?</span><button class="btn" data-say="지하철역은 어디에 있어요?">發音</button></div>
-        <div class="zh">地鐵站在哪裡？</div>
-      </div>
-      <div class="phrase">
-        <div class="row"><span class="krl">카카오택시로 불러 주세요.</span><button class="btn" data-say="카카오택시로 불러 주세요.">發音</button></div>
-        <div class="zh">請幫我叫 Kakao 計程車。</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="legend">餐廳/點餐</div>
-    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
-      <div class="phrase">
-        <div class="row"><span class="krl">추천 메뉴가 뭐예요?</span><button class="btn" data-say="추천 메뉴가 뭐예요?">發音</button></div>
+        <div class="row"><span class="krl">추천 메뉴가 뭐예요?</span>
+          <span>
+            <button class="btn" data-say-ko="추천 메뉴가 뭐예요?">韓</button>
+            <button class="btn" data-say-en="What do you recommend?">英</button>
+          </span>
+        </div>
+        <div class="eng">What do you recommend?</div>
         <div class="zh">有推薦的餐點嗎？</div>
       </div>
       <div class="phrase">
-        <div class="row"><span class="krl">덜 매운 걸로 해 주세요.</span><button class="btn" data-say="덜 매운 걸로 해 주세요.">發音</button></div>
+        <div class="row"><span class="krl">덜 매운 걸로 해 주세요.</span>
+          <span>
+            <button class="btn" data-say-ko="덜 매운 걸로 해 주세요.">韓</button>
+            <button class="btn" data-say-en="Please make it less spicy.">英</button>
+          </span>
+        </div>
+        <div class="eng">Please make it less spicy.</div>
         <div class="zh">可以做不那麼辣嗎？</div>
       </div>
       <div class="phrase">
-        <div class="row"><span class="krl">계산서 따로 해 주세요.</span><button class="btn" data-say="계산서 따로 해 주세요.">發音</button></div>
+        <div class="row"><span class="krl">계산서 따로 해 주세요.</span>
+          <span>
+            <button class="btn" data-say-ko="계산서 따로 해 주세요.">韓</button>
+            <button class="btn" data-say-en="Could we split the bill?">英</button>
+          </span>
+        </div>
+        <div class="eng">Could we split the bill?</div>
         <div class="zh">請分開結帳。</div>
       </div>
     </div>
   </section>
 
   <section class="section">
-    <div class="legend">購物/結帳</div>
-    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
+    <div class="legend">🛍️ 購物 / 詢價・顏色・尺寸・試穿</div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(360px,1fr))">
+      
+      <!-- 顏色：有沒有別的顏色 -->
       <div class="phrase">
-        <div class="row"><span class="krl">이거 다른 색 있어요?</span><button class="btn" data-say="이거 다른 색 있어요?">發音</button></div>
+        <div class="row"><span class="krl">이거 다른 색 있어요?</span>
+          <span>
+            <button class="btn" data-say-ko="이거 다른 색 있어요?">韓</button>
+            <button class="btn" data-say-en="Do you have this in other colors?">英</button>
+          </span>
+        </div>
+        <div class="eng">Do you have this in other colors?</div>
         <div class="zh">這個有別的顏色嗎？</div>
+        <hr class="div"/>
+        <div class="colors">
+          <button class="color-chip" data-say-ko="검은색" data-say-en="black"><span class="color-dot" style="background:#111"></span>검은색 / black</button>
+          <button class="color-chip" data-say-ko="흰색" data-say-en="white"><span class="color-dot" style="background:#fafafa"></span>흰색 / white</button>
+          <button class="color-chip" data-say-ko="빨간색" data-say-en="red"><span class="color-dot" style="background:#ef4444"></span>빨간색 / red</button>
+          <button class="color-chip" data-say-ko="파란색" data-say-en="blue"><span class="color-dot" style="background:#3b82f6"></span>파란색 / blue</button>
+          <button class="color-chip" data-say-ko="초록색" data-say-en="green"><span class="color-dot" style="background:#22c55e"></span>초록색 / green</button>
+          <button class="color-chip" data-say-ko="노란색" data-say-en="yellow"><span class="color-dot" style="background:#facc15"></span>노란색 / yellow</button>
+          <button class="color-chip" data-say-ko="베이지색" data-say-en="beige"><span class="color-dot" style="background:#e6dfcf"></span>베이지색 / beige</button>
+          <button class="color-chip" data-say-ko="회색" data-say-en="gray"><span class="color-dot" style="background:#9ca3af"></span>회색 / gray</button>
+        </div>
       </div>
+
+      <!-- 尺寸：S M L 問答 -->
       <div class="phrase">
-        <div class="row"><span class="krl">카드 결제 돼요?</span><button class="btn" data-say="카드 결제 돼요?">發音</button></div>
-        <div class="zh">可以刷卡嗎？</div>
+        <div class="row"><span class="krl">이거 S, M, L 사이즈 있어요?</span>
+          <span>
+            <button class="btn" data-say-ko="이거 S, M, L 사이즈 있어요?">韓</button>
+            <button class="btn" data-say-en="Do you have this in S, M, or L?">英</button>
+          </span>
+        </div>
+        <div class="eng">Do you have this in S, M, or L?</div>
+        <div class="zh">這個有沒有 S、M、L 之類的尺寸？</div>
+        <hr class="div"/>
+        <div class="size-grid">
+          <button class="size-chip" data-say-ko="스몰 있어요." data-say-en="We have small.">S 有</button>
+          <button class="size-chip" data-say-ko="미디엄 있어요." data-say-en="We have medium.">M 有</button>
+          <button class="size-chip" data-say-ko="라지 있어요." data-say-en="We have large.">L 有</button>
+          <button class="size-chip" data-say-ko="지금은 스몰만 있어요." data-say-en="We only have small right now.">只剩 S</button>
+          <button class="size-chip" data-say-ko="죄송하지만, 그 사이즈는 없어요." data-say-en="Sorry, we don't have that size.">沒有那個尺寸</button>
+        </div>
       </div>
+
+      <!-- 試穿：問 + 回答 -->
       <div class="phrase">
-        <div class="row"><span class="krl">면세 환급은 어디서 받아요?</span><button class="btn" data-say="면세 환급은 어디서 받아요?">發音</button></div>
-        <div class="zh">退稅在哪裡辦？</div>
+        <div class="row"><span class="krl">입어 봐도 돼요?</span>
+          <span>
+            <button class="btn" data-say-ko="입어 봐도 돼요?">韓</button>
+            <button class="btn" data-say-en="May I try it on?">英</button>
+          </span>
+        </div>
+        <div class="eng">May I try it on?</div>
+        <div class="zh">可以試穿嗎？</div>
+        <hr class="div"/>
+        <div class="size-grid">
+          <button class="size-chip" data-say-ko="네, 저쪽 피팅룸에서 가능해요." data-say-en="Yes, the fitting room is over there.">店員：可以</button>
+          <button class="size-chip" data-say-ko="죄송해요, 오늘은 피팅이 어려워요." data-say-en="Sorry, trying on is not available today.">店員：不可以</button>
+        </div>
+      </div>
+
+      <!-- 價格/折扣 -->
+      <div class="phrase">
+        <div class="row"><span class="krl">이거 얼마예요? 할인돼요?</span>
+          <span>
+            <button class="btn" data-say-ko="이거 얼마예요? 할인돼요?">韓</button>
+            <button class="btn" data-say-en="How much is this? Any discount?">英</button>
+          </span>
+        </div>
+        <div class="eng">How much is this? Any discount?</div>
+        <div class="zh">這個多少錢？有折扣嗎？</div>
       </div>
     </div>
   </section>
 
   <section class="section">
-    <div class="legend">緊急/求助</div>
-    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
+    <div class="legend">🧭 問路（拿著圖片問這裡怎麼走）</div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(360px,1fr))">
       <div class="phrase">
-        <div class="row"><span class="krl">도와 주세요!</span><button class="btn" data-say="도와 주세요!">發音</button></div>
-        <div class="zh">請幫幫我！</div>
+        <div class="row"><span class="krl">이 사진처럼 보이는 곳은 어디예요?</span>
+          <span>
+            <button class="btn" data-say-ko="이 사진처럼 보이는 곳은 어디예요?">韓</button>
+            <button class="btn" data-say-en="Where is this place in the photo?">英</button>
+          </span>
+        </div>
+        <div class="eng">Where is this place in the photo?</div>
+        <div class="zh">這張照片裡的地方在哪裡？</div>
       </div>
       <div class="phrase">
-        <div class="row"><span class="krl">여기 병원이 가까워요?</span><button class="btn" data-say="여기 병원이 가까워요?">發音</button></div>
-        <div class="zh">附近有醫院嗎？</div>
+        <div class="row"><span class="krl">여기로 가려면 어떻게 가요?</span>
+          <span>
+            <button class="btn" data-say-ko="여기로 가려면 어떻게 가요?">韓</button>
+            <button class="btn" data-say-en="How do I get here?">英</button>
+          </span>
+        </div>
+        <div class="eng">How do I get here?</div>
+        <div class="zh">要到這裡怎麼走？</div>
       </div>
       <div class="phrase">
-        <div class="row"><span class="krl">여권을 잃어버렸어요.</span><button class="btn" data-say="여권을 잃어버렸어요.">發音</button></div>
-        <div class="zh">我把護照弄丟了。</div>
+        <div class="row"><span class="krl">오른쪽으로 가세요. / 왼쪽으로 가세요. / 쭉 가세요.</span>
+          <span>
+            <button class="btn" data-say-ko="오른쪽으로 가세요.">右</button>
+            <button class="btn" data-say-ko="왼쪽으로 가세요.">左</button>
+            <button class="btn" data-say-ko="쭉 가세요.">直</button>
+            <button class="btn" data-say-en="Go right / Go left / Go straight.">英</button>
+          </span>
+        </div>
+        <div class="eng">Go right. / Go left. / Go straight.</div>
+        <div class="zh">往右走／往左走／直走。</div>
       </div>
     </div>
   </section>
+
 </main>
 
-<footer>GitHub Pages / Web Speech API（ko-KR）。</footer>
+<footer>GitHub Pages / Web Speech API（ko-KR / en-US）。</footer>
 
 <script>
-function pickKoreanVoice(){
+function pickVoice(regex, fallback){
   const list = speechSynthesis.getVoices();
-  const ko = list.filter(v => /ko|Korean/i.test(v.lang));
-  return ko[0] || list.find(v => v.lang && v.lang.toLowerCase().startsWith('ko'));
+  const arr = list.filter(v => regex.test((v.lang||"")));
+  if(arr.length) return arr[0];
+  return list.find(v => (v.lang||"").toLowerCase().startsWith(fallback)) || null;
 }
-let voice = null;
-function speak(t){
-  const u = new SpeechSynthesisUtterance(t);
-  voice = voice || pickKoreanVoice();
-  if(voice) u.voice = voice;
-  u.lang = 'ko-KR';
-  u.rate = document.getElementById('slowRate').checked ? 0.85 : 1.0;
-  const twice = document.getElementById('repeatTwice').checked;
-  if(twice){
-    u.onend = () => {
-      const u2 = new SpeechSynthesisUtterance(t);
-      if(voice) u2.voice = voice;
-      u2.lang = 'ko-KR'; u2.rate = u.rate;
-      speechSynthesis.speak(u2);
-    };
+let voiceKo=null, voiceEn=null;
+function rate(){ return parseFloat(document.getElementById('rate').value||'0.75'); }
+function repeatHook(u, text, lang, voice){
+  if(document.getElementById('repeatTwice').checked){
+    u.onend = ()=>{ const u2=new SpeechSynthesisUtterance(text); if(voice) u2.voice=voice; u2.lang=lang; u2.rate=u.rate; speechSynthesis.speak(u2); };
   }
+}
+function speakKO(text){
+  const u = new SpeechSynthesisUtterance(text);
+  voiceKo = voiceKo || pickVoice(/ko|korean/i, 'ko');
+  if(voiceKo) u.voice = voiceKo;
+  u.lang = 'ko-KR'; u.rate = rate();
+  repeatHook(u, text, 'ko-KR', voiceKo);
   speechSynthesis.speak(u);
 }
+function speakEN(text){
+  const u = new SpeechSynthesisUtterance(text);
+  voiceEn = voiceEn || pickVoice(/en|english/i, 'en');
+  if(voiceEn) u.voice = voiceEn;
+  u.lang = (voiceEn && voiceEn.lang) ? voiceEn.lang : 'en-US';
+  u.rate = rate();
+  repeatHook(u, text, u.lang, voiceEn);
+  speechSynthesis.speak(u);
+}
+
 document.addEventListener('click', e => {
-  const b = e.target.closest('[data-say]');
-  if(b) speak(b.getAttribute('data-say'));
+  const k = e.target.closest('[data-say-ko]'); if(k){ speakKO(k.getAttribute('data-say-ko')); return; }
+  const n = e.target.closest('[data-say-en]'); if(n){ speakEN(n.getAttribute('data-say-en')); return; }
 });
-document.getElementById('testVoice').addEventListener('click', ()=>speak('안녕하세요'));
-window.speechSynthesis.onvoiceschanged = () => { voice = pickKoreanVoice(); };
+document.getElementById('testKo').addEventListener('click', ()=>speakKO('안녕하세요'));
+document.getElementById('testEn').addEventListener('click', ()=>speakEN('Hello'));
+window.speechSynthesis.onvoiceschanged = () => { voiceKo = pickVoice(/ko|korean/i,'ko'); voiceEn = pickVoice(/en/i,'en'); };
 document.addEventListener('touchstart', function once(){
   speechSynthesis.speak(new SpeechSynthesisUtterance(''));
   document.removeEventListener('touchstart', once);

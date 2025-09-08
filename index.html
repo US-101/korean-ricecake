@@ -16,7 +16,13 @@
     </div>
     <div class="warn">提示：點字母可聽音節；下方三個單字可各自發音。若無聲音，先點「測試語音」。</div>
     <div class="controls">
-      <label class="control"><input type="checkbox" id="slowRate" />慢速播放</label>
+      <label>播放速度
+        <select id="rate" class="select">
+          <option value="0.5">超慢 ×0.5</option>
+          <option value="0.75" selected>慢 ×0.75</option>
+          <option value="1.0">正常 ×1.0</option>
+        </select>
+      </label>
       <label class="control"><input type="checkbox" id="repeatTwice" />重複兩次</label>
       <button class="control" id="testVoice">測試語音（안녕하세요）</button>
     </div>
@@ -99,41 +105,34 @@ function render(){
   data.vowels.forEach(it => v.appendChild(card(it,'母音')));
 }
 
-let voice = null;
-function pickKoreanVoice(){
+let voiceKo=null;
+function pick(langRegex){
   const list = speechSynthesis.getVoices();
-  const ko = list.filter(v => /ko|Korean/i.test(v.lang));
-  return ko[0] || list.find(v => v.lang && v.lang.toLowerCase().startsWith('ko'));
+  const arr = list.filter(v => langRegex.test((v.lang||"")));
+  return arr[0] || list.find(v => (v.lang||"").toLowerCase().startsWith('ko'));
 }
-function speak(t){
+function speakKo(t){
   const u = new SpeechSynthesisUtterance(t);
-  voice = voice || pickKoreanVoice();
-  if(voice) u.voice = voice;
+  voiceKo = voiceKo || pick(/ko|korean/i);
+  if(voiceKo) u.voice = voiceKo;
   u.lang = 'ko-KR';
-  u.rate = document.getElementById('slowRate').checked ? 0.75 : 1.0;
-  const twice = document.getElementById('repeatTwice').checked;
-  if(twice){
-    u.onend = () => {
-      const u2 = new SpeechSynthesisUtterance(t);
-      if(voice) u2.voice = voice;
-      u2.lang = 'ko-KR'; u2.rate = u.rate;
-      speechSynthesis.speak(u2);
-    };
+  u.rate = parseFloat(document.getElementById('rate').value||'0.75');
+  if(document.getElementById('repeatTwice').checked){
+    u.onend = ()=>{ const u2=new SpeechSynthesisUtterance(t); if(voiceKo) u2.voice=voiceKo; u2.lang='ko-KR'; u2.rate=u.rate; speechSynthesis.speak(u2); };
   }
   speechSynthesis.speak(u);
 }
 
 document.addEventListener('click', (e) => {
   const chip = e.target.closest('.chip');
-  if(chip){ speak(chip.getAttribute('data-say')); return; }
+  if(chip){ speakKo(chip.getAttribute('data-say')); return; }
   const sym = e.target.closest('.symbolWrap');
-  if(sym){ speak(sym.getAttribute('data-say')); return; }
+  if(sym){ speakKo(sym.getAttribute('data-say')); return; }
 });
-document.getElementById('testVoice').addEventListener('click', ()=>speak('안녕하세요'));
-window.speechSynthesis.onvoiceschanged = () => { voice = pickKoreanVoice(); };
+document.getElementById('testVoice').addEventListener('click', ()=>speakKo('안녕하세요'));
+window.speechSynthesis.onvoiceschanged = () => { voiceKo = pick(/ko|korean/i); };
 document.addEventListener('touchstart', function once(){
-  const u = new SpeechSynthesisUtterance('');
-  speechSynthesis.speak(u);
+  speechSynthesis.speak(new SpeechSynthesisUtterance(''));
   document.removeEventListener('touchstart', once);
 },{passive:true});
 
