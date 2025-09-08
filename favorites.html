@@ -1,4 +1,10 @@
-<!DOCTYPE html><html><head><title>收藏</title>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>★ 收藏</title>
+<link rel="stylesheet" href="styles.css" />
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ffffff">
 <link rel="apple-touch-icon" href="icons/icon-512.png">
@@ -11,4 +17,124 @@
     });
   }
 </script>
-</head><body>Favorites</body></html>
+
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>★ 收藏</h1>
+    <div class="nav">
+      <a href="index.html">發音練習</a>
+      <a href="travel.html">旅遊會話</a>
+      <a href="translate.html">AI 翻譯</a>
+      <a class="active" href="favorites.html">★ 收藏</a>
+    </div>
+    <div class="controls">
+      <label>播放速度
+        <select id="rate" class="select">
+          <option value="0.5">×0.5</option>
+          <option value="0.75" selected>×0.75</option>
+          <option value="1.0">×1.0</option>
+        </select>
+      </label>
+      <label class="control"><input type="checkbox" id="cartoonEn" />英文卡通模式</label>
+      <label>英文聲音
+        <select id="voiceEn" class="select"><option>載入中…</option></select>
+      </label>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="legend">已收藏句子</div>
+  <div id="list" class="list"></div>
+</main>
+
+<footer>資料保存在本機瀏覽器（localStorage）。</footer>
+
+<script>
+const EN_WHITELIST = [
+  {name:"Daniel",   lang:"en-GB"},
+  {name:"Moira",    lang:"en-IE"},
+  {name:"Samantha", lang:"en-AU"},
+  {name:"Tessa",    lang:"en-ZA"}
+];
+function pickWhitelistedEnglishVoices(){
+  const all = speechSynthesis.getVoices();
+  const ok = [];
+  EN_WHITELIST.forEach(w=>{
+    const v = all.find(x => x.name===w.name && (x.lang||"").toLowerCase().startsWith(w.lang.toLowerCase()));
+    if(v) ok.push(v);
+  });
+  return ok;
+}
+function populateEnglishVoices(){
+  const sel = document.getElementById('voiceEn');
+  sel.innerHTML = "";
+  const list = pickWhitelistedEnglishVoices();
+  if(!list.length){ sel.innerHTML = "<option>未找到：Daniel / Moira / Samantha / Tessa</option>"; return; }
+  list.forEach((v,i)=>{
+    const opt = document.createElement('option');
+    opt.value = v.name;
+    opt.textContent = v.name + " ("+v.lang+")";
+    sel.appendChild(opt);
+    if(i===0) sel.value = v.name;
+  });
+  const stored = localStorage.getItem('voiceEnName');
+  if(stored && list.some(v=>v.name===stored)) sel.value = stored;
+  sel.addEventListener('change',()=>localStorage.setItem('voiceEnName', sel.value));
+}
+function rate(){ return parseFloat(document.getElementById('rate').value||'0.75'); }
+function speakKO(t){
+  const u = new SpeechSynthesisUtterance(t);
+  const ko = speechSynthesis.getVoices().find(v => /ko/i.test(v.lang||""));
+  if(ko) u.voice = ko;
+  u.lang='ko-KR'; u.rate = rate();
+  speechSynthesis.speak(u);
+}
+function speakEN(t){
+  const sel=document.getElementById('voiceEn');
+  const en = speechSynthesis.getVoices().find(v=>v.name===sel.value) || pickWhitelistedEnglishVoices()[0] || null;
+  const u=new SpeechSynthesisUtterance(t);
+  if(en) u.voice=en;
+  u.lang=(en && en.lang) ? en.lang : 'en-US';
+  u.rate = rate();
+  if(document.getElementById('cartoonEn').checked) u.pitch=1.6;
+  speechSynthesis.speak(u);
+}
+function getFavs(){ try{ return JSON.parse(localStorage.getItem('favorites')||'[]'); }catch(e){ return []; } }
+function setFavs(a){ localStorage.setItem('favorites', JSON.stringify(a)); }
+function render(){
+  const list = document.getElementById('list');
+  list.innerHTML = "";
+  const data = getFavs();
+  if(!data.length){ list.innerHTML = "<div class='small'>尚無收藏，請到「AI 翻譯」頁按星號加入。</div>"; return; }
+  data.forEach((it, idx)=>{
+    const div=document.createElement('div');
+    div.className='item';
+    div.innerHTML = `
+      <div class="title">🇰🇷 ${it.ko}</div>
+      <div class="eng">🇬🇧 ${it.en}</div>
+      <div class="zh">🇹🇼 ${it.zh}</div>
+      <div class="ops">
+        <button class="btn" data-ko="${it.ko}">韓文朗讀</button>
+        <button class="btn" data-en="${it.en}">英文朗讀</button>
+        <button class="btn del" data-del="${idx}">刪除</button>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+}
+document.addEventListener('click', e=>{
+  const ko=e.target.getAttribute('data-ko'); if(ko){ speakEN(""); speakKO(ko); return; }
+  const en=e.target.getAttribute('data-en'); if(en){ speakEN(en); return; }
+  const di=e.target.getAttribute('data-del'); if(di!==null){ const arr=getFavs(); arr.splice(parseInt(di),1); setFavs(arr); render(); }
+});
+window.speechSynthesis.onvoiceschanged = ()=>populateEnglishVoices();
+populateEnglishVoices();
+render();
+</script>
+
+</body>
+</html>
