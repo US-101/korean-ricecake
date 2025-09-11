@@ -1,17 +1,1 @@
-<!DOCTYPE html><html lang="zh-Hant"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>歷史紀錄</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
-<link rel="apple-touch-icon" href="icons/icon-512.png"><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
-<header class="appbar"><div class="bar"><h1 class="title">歷 史 紀 錄</h1></div></header>
-<main class="wrap"><div id="box" class="list"></div></main>
-<nav class="tabbar"><div class="in"><a class='' href='index.html'><span class='ico'><img src='icons/p1.svg' alt=''></span>發音練習</a><a class='' href='travel.html'><span class='ico'><img src='icons/p2.svg' alt=''></span>旅行會話</a><a class='' href='translate.html'><span class='ico'><img src='icons/p3.svg' alt=''></span>實時翻譯</a><a class='active' href='history.html'><span class='ico'><img src='icons/p4.svg' alt=''></span>歷史紀錄</a></div></nav>
-<script>
-function speakKO(t){ const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=0.75; const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); if(v) u.voice=v; speechSynthesis.speak(u);}
-function speakEN(t){ const v=speechSynthesis.getVoices().find(v=>['Daniel','Moira','Samantha','Tessa'].includes(v.name)); const u=new SpeechSynthesisUtterance(t); if(v) u.voice=v; u.rate=0.75; speechSynthesis.speak(u);}
-function hist(){ try{ return JSON.parse(localStorage.getItem('history')||'[]'); }catch(e){ return []; } }
-function favs(){ try{ return JSON.parse(localStorage.getItem('favorites')||'[]'); }catch(e){ return []; } }
-function saveFav(entry){ const f=favs(); f.unshift(entry); localStorage.setItem('favorites', JSON.stringify(f)); }
-function render(){ const box=document.getElementById('box'); box.innerHTML=''; const H=hist(); if(!H.length){ box.innerHTML="<div class='card'>尚無歷史。</div>"; return; } H.forEach(it=>{ const c=document.createElement('div'); c.className='card'; c.innerHTML=`<div class='ko'>${it.ko}</div><div class='en'>${it.en}</div><div class='zh'>${it.zh}</div><div class='badges'><span class='badge' data-ko='${it.ko}'>韓</span><span class='badge' data-en='${it.en}'>英</span><span class='star' data-star='1'>☆</span></div>`; box.appendChild(c); }); }
-document.addEventListener('click',(e)=>{ if(e.target.matches('[data-ko]')) return speakKO(e.target.getAttribute('data-ko')); if(e.target.matches('[data-en]')) return speakEN(e.target.getAttribute('data-en')); if(e.target.matches('[data-star]')){ const c=e.target.closest('.card'); saveFav({ko:c.querySelector('.ko').textContent,en:c.querySelector('.en').textContent,zh:c.querySelector('.zh').textContent,folder:'其他',ts:Date.now()}); e.target.classList.add('on'); e.target.textContent='★'; } });
-render();
-</script></body></html>
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>歷史紀錄</title><link rel='stylesheet' href='styles.css'></head><body><header>歷 史 紀 錄</header><div class='tabbar'><a href='index.html'><svg viewBox='0 0 24 24'><circle cx='12' cy='12' r='10' stroke='currentColor' fill='none' stroke-width='2'/></svg>發音練習</a><a href='travel.html'><svg viewBox='0 0 24 24'><rect x='4' y='4' width='16' height='16' stroke='currentColor' fill='none' stroke-width='2'/></svg>旅行會話</a><a href='translate.html'><svg viewBox='0 0 24 24'><path d='M21 21l-4.3-4.3M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z' stroke='currentColor' fill='none' stroke-width='2'/></svg>實時翻譯</a><a class='active' href='history.html'><svg viewBox='0 0 24 24'><circle cx='12' cy='12' r='9' stroke='currentColor' fill='none' stroke-width='2'/><path d='M12 7v5l3 3' stroke='currentColor' fill='none' stroke-width='2'/></svg>歷史紀錄</a></div></body></html>
