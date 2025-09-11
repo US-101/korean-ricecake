@@ -10,7 +10,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 .modal{position:fixed;inset:0;background:linear-gradient(to bottom, rgba(243,252,253,.95), rgba(243,252,253,.85));display:none;z-index:60}.sheet{max-width:540px;margin:0 auto;padding:14px 16px 96px 16px}
 .backbtn{width:48px;height:48px;border-radius:16px;background:var(--teal);color:#fff;border:none;display:inline-flex;align-items:center;justify-content:center;box-shadow:var(--shadow);cursor:pointer}
 .speed{margin-left:auto}.big{background:#fff;border-radius:24px;box-shadow:var(--shadow);padding:32px;margin-top:12px;width:140px;height:140px;display:flex;align-items:center;justify-content:center}.big span{font-size:56px;color:#78bfc0;font-weight:800}
-.word{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:12px 16px;margin-top:14px;display:flex;align-items:center;gap:16px}.word .ko{font-weight:800;font-size:22px;color:#465}.word .desc{font-size:12px;color:var(--muted);letter-spacing:2px}.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;background:#fff;border:1px solid var(--line);cursor:pointer}
+.word{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:12px 16px;margin-top:14px;display:flex;align-items:center;gap:16px}.word .ko{font-weight:800;font-size:22px;color:#307676}.word .desc{font-size:12px;color:var(--muted);letter-spacing:2px}.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;background:#fff;border:1px solid var(--line);cursor:pointer}
 /* Translate CTA feedback */
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
 .pill.pulse{animation:pulse .35s ease-out}
@@ -26,7 +26,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 .list{display:flex;flex-direction:column;gap:14px;margin-top:14px}.card{background:#fff;border-radius:18px;box-shadow:var(--shadow);padding:14px 16px;position:relative}.card .ko{font-weight:800}.card .en{font-size:13px;color:#5a6166;margin-top:6px}.card .zh{font-size:12px;color:#97a1a6}.badges{position:absolute;top:14px;right:16px;display:flex;gap:6px;align-items:center}.badge{background:#f0fbfb;border:1px solid #d6efef;color:#6aa; padding:6px 8px;border-radius:999px;font-size:12px}.star{cursor:pointer;font-size:18px;color:#c3ccd0}.star.on{color:#f5c14a}
 textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px;padding:12px;font-size:15px;background:#fff}
 .tabbar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:70}.tabbar .in{max-width:540px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
-.tabbar a{padding:10px 6px 12px;text-align:center;color:#9aa3a8;font-size:11px;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}.tabbar a .ico{display:flex;align-items:center;justify-content:center;margin:0}
+.tabbar a{padding:10px 6px 12px;text-align:center;color:#9aa3a8;font-size:11px;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;line-height:1;min-height:58px}.tabbar a .ico{display:flex;align-items:center;justify-content:center;margin:0}
 .tabbar a.active{color:#8ECFD0}
 .tabbar a .ico{width:22px;height:22px}
 /* 顯示 <img> 並用濾鏡調整顏色，避免遮罩導致看不到 */
@@ -36,3 +36,16 @@ textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px
 #mickey{border:none;background:transparent;box-shadow:none;cursor:pointer;padding:8px 10px}
 #mickey img{display:block;width:32px;height:32px;opacity:.9;filter:grayscale(100%) brightness(0) invert(70%)}
 #mickey.on img{opacity:1;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%)}
+/* 詳細頁播放按鈕：icon 顏色為 #8ECFD0，按下短暫變 #FAD162 */
+.modal .btn{border:1px solid transparent;background:transparent;color:#8ECFD0}
+.modal .btn svg{display:block}
+.ink-amber{color:#FAD162!important}
+/* 收藏彈窗置中 */
+#pickFolder{display:none;align-items:center;justify-content:center}
+#pickFolder .sheet{background:rgba(255,255,255,.98);border-radius:20px;box-shadow:var(--shadow);padding:16px;position:relative}
+#pickFolder .title{color:#9aa3a8!important}
+#pickFolder .pill{border-color:#e6ecef;color:#9aa3a8;background:#fff}
+#pickFolder .pill:active{background:#8ECFD0;color:#fff;border-color:#8ECFD0}
+/* close X for pick modal */
+#pickFolder .close{position:absolute;top:10px;right:10px;border:none;background:transparent;color:#9aa3a8;cursor:pointer;padding:6px;border-radius:8px}
+#pickFolder .close:hover{background:#f3f6f8}

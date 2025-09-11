@@ -80,8 +80,13 @@ function render(){
   const gv=document.getElementById('gridV'); gv.innerHTML=""; DATA.vowels.forEach(it=>gv.appendChild(tile(it)));
   const gc=document.getElementById('gridC'); gc.innerHTML=""; DATA.consonants.forEach(it=>gc.appendChild(tile(it)));
 }
-function openDetail(item){ document.getElementById('bigSym').textContent=item.sym; const w=document.getElementById('words'); w.innerHTML=''; item.words.forEach(([ko,zh,rom])=>{ const d=document.createElement('div'); d.className='word'; d.innerHTML=`<div class='ko'>${ko}</div><div><div class='zh'>${zh}</div><div class='desc'>${rom}</div></div><button class='btn' data-say='${ko}'>播放</button>`; w.appendChild(d); }); document.getElementById('detail').style.display='block'; }
-document.addEventListener('click',e=>{ if(e.target.closest('.speed')) return cycleSpeed(); const s=e.target.getAttribute('data-say'); if(s) speakKo(s); });
+function openDetail(item){ document.getElementById('bigSym').textContent=item.sym; const w=document.getElementById('words'); w.innerHTML=''; item.words.forEach(([ko,zh,rom])=>{ const d=document.createElement('div'); d.className='word'; d.innerHTML=`<div class='ko'>${ko}</div><div><div class='zh'>${zh}</div><div class='desc'>${rom}</div></div><button class='btn' data-say='${ko}' aria-label='播放'>
+  <svg width="28" height="28" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="24" cy="24" r="20" fill="none"/>
+    <path d="M21 17l12 7-12 7z" fill="currentColor" stroke="none"/>
+  </svg>
+</button>`; w.appendChild(d); }); document.getElementById('detail').style.display='block'; }
+document.addEventListener('click',e=>{ if(e.target.closest('.speed')) return cycleSpeed(); const s=e.target.getAttribute('data-say'); if(s){ const btn=e.target.closest('.btn'); if(btn){ btn.classList.add('pulse','amber-temp','ink-amber'); setTimeout(()=>btn.classList.remove('pulse','amber-temp','ink-amber'),350);} speakKo(s); } });
 document.getElementById('back').addEventListener('click',()=>document.getElementById('detail').style.display='none');
 
 const btnV=document.getElementById('btnV'), btnC=document.getElementById('btnC');

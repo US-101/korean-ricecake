@@ -17,7 +17,8 @@
   <div class="result list" id="result"></div>
 </main>
 <nav class="tabbar"><div class="in"><a class='' href='index.html'><span class='ico'><img src='icons/p1.svg' alt=''></span>發音練習</a><a class='' href='travel.html'><span class='ico'><img src='icons/p2.svg' alt=''></span>旅行會話</a><a class='active' href='translate.html'><span class='ico'><img src='icons/p3.svg' alt=''></span>實時翻譯</a><a class='' href='history.html'><span class='ico'><img src='icons/p4.svg' alt=''></span>歷史紀錄</a></div></nav>
-<section class="modal" id="pickFolder"><div class="sheet">
+<section class="modal" id="pickFolder" style="display:none"><div class="sheet">
+  <button class="close" id="pickClose" aria-label="關閉">✕</button>
   <h3 class="title" style="text-align:center;margin:6px 0 12px 0;color:#78bfc0">收藏到哪個資料夾？</h3>
   <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
     <button class="pill" data-folder="餐廳">餐 廳</button>
@@ -53,7 +54,9 @@ document.addEventListener('click', (e)=>{ if(e.target.closest('#voiceEn')) retur
   if(e.target.id==='fstar'){ const c=e.target.closest('.card'); PENDING_STAR={ko:c.querySelector('.ko').textContent,en:c.querySelector('.en').textContent,zh:c.querySelector('.zh').textContent,el:e.target}; document.getElementById('pickFolder').style.display='block'; return; }
   if(e.target.matches('[data-folder]')){ const folder=e.target.getAttribute('data-folder'); if(PENDING_STAR){ const favs=JSON.parse(localStorage.getItem('favorites')||'[]'); favs.unshift({ko:PENDING_STAR.ko,en:PENDING_STAR.en,zh:PENDING_STAR.zh,folder,ts:Date.now()}); localStorage.setItem('favorites', JSON.stringify(favs)); PENDING_STAR.el.classList.add('on'); PENDING_STAR.el.textContent='★'; PENDING_STAR=null; } document.getElementById('pickFolder').style.display='none'; return; }
   if(e.target.id==='pickFolder') { document.getElementById('pickFolder').style.display='none'; return; }
+  if(e.target.closest('#pickFolder .sheet') && !e.target.matches('[data-folder]')){ /* swallow clicks inside sheet */ return; }
 });
+document.getElementById('pickClose').addEventListener('click',()=>{ document.getElementById('pickFolder').style.display='none'; });
 ensureVoice(); updateSpeedUI();
 updateSpeedUI();
 </script></body></html>
