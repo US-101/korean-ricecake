@@ -1,6 +1,133 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>旅行會話</title><link rel='stylesheet' href='styles.css'></head><body><header class='appbar'><div class='wrap'><h1>旅行會話</h1><div class='badge'>x0.75</div></div></header><main class='wrap'><div>TODO content</div></main><nav class="tabbar"><div class="in">
-<a class='' href='index.html'>發音練習</a>
-<a class='active' href='travel.html'>旅行會話</a>
-<a class='' href='translate.html'>實時翻譯</a>
-<a class='' href='history.html'>歷史紀錄</a>
-</div></nav></body></html>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>旅行會話</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ffffff">
+<link rel="apple-touch-icon" href="icons/icon-512.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>
+  if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("/sw.js"); }); }
+</script>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="wrap">
+    <h1>旅行會話</h1>
+    <div class="badge">x0.75</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="controls">
+    <label>英文聲音
+      <select id="voiceEn" class="select"></select>
+    </label>
+    <label class="control">卡通模式 <span id="mickey" class="icon-mickey" title="Cartoon"></span></label>
+  </div>
+
+  <section class="section">
+    <div class="legend">🍽️ 餐廳 / 點餐</div>
+    <div class="list" id="listR"></div>
+  </section>
+
+  <section class="section">
+    <div class="legend">🛍️ 購物 / 顏色・尺寸・試穿</div>
+    <div class="list" id="listS"></div>
+  </section>
+
+  <section class="section">
+    <div class="legend">🧭 問路</div>
+    <div class="list" id="listN"></div>
+  </section>
+</main>
+<nav class="tabbar"><div class="in">
+<a class='' href='index.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 10l9-7 9 7v7a2 2 0 0 1-2 2h-3m-8 0H6a2 2 0 0 1-2-2v-7'/></svg><span>發音練習</span></a>
+<a class='active' href='travel.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 16v-5a2 2 0 0 0-2-2h-5l-3-3-3 3H3a2 2 0 0 0-2 2v5'/></svg><span>旅行會話</span></a>
+<a class='' href='translate.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 5h7M7.5 5c0 6 5 9 9 9m0 0l-3-3m3 3l3-3'/></svg><span>實時翻譯</span></a>
+<a class='' href='history.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 8v5l3 3M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0'/></svg><span>歷史紀錄</span></a>
+</div></nav>
+<footer>Web Speech API（ko-KR / en-*）。</footer>
+
+<script>
+const EN = ["Daniel","Moira","Samantha","Tessa"];
+function whitelisted(){
+  const all=speechSynthesis.getVoices();
+  const ok=[]; EN.forEach(name=>{ const v=all.find(x=>x.name===name); if(v) ok.push(v); });
+  return ok;
+}
+function populate(){
+  const sel=document.getElementById('voiceEn');
+  sel.innerHTML="";
+  const list=whitelisted();
+  if(!list.length){ sel.innerHTML="<option>載入中…</option>"; return; }
+  list.forEach((v,i)=>{ const o=document.createElement('option'); o.value=v.name; o.textContent=v.name; sel.appendChild(o); if(i===0) sel.value=v.name; });
+  const saved=localStorage.getItem('voiceEnName'); if(saved && list.some(v=>v.name===saved)) sel.value=saved;
+  sel.addEventListener('change',()=>localStorage.setItem('voiceEnName', sel.value));
+}
+function rate(){ return 0.75; }
+let vKo=null, vEn=null;
+function speakKO(t){
+  const u=new SpeechSynthesisUtterance(t);
+  vKo = vKo || speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||"")); if(vKo) u.voice=vKo;
+  u.lang='ko-KR'; u.rate=rate(); speechSynthesis.speak(u);
+}
+function speakEN(t){
+  const sel=document.getElementById('voiceEn');
+  const voices=speechSynthesis.getVoices();
+  vEn = voices.find(v=>v.name===sel.value) || whitelisted()[0] || null;
+  const u=new SpeechSynthesisUtterance(t); if(vEn) u.voice=vEn;
+  u.lang = (vEn && vEn.lang) ? vEn.lang : 'en-US';
+  u.rate=rate();
+  if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6;
+  speechSynthesis.speak(u);
+}
+document.getElementById('mickey').addEventListener('click',e=>e.target.classList.toggle('on'));
+
+const DATA={ 
+  R:[
+    ["추천 메뉴가 뭐예요?","What do you recommend?","有推薦的餐點嗎？"],
+    ["덜 매운 걸로 해 주세요.","Please make it less spicy.","可以做不那麼辣嗎？"],
+    ["계산서 따로 해 주세요.","Could we split the bill?","請分開結帳。"]
+  ],
+  S:[
+    ["이거 다른 색 있어요?","Do you have this in other colors?","這個有別的顏色嗎？"],
+    ["이거 S, M, L 사이즈 있어요?","Do you have this in S, M, or L?","這個有沒有 S、M、L 之類的尺寸？"],
+    ["입어 봐도 돼요?","May I try it on?","可以試穿嗎？"],
+    ["이거 얼마예요? 할인돼요?","How much is this? Any discount?","這個多少錢？有折扣嗎？"]
+  ],
+  N:[
+    ["이 사진처럼 보이는 곳은 어디예요?","Where is this place in the photo?","這張照片裡的地方在哪裡？"],
+    ["여기로 가려면 어떻게 가요?","How do I get here?","要到這裡怎麼走？"],
+    ["오른쪽으로 가세요. 왼쪽으로 가세요. 쭉 가세요.","Go right. Go left. Go straight.","往右走／往左走／直走。"]
+  ]
+};
+function card(kr,en,zh){
+  const div=document.createElement('div'); div.className='item';
+  div.innerHTML=`<div class='krl'>${kr}</div><div class='eng'>${en}</div><div class='zh'>${zh}</div>
+  <div class='ops'>
+    <button class='btn' data-ko='${kr}'>韓</button>
+    <button class='btn' data-en='${en}'>英</button>
+  </div>`;
+  return div;
+}
+function render(){
+  const lR=document.getElementById('listR'), lS=document.getElementById('listS'), lN=document.getElementById('listN');
+  DATA.R.forEach(([k,e,z])=>lR.appendChild(card(k,e,z)));
+  DATA.S.forEach(([k,e,z])=>lS.appendChild(card(k,e,z)));
+  DATA.N.forEach(([k,e,z])=>lN.appendChild(card(k,e,z)));
+}
+document.addEventListener('click',e=>{
+  const k=e.target.getAttribute('data-ko'); if(k){ speakKO(k); return; }
+  const n=e.target.getAttribute('data-en'); if(n){ speakEN(n); return; }
+});
+window.speechSynthesis.onvoiceschanged = ()=>populate();
+populate(); render();
+</script>
+</body>
+</html>

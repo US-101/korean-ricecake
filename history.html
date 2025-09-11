@@ -1,6 +1,87 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>歷史紀錄</title><link rel='stylesheet' href='styles.css'></head><body><header class='appbar'><div class='wrap'><h1>歷史紀錄</h1><div class='badge'>x0.75</div></div></header><main class='wrap'><div>TODO</div></main><nav class="tabbar"><div class="in">
-<a class='' href='index.html'>發音練習</a>
-<a class='' href='travel.html'>旅行會話</a>
-<a class='' href='translate.html'>實時翻譯</a>
-<a class='active' href='history.html'>歷史紀錄</a>
-</div></nav></body></html>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>歷史紀錄</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ffffff">
+<link rel="apple-touch-icon" href="icons/icon-512.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>
+  if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("/sw.js"); }); }
+</script>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="wrap">
+    <h1>歷史紀錄</h1>
+    <div class="badge">x0.75</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="legend">最近 10 筆翻譯</div>
+  <div id="list" class="list"></div>
+</main>
+<nav class="tabbar"><div class="in">
+<a class='' href='index.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 10l9-7 9 7v7a2 2 0 0 1-2 2h-3m-8 0H6a2 2 0 0 1-2-2v-7'/></svg><span>發音練習</span></a>
+<a class='' href='travel.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 16v-5a2 2 0 0 0-2-2h-5l-3-3-3 3H3a2 2 0 0 0-2 2v5'/></svg><span>旅行會話</span></a>
+<a class='' href='translate.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 5h7M7.5 5c0 6 5 9 9 9m0 0l-3-3m3 3l3-3'/></svg><span>實時翻譯</span></a>
+<a class='active' href='history.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 8v5l3 3M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0'/></svg><span>歷史紀錄</span></a>
+</div></nav>
+<footer>可從歷史加星加入「收藏」資料夾。</footer>
+<script>
+function getHist(){ try{ return JSON.parse(localStorage.getItem('history')||'[]'); }catch(e){ return []; } }
+function getFavs(){ try{ return JSON.parse(localStorage.getItem('favorites')||'[]'); }catch(e){ return []; } }
+function setFavs(a){ localStorage.setItem('favorites', JSON.stringify(a)); }
+function speakKO(t){ const u=new SpeechSynthesisUtterance(t); const ko=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||"")); if(ko) u.voice=ko; u.lang='ko-KR'; u.rate=0.75; speechSynthesis.speak(u);}
+function speakEN(t){ const en=speechSynthesis.getVoices().find(v=>['Daniel','Moira','Samantha','Tessa'].includes(v.name)); const u=new SpeechSynthesisUtterance(t); if(en) u.voice=en; u.rate=0.75; speechSynthesis.speak(u);}
+const FOLDERS=["旅行","購物","問路","其他"];
+function chooseFolder(){
+  return new Promise((resolve)=>{
+    const modal=document.createElement('div'); modal.className='modal'; modal.style.display='flex';
+    modal.innerHTML=`<div class='panel'>
+      <div class='row'><div style='font-weight:700'>收藏到資料夾</div><button class='back' id='cancel'>取消</button></div>
+      <div style='display:flex;gap:8px;flex-wrap:wrap;margin-top:10px'>` + 
+        FOLDERS.map(f=>`<button class='control folder' data-f='${f}'>${f}</button>`).join('') + 
+      `</div></div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click',(e)=>{ if(e.target.id==='cancel'){ document.body.removeChild(modal); resolve(null); }
+      const f=e.target.getAttribute('data-f'); if(f){ document.body.removeChild(modal); resolve(f); }
+    });
+  });
+}
+function render(){
+  const list=document.getElementById('list'); list.innerHTML="";
+  const data=getHist();
+  if(!data.length){ list.innerHTML="<div class='small'>尚無歷史。</div>"; return; }
+  data.forEach((it,idx)=>{
+    const div=document.createElement('div'); div.className='item';
+    div.innerHTML=`<div class='krl'>${it.ko}</div><div class='eng'>${it.en}</div><div class='zh'>${it.zh}</div>
+      <div class='ops'>
+        <button class='btn' data-ko='${it.ko}'>韓</button>
+        <button class='btn' data-en='${it.en}'>英</button>
+        <span class='star' data-star='${idx}'>☆</span>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+document.addEventListener('click', async (e)=>{
+  const k=e.target.getAttribute('data-ko'); if(k){speakKO(k); return;}
+  const n=e.target.getAttribute('data-en'); if(n){speakEN(n); return;}
+  const s=e.target.getAttribute('data-star');
+  if(s!==null){
+    const folder=await chooseFolder(); if(!folder) return;
+    const hist=getHist(); const it=hist[parseInt(s)];
+    const favs=getFavs(); favs.unshift(Object.assign({}, it, {folder, ts: Date.now()})); setFavs(favs);
+    e.target.textContent="★";
+  }
+});
+render();
+</script>
+</body>
+</html>
