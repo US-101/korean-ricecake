@@ -1,12 +1,9 @@
 :root{--bg:#F3FCFD;--card:#fff;--ink:#2b2f33;--muted:#8b8f94;--line:#e9eef2;--teal:#8ECFD0;--amber:#FAD162;--shadow:0 6px 18px rgba(40,48,54,.08),0 1px 3px rgba(40,48,54,.05);}*{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sans-serif,-apple-system,'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif}
 .appbar{position:sticky;top:0;z-index:50;background:var(--bg)}.appbar .bar{background:var(--bg);padding:14px 16px;border-bottom:1px solid var(--line)}.appbar .title{text-align:center;margin:0;letter-spacing:0;color:#78bfc0;font-weight:700;display:flex;align-items:center;justify-content:center;min-height:32px}
+.appbar .title img{width:28px;height:28px;display:block;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%)}
 /* Top icon titles */
-.ico-top{display:inline-block;width:28px;height:28px;background:#8ECFD0;vertical-align:middle}
-.ico-p1{-webkit-mask:url('icons/p1.svg') center/contain no-repeat;mask:url('icons/p1.svg') center/contain no-repeat}
-.ico-p2{-webkit-mask:url('icons/p2.svg') center/contain no-repeat;mask:url('icons/p2.svg') center/contain no-repeat}
-.ico-p3{-webkit-mask:url('icons/p3.svg') center/contain no-repeat;mask:url('icons/p3.svg') center/contain no-repeat}
-.ico-p4{-webkit-mask:url('icons/p4.svg') center/contain no-repeat;mask:url('icons/p4.svg') center/contain no-repeat}
+/* mask-based top icons removed; using <img> for compatibility */
 .appbar .row{display:flex;align-items:center;gap:10px;justify-content:center;padding:12px 16px 6px 16px}
 .pill{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1.5px solid var(--teal);background:#fff;color:var(--teal);box-shadow:var(--shadow)}.pill.teal{background:var(--teal);color:#fff;border-color:var(--teal)}.pill.amber{background:var(--amber);color:#7a5b00;border-color:var(--amber)}.pill .dot{width:6px;height:6px;background:#fff;border-radius:999px;display:inline-block}
 /* transient amber state */
@@ -28,7 +25,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 .spinner{width:16px;height:16px;border:2px solid #e9eef2;border-top-color:#8ECFD0;border-radius:50%;display:inline-block;animation:spin .7s linear infinite;vertical-align:middle}
 /* Badge pulse for KO/EN click */
 .badge.pulse{animation:pulse .35s ease-out}
-.tabs{display:flex;gap:14px;justify-content:center;margin-top:6px}.tab{border:none;background:transparent;color:#7c8b8c;cursor:pointer;position:relative;padding:8px 2px}.tab.active{color:#78bfc0}.tab + .tab::before{content:'';position:absolute;left:-7px;top:50%;transform:translateY(-50%);width:1px;height:12px;background:#cbd5d6}
+.tabs{display:flex;gap:18px;justify-content:center;margin-top:6px}.tab{border:none;background:transparent;color:#7c8b8c;cursor:pointer;position:relative;padding:12px 4px;font-size:18px}.tab.active{color:#78bfc0}.tab + .tab::before{content:'';position:absolute;left:-9px;top:50%;transform:translateY(-50%);width:1px;height:14px;background:#cbd5d6}
 .list{display:flex;flex-direction:column;gap:14px;margin-top:14px}.card{background:#fff;border-radius:18px;box-shadow:var(--shadow);padding:14px 16px;position:relative}.card .ko{font-weight:800}.card .en{font-size:13px;color:#5a6166;margin-top:6px}.card .zh{font-size:12px;color:#97a1a6}.badges{position:absolute;top:14px;right:16px;display:flex;gap:6px;align-items:center}.badge{background:#f0fbfb;border:1px solid #d6efef;color:#6aa; padding:6px 8px;border-radius:999px;font-size:12px}.star{cursor:pointer;font-size:18px;color:#c3ccd0}.star.on{color:#f5c14a}
 textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px;padding:12px;font-size:15px;background:#fff}
 .tabbar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:70}.tabbar .in{max-width:540px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
