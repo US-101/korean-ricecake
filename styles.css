@@ -3,6 +3,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 .appbar{position:sticky;top:0;z-index:50;background:var(--bg)}.appbar .bar{background:var(--bg);padding:14px 16px;border-bottom:1px solid var(--line)}.appbar .title{text-align:center;margin:0;letter-spacing:6px;color:#78bfc0;font-weight:700}
 .appbar .row{display:flex;align-items:center;gap:10px;justify-content:center;padding:12px 16px 6px 16px}
 .pill{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1.5px solid var(--teal);background:#fff;color:var(--teal);box-shadow:var(--shadow)}.pill.teal{background:var(--teal);color:#fff;border-color:var(--teal)}.pill.amber{background:var(--amber);color:#7a5b00;border-color:var(--amber)}.pill .dot{width:6px;height:6px;background:#fff;border-radius:999px;display:inline-block}
+/* transient amber state */
+.amber-temp{background:var(--amber)!important;color:#7a5b00!important;border-color:var(--amber)!important}
 .wrap{max-width:540px;margin:0 auto;padding:12px 16px 96px 16px}
 .grid{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}.tile{background:#fff;border-radius:18px;padding:22px 10px;text-align:center;box-shadow:var(--shadow)}.tile .sym{font-size:34px;font-weight:800;color:#3e4246;letter-spacing:2px}.tile .rom{font-size:12px;color:var(--muted);margin-top:6px}
 .modal{position:fixed;inset:0;background:linear-gradient(to bottom, rgba(243,252,253,.95), rgba(243,252,253,.85));display:none;z-index:60}.sheet{max-width:540px;margin:0 auto;padding:14px 16px 96px 16px}
@@ -11,8 +13,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 .word{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:12px 16px;margin-top:14px;display:flex;align-items:center;gap:16px}.word .ko{font-weight:800;font-size:22px;color:#465}.word .desc{font-size:12px;color:var(--muted);letter-spacing:2px}.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;background:#fff;border:1px solid var(--line);cursor:pointer}
 /* Translate CTA feedback */
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
-.pill.teal.pulse{animation:pulse .35s ease-out}
-.pill.teal.busy{opacity:.8;pointer-events:none}
+.pill.pulse{animation:pulse .35s ease-out}
+.pill.busy{opacity:.9;pointer-events:none}
 @keyframes flash{0%{background:#fffbe6}100%{background:#fff}}
 .card.flash{animation:flash .8s ease-out 1}
 /* Small spinner for loading */
