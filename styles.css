@@ -9,10 +9,28 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 .backbtn{width:48px;height:48px;border-radius:16px;background:var(--teal);color:#fff;border:none;display:inline-flex;align-items:center;justify-content:center;box-shadow:var(--shadow);cursor:pointer}
 .speed{margin-left:auto}.big{background:#fff;border-radius:24px;box-shadow:var(--shadow);padding:32px;margin-top:12px;width:140px;height:140px;display:flex;align-items:center;justify-content:center}.big span{font-size:56px;color:#78bfc0;font-weight:800}
 .word{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:12px 16px;margin-top:14px;display:flex;align-items:center;gap:16px}.word .ko{font-weight:800;font-size:22px;color:#465}.word .desc{font-size:12px;color:var(--muted);letter-spacing:2px}.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;background:#fff;border:1px solid var(--line);cursor:pointer}
+/* Translate CTA feedback */
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+.pill.teal.pulse{animation:pulse .35s ease-out}
+.pill.teal.busy{opacity:.8;pointer-events:none}
+@keyframes flash{0%{background:#fffbe6}100%{background:#fff}}
+.card.flash{animation:flash .8s ease-out 1}
+/* Small spinner for loading */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:16px;height:16px;border:2px solid #e9eef2;border-top-color:#8ECFD0;border-radius:50%;display:inline-block;animation:spin .7s linear infinite;vertical-align:middle}
+/* Badge pulse for KO/EN click */
+.badge.pulse{animation:pulse .35s ease-out}
 .tabs{display:flex;gap:14px;justify-content:center;margin-top:6px}.tab{border:none;background:transparent;color:#7c8b8c;cursor:pointer;position:relative;padding:8px 2px}.tab.active{color:#78bfc0}.tab + .tab::before{content:'';position:absolute;left:-7px;top:50%;transform:translateY(-50%);width:1px;height:12px;background:#cbd5d6}
 .list{display:flex;flex-direction:column;gap:14px;margin-top:14px}.card{background:#fff;border-radius:18px;box-shadow:var(--shadow);padding:14px 16px;position:relative}.card .ko{font-weight:800}.card .en{font-size:13px;color:#5a6166;margin-top:6px}.card .zh{font-size:12px;color:#97a1a6}.badges{position:absolute;top:14px;right:16px;display:flex;gap:6px;align-items:center}.badge{background:#f0fbfb;border:1px solid #d6efef;color:#6aa; padding:6px 8px;border-radius:999px;font-size:12px}.star{cursor:pointer;font-size:18px;color:#c3ccd0}.star.on{color:#f5c14a}
 textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px;padding:12px;font-size:15px;background:#fff}
 .tabbar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:70}.tabbar .in{max-width:540px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
-.tabbar a{padding:10px 6px 12px;text-align:center;color:#9aa3a8;font-size:11px;text-decoration:none}.tabbar a .ico{display:block;margin:0 auto 6px}
+.tabbar a{padding:10px 6px 12px;text-align:center;color:#9aa3a8;font-size:11px;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}.tabbar a .ico{display:flex;align-items:center;justify-content:center;margin:0}
 .tabbar a.active{color:#8ECFD0}
-.tabbar a .ico img{width:22px;height:22px;display:block;opacity:.8}.tabbar a.active .ico img{opacity:1}
+.tabbar a .ico{width:22px;height:22px}
+/* 顯示 <img> 並用濾鏡調整顏色，避免遮罩導致看不到 */
+.tabbar a .ico img{width:22px;height:22px;display:block;opacity:.9;filter:grayscale(100%) brightness(0) invert(70%)}
+.tabbar a.active .ico img{opacity:1;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%)}
+/* Mickey 開關樣式：無邊框、預設灰、啟用為 #8ECFD0 */
+#mickey{border:none;background:transparent;box-shadow:none;cursor:pointer;padding:8px 10px}
+#mickey img{display:block;width:32px;height:32px;opacity:.9;filter:grayscale(100%) brightness(0) invert(70%)}
+#mickey.on img{opacity:1;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%)}

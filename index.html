@@ -6,7 +6,7 @@
 <div class="appbar"><div class="row" style="justify-content:center;gap:12px">
   <button id="btnV" class="pill teal">母 音</button>
   <button id="btnC" class="pill">子 音</button>
-  <span class="pill amber">x0.75</span>
+  <span class="pill amber speed">x0.75</span>
 </div></div>
 <main class="wrap">
   <div id="gridV" class="grid"></div>
@@ -71,18 +71,22 @@ const DATA={
   ]
 };
 
-function speakKo(t){ const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=0.75; const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); if(v) u.voice=v; speechSynthesis.speak(u);}
+let RATE=0.75; const SPEEDS=[0.5,0.75,1.0];
+function updateSpeedUI(){ document.querySelectorAll('.speed').forEach(el=>{ el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); }); }
+function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; updateSpeedUI(); }
+function speakKo(t){ const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=RATE; const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); if(v) u.voice=v; speechSynthesis.speak(u);}
 function tile(it){ const el=document.createElement('div'); el.className='tile'; el.innerHTML=`<div class='sym'>${it.sym}</div><div class='rom'>${it.roman}</div>`; el.addEventListener('click',()=>speakKo(it.say)); el.addEventListener('dblclick',()=>openDetail(it)); return el; }
 function render(){
   const gv=document.getElementById('gridV'); gv.innerHTML=""; DATA.vowels.forEach(it=>gv.appendChild(tile(it)));
   const gc=document.getElementById('gridC'); gc.innerHTML=""; DATA.consonants.forEach(it=>gc.appendChild(tile(it)));
 }
 function openDetail(item){ document.getElementById('bigSym').textContent=item.sym; const w=document.getElementById('words'); w.innerHTML=''; item.words.forEach(([ko,zh,rom])=>{ const d=document.createElement('div'); d.className='word'; d.innerHTML=`<div class='ko'>${ko}</div><div><div class='zh'>${zh}</div><div class='desc'>${rom}</div></div><button class='btn' data-say='${ko}'>播放</button>`; w.appendChild(d); }); document.getElementById('detail').style.display='block'; }
-document.addEventListener('click',e=>{ const s=e.target.getAttribute('data-say'); if(s) speakKo(s); });
+document.addEventListener('click',e=>{ if(e.target.closest('.speed')) return cycleSpeed(); const s=e.target.getAttribute('data-say'); if(s) speakKo(s); });
 document.getElementById('back').addEventListener('click',()=>document.getElementById('detail').style.display='none');
 
 const btnV=document.getElementById('btnV'), btnC=document.getElementById('btnC');
 btnV.addEventListener('click',()=>{btnV.classList.add('teal');btnC.classList.remove('teal');document.getElementById('gridV').style.display='grid';document.getElementById('gridC').style.display='none';});
 btnC.addEventListener('click',()=>{btnC.classList.add('teal');btnV.classList.remove('teal');document.getElementById('gridC').style.display='grid';document.getElementById('gridV').style.display='none';});
+updateSpeedUI();
 render();
 </script></body></html>
