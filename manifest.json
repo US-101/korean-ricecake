@@ -1,6 +1,6 @@
 {
   "name": "韓文學習",
-  "short_name": "韓文學習",
+  "short_name": "韓語工具",
   "start_url": "index.html",
   "scope": "./",
   "display": "standalone",
@@ -13,6 +13,5 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "lang": "zh-Hant"
+  ]
 }

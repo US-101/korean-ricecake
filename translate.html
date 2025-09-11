@@ -1,142 +1,20 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>實時翻譯</title>
-<link rel="stylesheet" href="styles.css" />
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ffffff">
-<link rel="apple-touch-icon" href="icons/icon-512.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<!DOCTYPE html><html lang="zh-Hant"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>實時翻譯</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
+<link rel="apple-touch-icon" href="icons/icon-512.png"><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script>
+</head><body><header class="appbar"><div class="bar"><h1 class="title">實 時 翻 譯</h1></div></header>
+<div class="appbar"><div class="row" style="gap:12px;justify-content:center">
+  <select id="voiceEn" class="pill" style="appearance:none;padding-right:28px"><option>Daniel</option><option selected>Moira</option><option>Samantha</option><option>Tessa</option></select>
+  <span id="mickey" class="pill">🐭</span><span class="pill amber">x0.75</span></div></div>
+<main class="wrap"><div class="legend">輸 入 中 文</div><textarea id="in" placeholder="請分開結帳"></textarea><div class="result list" id="result"></div></main><nav class="tabbar"><div class="in"><a class='' href='index.html'><span class='ico'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 10l9-7 9 7v7a2 2 0 0 1-2 2h-3m-8 0H6a2 2 0 0 1-2-2v-7'/></svg></span>發音練習</a><a class='' href='travel.html'><span class='ico'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 7V6a3 3 0 0 1 6 0v1m-8 0h14l-1 11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 7z'/></svg></span>旅行會話</a><a class='active' href='translate.html'><span class='ico'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 19a8 8 0 1 1 5.3-14.1M21 21l-4.3-4.3'/></svg></span>實時翻譯</a><a class='' href='history.html'><span class='ico'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 8v5l3 3M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0'/></svg></span>歷史紀錄</a></div></nav>
 <script>
-  if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("/sw.js"); }); }
-</script>
-</head>
-<body>
-
-<header class="appbar">
-  <div class="wrap">
-    <h1>實時翻譯</h1>
-    <div class="badge">x0.75</div>
-  </div>
-</header>
-
-<main class="wrap">
-  <div class="controls">
-    <label>英文聲音 <select id="voiceEn" class="select"></select></label>
-    <label class="control">卡通模式 <span id="mickey" class="icon-mickey"></span></label>
-  </div>
-
-  <div class="legend">輸入中文</div>
-  <div class="input">
-    <textarea id="cn" placeholder="例：這個有別的顏色嗎？"></textarea>
-    <button class="control" id="btnTrans">翻譯 → 韓/英</button>
-  </div>
-
-  <div class="bigcard" id="res" style="display:none">
-    <div class="row">
-      <div class="title">翻譯結果</div>
-      <div><button class="control" id="speakKo">朗讀韓文</button> <span class="star" id="star" title="加入收藏">☆</span></div>
-    </div>
-    <div class="krl" id="koText">—</div>
-    <div class="eng" id="enText">—</div>
-    <div class="zh" id="zhText">—</div>
-    <div class="row">
-      <small class="small">英文朗讀：</small>
-      <button class="control" id="speakEn">Play EN</button>
-    </div>
-  </div>
-</main>
-<nav class="tabbar"><div class="in">
-<a class='' href='index.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 10l9-7 9 7v7a2 2 0 0 1-2 2h-3m-8 0H6a2 2 0 0 1-2-2v-7'/></svg><span>發音練習</span></a>
-<a class='' href='travel.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 16v-5a2 2 0 0 0-2-2h-5l-3-3-3 3H3a2 2 0 0 0-2 2v5'/></svg><span>旅行會話</span></a>
-<a class='active' href='translate.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 5h7M7.5 5c0 6 5 9 9 9m0 0l-3-3m3 3l3-3'/></svg><span>實時翻譯</span></a>
-<a class='' href='history.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 8v5l3 3M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0'/></svg><span>歷史紀錄</span></a>
-</div></nav>
-<footer>收藏保存在瀏覽器 localStorage。最新 10 筆會寫入「歷史紀錄」。</footer>
-
-<script>
-const EN=["Daniel","Moira","Samantha","Tessa"];
-function listEn(){ const all=speechSynthesis.getVoices(); const ok=[]; EN.forEach(n=>{ const v=all.find(x=>x.name===n); if(v) ok.push(v); }); return ok; }
-function populate(){
-  const sel=document.getElementById('voiceEn'); sel.innerHTML="";
-  const list=listEn(); if(!list.length){ sel.innerHTML="<option>載入中…</option>"; return; }
-  list.forEach((v,i)=>{ const o=document.createElement('option'); o.value=v.name; o.textContent=v.name; sel.appendChild(o); if(i===0) sel.value=v.name; });
-  const saved=localStorage.getItem('voiceEnName'); if(saved && list.some(v=>v.name===saved)) sel.value=saved;
-  sel.addEventListener('change',()=>localStorage.setItem('voiceEnName', sel.value));
-}
-
-function rate(){ return 0.75; }
-function speakKO(t){ const u=new SpeechSynthesisUtterance(t); const ko=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||"")); if(ko) u.voice=ko; u.lang='ko-KR'; u.rate=rate(); speechSynthesis.speak(u);}
-function speakEN(t){ const sel=document.getElementById('voiceEn'); let en=speechSynthesis.getVoices().find(v=>v.name===sel.value) || listEn()[0]; const u=new SpeechSynthesisUtterance(t); if(en) u.voice=en; u.lang=en? en.lang : 'en-US'; u.rate=rate(); if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; speechSynthesis.speak(u);}
-document.getElementById('mickey').addEventListener('click',e=>e.target.classList.toggle('on'));
-document.getElementById('speakKo').addEventListener('click',()=>speakKO(document.getElementById('koText').textContent||""));
-document.getElementById('speakEn').addEventListener('click',()=>speakEN(document.getElementById('enText').textContent||""));
-
-async function myMemory(q, from, to){
-  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=${from}|${to}`;
-  const r = await fetch(url); const j = await r.json(); return j?.responseData?.translatedText || "";
-}
-async function libre(q, from, to){
-  const r = await fetch("https://libretranslate.de/translate", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({q, source:from, target:to}) });
-  const j = await r.json(); return j?.translatedText || "";
-}
-async function translateAll(zh){
-  let en="", ko="";
-  try{ en = await myMemory(zh,"zh-TW","en"); }catch(e){}
-  try{ ko = await myMemory(zh,"zh-TW","ko"); }catch(e){}
-  if(!en){ try{ en = await libre(zh,"zh","en"); }catch(e){} }
-  if(!ko){ try{ ko = await libre(zh,"zh","ko"); }catch(e){} }
-  return {en, ko};
-}
-
-function getFavs(){ try{ return JSON.parse(localStorage.getItem('favorites')||'[]'); }catch(e){ return []; } }
-function setFavs(a){ localStorage.setItem('favorites', JSON.stringify(a)); }
-function getHist(){ try{ return JSON.parse(localStorage.getItem('history')||'[]'); }catch(e){ return []; } }
-function setHist(a){ localStorage.setItem('history', JSON.stringify(a.slice(0,10))); }
-
-const FOLDERS=["旅行","購物","問路","其他"];
-function chooseFolder(){
-  return new Promise((resolve)=>{
-    const modal=document.createElement('div'); modal.className='modal'; modal.style.display='flex';
-    modal.innerHTML=`<div class='panel'>
-      <div class='row'><div style='font-weight:700'>收藏到資料夾</div><button class='back' id='cancel'>取消</button></div>
-      <div style='display:flex;gap:8px;flex-wrap:wrap;margin-top:10px'>` + 
-        FOLDERS.map(f=>`<button class='control folder' data-f='${f}'>${f}</button>`).join('') + 
-      `</div></div>`;
-    document.body.appendChild(modal);
-    modal.addEventListener('click',(e)=>{ if(e.target.id==='cancel'){ document.body.removeChild(modal); resolve(null); }
-      const f=e.target.getAttribute('data-f'); if(f){ document.body.removeChild(modal); resolve(f); }
-    });
-  });
-}
-
-const btn=document.getElementById('btnTrans');
-const cn=document.getElementById('cn');
-const res=document.getElementById('res');
-const zhText=document.getElementById('zhText');
-const enText=document.getElementById('enText');
-const koText=document.getElementById('koText');
-const star=document.getElementById('star');
-
-btn.addEventListener('click', async ()=>{
-  const text=(cn.value||"").trim(); if(!text) return;
-  res.style.display='block'; zhText.textContent=text; enText.textContent="翻譯中…"; koText.textContent="번역 중…";
-  try{ const out=await translateAll(text); enText.textContent=out.en||"(英文失敗)"; koText.textContent=out.ko||"(韓文失敗)"; }
-  catch(e){ enText.textContent="(英文錯誤)"; koText.textContent="(韓文錯誤)"; }
-  const hist=getHist(); hist.unshift({ zh: zhText.textContent, en: enText.textContent, ko: koText.textContent, ts: Date.now() }); setHist(hist);
-});
-
-star.addEventListener('click', async ()=>{
-  const folder=await chooseFolder(); if(!folder) return;
-  const list=getFavs(); list.unshift({ zh: zhText.textContent, en: enText.textContent, ko: koText.textContent, folder, ts: Date.now() }); setFavs(list);
-  star.textContent="★";
-});
-
-window.speechSynthesis.onvoiceschanged = ()=>populate();
-populate();
-</script>
-</body>
-</html>
+const EN=["Daniel","Moira","Samantha","Tessa"];function loadEn(){const all=speechSynthesis.getVoices();const sel=document.getElementById('voiceEn');const picked=EN.map(n=>all.find(v=>v.name===n)).filter(Boolean);if(picked.length){sel.innerHTML=picked.map(v=>`<option>${v.name}</option>`).join("");const saved=localStorage.getItem('voiceEnName');if(saved && picked.some(v=>v.name===saved)) sel.value=saved; sel.addEventListener('change',()=>localStorage.setItem('voiceEnName', sel.value));}}window.speechSynthesis.onvoiceschanged=loadEn;
+function speakKO(t){const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=0.75;const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||''));if(v)u.voice=v;speechSynthesis.speak(u);}function speakEN(t){const sel=document.getElementById('voiceEn');const v=speechSynthesis.getVoices().find(v=>v.name===sel.value)||speechSynthesis.getVoices().find(v=>/en/i.test(v.lang||''));const u=new SpeechSynthesisUtterance(t);if(v)u.voice=v;u.rate=0.75;if(document.getElementById('mickey').classList.contains('on'))u.pitch=1.6;speechSynthesis.speak(u);}document.getElementById('mickey').addEventListener('click',e=>e.target.classList.toggle('on'));
+async function tMM(q,from,to){const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=${from}|${to}`);const j=await r.json();return j?.responseData?.translatedText||"";}
+async function tLibre(q,from,to){const r=await fetch("https://libretranslate.de/translate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q,source:from,target:to})});const j=await r.json();return j?.translatedText||"";}
+async function doTranslate(text){let ko="",en="";try{en=await tMM(text,"zh-TW","en");}catch(e){}try{ko=await tMM(text,"zh-TW","ko");}catch(e){}if(!en){try{en=await tLibre(text,"zh","en");}catch(e){}}if(!ko){try{ko=await tLibre(text,"zh","ko");}catch(e){}}return {ko,en};}
+function hist(){try{return JSON.parse(localStorage.getItem('history')||'[]');}catch(e){return [];}}function saveHist(entry){const h=hist();h.unshift(Object.assign({ts:Date.now()},entry));localStorage.setItem('history',JSON.stringify(h.slice(0,10)));}
+function favs(){try{return JSON.parse(localStorage.getItem('favorites')||'[]');}catch(e){return [];}}function saveFav(entry){const f=favs();f.unshift(entry);localStorage.setItem('favorites',JSON.stringify(f));}
+const input=document.getElementById('in');const result=document.getElementById('result');let timer=null;input.addEventListener('input',()=>{clearTimeout(timer);const text=input.value.trim();if(!text){result.innerHTML='';return;}timer=setTimeout(async()=>{result.innerHTML="<div class='card'>翻譯中…</div>";const out=await doTranslate(text);const c=document.createElement('div');c.className='card';c.innerHTML=`<div class='ko'>${out.ko||"(韓文失敗)"}</div><div class='en'>${out.en||"(英文失敗)"}</div><div class='zh'>${text}</div><div class='badges'><span class='badge' data-ko='${out.ko}'>韓</span><span class='badge' data-en='${out.en}'>英</span><span class='star' id='fstar'>☆</span></div>`;result.innerHTML='';result.appendChild(c);saveHist({ko:out.ko,en:out.en,zh:text});},400);});
+document.addEventListener('click',async (e)=>{if(e.target.matches('[data-ko]'))return speakKO(e.target.getAttribute('data-ko')); if(e.target.matches('[data-en]'))return speakEN(e.target.getAttribute('data-en')); if(e.target.id==='fstar'){const pick=prompt("收藏到哪個資料夾？（旅行/購物/問路/其他）","旅行"); if(!pick)return;const c=e.target.closest('.card'); saveFav({ko:c.querySelector('.ko').textContent,en:c.querySelector('.en').textContent,zh:c.querySelector('.zh').textContent,folder:pick,ts:Date.now()}); e.target.classList.add('on'); e.target.textContent='★';}});
+</script></body></html>

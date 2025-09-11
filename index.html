@@ -1,154 +1,39 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>發音練習</title>
-<link rel="stylesheet" href="styles.css" />
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ffffff">
-<link rel="apple-touch-icon" href="icons/icon-512.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<script>
-  if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("/sw.js"); }); }
-</script>
-</head>
-<body>
-
-<header class="appbar">
-  <div class="wrap">
-    <h1>發音練習</h1>
-    <div class="badge">x0.75</div>
-  </div>
-</header>
-
+<!DOCTYPE html><html lang="zh-Hant"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>發音練習</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
+<link rel="apple-touch-icon" href="icons/icon-512.png"><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script>
+</head><body>
+<header class="appbar"><div class="bar"><h1 class="title">發 音 練 習</h1></div></header>
+<div class="appbar"><div class="row" style="justify-content:center;gap:12px">
+  <button id="btnV" class="pill teal">母 音</button>
+  <button id="btnC" class="pill">子 音 <span class="dot"></span></button>
+  <span class="pill amber">x0.75</span>
+</div></div>
 <main class="wrap">
-  <div class="tabs">
-    <button class="tab active" id="tabV">母音</button>
-    <button class="tab" id="tabC">子音</button>
-  </div>
-  <div class="legend">點一下發音；快速按兩下 → 查看單字</div>
   <div id="gridV" class="grid"></div>
   <div id="gridC" class="grid" style="display:none"></div>
 </main>
-<nav class="tabbar"><div class="in">
-<a class='active' href='index.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 10l9-7 9 7v7a2 2 0 0 1-2 2h-3m-8 0H6a2 2 0 0 1-2-2v-7'/></svg><span>發音練習</span></a>
-<a class='' href='travel.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 16v-5a2 2 0 0 0-2-2h-5l-3-3-3 3H3a2 2 0 0 0-2 2v5'/></svg><span>旅行會話</span></a>
-<a class='' href='translate.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 5h7M7.5 5c0 6 5 9 9 9m0 0l-3-3m3 3l3-3'/></svg><span>實時翻譯</span></a>
-<a class='' href='history.html'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#9aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 8v5l3 3M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0'/></svg><span>歷史紀錄</span></a>
-</div></nav>
-
-<!-- 詳情 -->
-<div class="modal" id="detail">
-  <div class="panel">
-    <div class="row">
-      <button class="back" id="backBtn">上一頁</button>
-      <div class="sym" id="dSym" style="font-size:36px"></div>
-      <span></span>
+<nav class="tabbar"><div class="in"><a class='active' href='index.html'><span class='ico'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 10l9-7 9 7v7a2 2 0 0 1-2 2h-3m-8 0H6a2 2 0 0 1-2-2v-7'/></svg></span>發音練習</a><a class='' href='travel.html'><span class='ico'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 7V6a3 3 0 0 1 6 0v1m-8 0h14l-1 11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 7z'/></svg></span>旅行會話</a><a class='' href='translate.html'><span class='ico'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 19a8 8 0 1 1 5.3-14.1M21 21l-4.3-4.3'/></svg></span>實時翻譯</a><a class='' href='history.html'><span class='ico'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 8v5l3 3M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0'/></svg></span>歷史紀錄</a></div></nav>
+<section class="modal" id="detail">
+  <div class="sheet">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="backbtn" id="back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <h3 class="title" style="flex:1;text-align:center;letter-spacing:6px;color:#78bfc0;margin:0">發 音 練 習</h3>
+      <span class="pill amber speed">x0.75</span>
     </div>
-    <div class="small" id="dRom"></div>
-    <hr class="div"/>
-    <div class="chips" id="dChips"></div>
+    <div class="big"><span id="bigSym">ㅏ</span></div>
+    <div id="words"></div>
   </div>
-</div>
-
-<footer>GitHub Pages / Web Speech API（ko-KR）。</footer>
-
+</section>
 <script>
-// 取自你原本的資料結構（並補上母音/子音）
-const data = {
-  consonants: [
-    {sym:"ㄱ", roman:"g/k", say:"가", words:[["가다","去"],["고기","肉"],["가족","家族"]]},
-    {sym:"ㄴ", roman:"n",   say:"나", words:[["나라","國家"],["노래","歌曲"],["눈","眼睛"]]}, 
-    {sym:"ㄷ", roman:"d/t", say:"다", words:[["다리","腿/橋"],["도서관","圖書館"],["달","月亮"]]},
-    {sym:"ㄹ", roman:"r/l", say:"라", words:[["라디오","收音機"],["로봇","機器人"],["리본","緞帶"]]},
-    {sym:"ㅁ", roman:"m",   say:"마", words:[["머리","頭"],["물","水"],["멀다","遠"]]},
-    {sym:"ㅂ", roman:"b/p", say:"바", words:[["바다","海"],["바보","傻瓜"],["빵","麵包"]]},
-    {sym:"ㅅ", roman:"s",   say:"사", words:[["사람","人"],["사과","蘋果"],["시간","時間"]]},
-    {sym:"ㅇ", roman:"ng/Ø",say:"아", words:[["아이","小孩"],["얼굴","臉"],["운동","運動"]]},
-    {sym:"ㅈ", roman:"j",   say:"자", words:[["자다","睡覺"],["지갑","錢包"],["전화","電話"]]},
-    {sym:"ㅊ", roman:"ch",  say:"차", words:[["차","車"],["친구","朋友"],["책","書"]]},
-    {sym:"ㅋ", roman:"k",   say:"카", words:[["코","鼻子"],["카페","咖啡館"],["쿠키","餅乾"]]},
-    {sym:"ㅌ", roman:"t",   say:"타", words:[["토마토","番茄"],["티셔츠","T恤"],["토끼","兔子"]]},
-    {sym:"ㅍ", roman:"p",   say:"파", words:[["피자","披薩"],["포도","葡萄"],["편지","信"]]},
-    {sym:"ㅎ", roman:"h",   say:"하", words:[["하늘","天空"],["학교","學校"],["하루","一天"]]}
-  ],
-  vowels: [
-    {sym:"ㅏ", roman:"a",  say:"아", words:[["아기","嬰兒"],["바다","海"],["사탕","糖果"]]},
-    {sym:"ㅑ", roman:"ya", say:"야", words:[["야구","棒球"],["약","藥"],["양말","襪子"]]},
-    {sym:"ㅓ", roman:"eo", say:"어", words:[["서울","首爾"],["버스","公車"],["전화","電話"]]},
-    {sym:"ㅕ", roman:"yeo",say:"여", words:[["여자","女人"],["여행","旅行"],["영화","電影"]]},
-    {sym:"ㅗ", roman:"o",  say:"오", words:[["오이","小黃瓜"],["손","手"],["도로","道路"]]},
-    {sym:"ㅛ", roman:"yo", say:"요", words:[["요리","料理"],["교실","教室"],["표","票"]]},
-    {sym:"ㅜ", roman:"u",  say:"우", words:[["우유","牛奶"],["문","門"],["구두","皮鞋"]]},
-    {sym:"ㅠ", roman:"yu", say:"유", words:[["유리","玻璃"],["휴지","衛生紙"],["규칙","規則"]]},
-    {sym:"ㅡ", roman:"eu", say:"으", words:[["은행","銀行"],["으깨다","壓碎"],["으레","理所當然"]]},
-    {sym:"ㅣ", roman:"i",  say:"이", words:[["이름","名字"],["시간","時間"],["비","雨"]]}
-  ]
-};
+const DATA={vowels:[{"sym":"ㅏ","roman":"a","say":"아","words":[["아기","嬰兒","a-gi"],["바다","海","bada"],["사탕","糖果","sataing"]]}, {"sym":"ㅑ","roman":"ya","say":"야","words":[["야구","棒球","yagu"],["약","藥","yak"],["양말","襪子","yangmal"]]}, {"sym":"ㅓ","roman":"eo","say":"어","words":[["서울","首爾","seoul"],["버스","公車","beoseu"],["전화","電話","jeonhwa"]]}, {"sym":"ㅕ","roman":"yeo","say":"여","words":[["여자","女人","yeoja"],["여행","旅行","yeohaeng"],["영화","電影","yeonghwa"]]}, {"sym":"ㅗ","roman":"o","say":"오","words":[["오이","小黃瓜","oi"],["손","手","son"],["도로","道路","doro"]]}, {"sym":"ㅛ","roman":"yo","say":"요","words":[["요리","料理","yori"],["교실","教室","gyosil"],["표","票","pyo"]]}, {"sym":"ㅜ","roman":"u","say":"우","words":[["우유","牛奶","uyu"],["문","門","mun"],["구두","皮鞋","gudu"]]}, {"sym":"ㅠ","roman":"yu","say":"유","words":[["유리","玻璃","yuri"],["휴지","衛生紙","hyuji"],["규칙","規則","gyuchik"]]}, {"sym":"ㅡ","roman":"eu","say":"으","words":[["은행","銀行","eunhaeng"],["으깨다","壓碎","eukkaeda"],["으레","理所當然","eure"]]}, {"sym":"ㅣ","roman":"i","say":"이","words":[["이름","名字","ireum"],["시간","時間","sigan"],["비","雨","bi"]]}],
+consonants:[{"sym":"ㄱ","roman":"g/k","say":"가","words":[["가다","去","gada"],["고기","肉","gogi"],["가족","家族","gajok"]]}, {"sym":"ㄴ","roman":"n","say":"나","words":[["나라","國家","nara"],["노래","歌曲","norae"],["눈","眼睛","nun"]]}, {"sym":"ㄷ","roman":"d/t","say":"다","words":[["다리","腿/橋","dari"],["도서관","圖書館","doseogwan"],["달","月亮","dal"]]}, {"sym":"ㄹ","roman":"r/l","say":"라","words":[["라디오","收音機","radio"],["로봇","機器人","robot"],["리본","緞帶","ribon"]]}, {"sym":"ㅁ","roman":"m","say":"마","words":[["머리","頭","meori"],["물","水","mul"],["멀다","遠","meolda"]]}, {"sym":"ㅂ","roman":"b/p","say":"바","words":[["바다","海","bada"],["바보","傻瓜","babo"],["빵","麵包","ppang"]]}, {"sym":"ㅅ","roman":"s","say":"사","words":[["사람","人","saram"],["사과","蘋果","sagwa"],["시간","時間","sigan"]]}, {"sym":"ㅇ","roman":"ng/Ø","say":"아","words":[["아이","小孩","ai"],["얼굴","臉","eolgul"],["운동","運動","undong"]]}, {"sym":"ㅈ","roman":"j","say":"자","words":[["자다","睡覺","jada"],["지갑","錢包","jigap"],["전화","電話","jeonhwa"]]}, {"sym":"ㅊ","roman":"ch","say":"차","words":[["차","車","cha"],["친구","朋友","chingu"],["책","書","chaek"]]}, {"sym":"ㅋ","roman":"k","say":"카","words":[["코","鼻子","ko"],["카페","咖啡館","kape"],["쿠키","餅乾","kuki"]]}, {"sym":"ㅌ","roman":"t","say":"타","words":[["토마토","番茄","tomato"],["티셔츠","T恤","tisyeocheu"],["토끼","兔子","tokki"]]}, {"sym":"ㅍ","roman":"p","say":"파","words":[["피자","披薩","pija"],["포도","葡萄","podo"],["편지","信","pyeonji"]]}, {"sym":"ㅎ","roman":"h","say":"하","words":[["하늘","天空","haneul"],["학교","學校","hakgyo"],["하루","一天","haru"]]}]};
 
-function tile(item){
-  const el=document.createElement('div');
-  el.className='tile'; el.setAttribute('data-say', item.say);
-  el.innerHTML = `<div class="sym">${item.sym}</div><div class="rom">${item.roman}</div>`;
-  // single click speak
-  el.addEventListener('click', (e)=>{ speakKo(item.say); });
-  // double click open detail
-  el.addEventListener('dblclick', (e)=>{ openDetail(item); });
-  return el;
-}
-
-function render(){
-  const gv=document.getElementById('gridV'); gv.innerHTML="";
-  const gc=document.getElementById('gridC'); gc.innerHTML="";
-  data.vowels.forEach(it=>gv.appendChild(tile(it)));
-  data.consonants.forEach(it=>gc.appendChild(tile(it)));
-}
-
-let voiceKo=null;
-function pickKo(){
-  const list = speechSynthesis.getVoices();
-  return list.find(v => /ko|korean/i.test(v.lang||"")) || null;
-}
-function speakKo(t){
-  const u=new SpeechSynthesisUtterance(t);
-  voiceKo = voiceKo || pickKo(); if(voiceKo) u.voice=voiceKo;
-  u.lang='ko-KR'; u.rate=0.75; speechSynthesis.speak(u);
-}
-
-function openDetail(item){
-  document.getElementById('dSym').textContent=item.sym;
-  document.getElementById('dRom').textContent=item.roman+" ／ "+item.say;
-  const cont=document.getElementById('dChips'); cont.innerHTML="";
-  item.words.forEach(([kr, zh])=>{
-    const d=document.createElement('div'); d.className='chip';
-    d.innerHTML = `<div><div class='krl'>${kr}</div><div class='zh'>${zh}</div></div><button class='btn' data-say='${kr}'>播放</button>`;
-    cont.appendChild(d);
-  });
-  document.getElementById('detail').style.display='flex';
-}
-document.addEventListener('click', e=>{
-  const say=e.target.getAttribute('data-say'); if(say){ speakKo(say); }
-});
-document.getElementById('backBtn').addEventListener('click',()=>{ document.getElementById('detail').style.display='none'; });
-
-document.getElementById('tabV').addEventListener('click',()=>{ 
-  document.getElementById('gridV').style.display='grid'; 
-  document.getElementById('gridC').style.display='none';
-  document.getElementById('tabV').classList.add('active');
-  document.getElementById('tabC').classList.remove('active');
-});
-document.getElementById('tabC').addEventListener('click',()=>{ 
-  document.getElementById('gridV').style.display='none'; 
-  document.getElementById('gridC').style.display='grid';
-  document.getElementById('tabC').classList.add('active');
-  document.getElementById('tabV').classList.remove('active');
-});
-
-window.speechSynthesis.onvoiceschanged = ()=>{ voiceKo = pickKo(); };
-document.addEventListener('touchstart', function once(){ speechSynthesis.speak(new SpeechSynthesisUtterance('')); document.removeEventListener('touchstart', once); }, {passive:true});
-render();
-</script>
-</body>
-</html>
+function speakKo(t){const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=0.75;const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||''));if(v)u.voice=v;speechSynthesis.speak(u);}
+function renderTiles(list,id){const host=document.getElementById(id);host.innerHTML='';list.forEach(it=>{const el=document.createElement('div');el.className='tile';el.innerHTML=`<div class='sym'>${it.sym}</div><div class='rom'>${it.roman}</div>`;el.addEventListener('click',()=>speakKo(it.say));el.addEventListener('dblclick',()=>openDetail(it));host.appendChild(el);});}
+function openDetail(item){document.getElementById('bigSym').textContent=item.sym;const w=document.getElementById('words');w.innerHTML='';item.words.forEach(([ko,zh,rom])=>{const row=document.createElement('div');row.className='word';row.innerHTML=`<div class='ko'>${ko}</div><div><div class='zh'>${zh}</div><div class='desc'>${rom}</div></div><button class='btn' data-say='${ko}'>播放</button>`;w.appendChild(row);});document.getElementById('detail').style.display='block';}
+document.addEventListener('click',e=>{const s=e.target.getAttribute('data-say');if(s)speakKo(s)});
+document.getElementById('back').addEventListener('click',()=>document.getElementById('detail').style.display='none');
+const btnV=document.getElementById('btnV'), btnC=document.getElementById('btnC');btnV.addEventListener('click',()=>{btnV.classList.add('teal');btnC.classList.remove('teal');document.getElementById('gridV').style.display='grid';document.getElementById('gridC').style.display='none';});btnC.addEventListener('click',()=>{btnC.classList.add('teal');btnV.classList.remove('teal');document.getElementById('gridC').style.display='grid';document.getElementById('gridV').style.display='none';});
+renderTiles(DATA.vowels,'gridV');renderTiles(DATA.consonants,'gridC');
+</script></body></html>
