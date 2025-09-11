@@ -87,9 +87,9 @@ function render(){
   const gv=document.getElementById('gridV'); gv.innerHTML=""; DATA.vowels.forEach(it=>gv.appendChild(tile(it)));
   const gc=document.getElementById('gridC'); gc.innerHTML=""; DATA.consonants.forEach(it=>gc.appendChild(tile(it)));
 }
-function openDetail(item){ document.getElementById('bigSym').textContent=item.sym; const w=document.getElementById('words'); w.innerHTML=''; item.words.forEach(([ko,zh,rom])=>{ const d=document.createElement('div'); d.className='word'; d.setAttribute('data-say', ko); d.innerHTML=`<div class='ko'>${ko}</div><div><div class='zh'>${zh}</div><div class='desc'>${rom}</div></div>`; w.appendChild(d); }); document.getElementById('detail').style.display='block'; }
+function openDetail(item){ document.getElementById('bigSym').textContent=item.sym; const w=document.getElementById('words'); w.innerHTML=''; item.words.forEach(([ko,zh,rom])=>{ const d=document.createElement('div'); d.className='word'; d.setAttribute('data-say', ko); d.innerHTML=`<div class='ko'>${ko}</div><div><div class='zh'>${zh}</div><div class='desc'>${rom}</div></div>`; w.appendChild(d); }); const sb=document.querySelector('.subbar'); if(sb) sb.style.display='none'; document.getElementById('detail').style.display='block'; }
 document.addEventListener('click',e=>{ if(e.target.closest('.speed')) return cycleSpeed(); const word=e.target.closest('.word'); if(word && word.getAttribute('data-say')){ word.classList.add('pulse','amber-temp'); setTimeout(()=>word.classList.remove('pulse','amber-temp'),350); speakKo(word.getAttribute('data-say')); return; } const s=e.target.getAttribute('data-say'); if(s) speakKo(s); });
-document.getElementById('back').addEventListener('click',()=>document.getElementById('detail').style.display='none');
+document.getElementById('back').addEventListener('click',()=>{ document.getElementById('detail').style.display='none'; const sb=document.querySelector('.subbar'); if(sb) sb.style.display=''; });
 
 const btnV=document.getElementById('btnV'), btnC=document.getElementById('btnC');
 btnV.addEventListener('click',()=>{btnV.classList.add('teal');btnC.classList.remove('teal');document.getElementById('gridV').style.display='grid';document.getElementById('gridC').style.display='none';});
