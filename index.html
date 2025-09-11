@@ -2,12 +2,18 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>發音練習</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
 <link rel="apple-touch-icon" href="icons/icon-512.png"><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
-<header class="appbar"><div class="bar"><h1 class="title"><img src="icons/p1.svg" alt=""></h1></div></header>
-<div class="appbar"><div class="row" style="justify-content:center;gap:12px">
-  <button id="btnV" class="pill teal">母 音</button>
-  <button id="btnC" class="pill">子 音</button>
-  <span class="pill amber speed">x0.75</span>
-</div></div>
+<header class="topbar"><div class="bar"><h1 class="title"><img src="icons/p1.svg" alt=""></h1></div></header>
+<div class="subbar">
+  <div class="row" style="justify-content:center;gap:12px;max-width:540px;margin:0 auto;padding:8px 16px">
+    <button id="btnV" class="pill teal">母 音</button>
+    <button id="btnC" class="pill">子 音</button>
+    <span class="pill amber speed">x0.75</span>
+  </div>
+  <div class="row" style="justify-content:flex-start;max-width:540px;margin:0 auto;padding:0 16px 8px 16px">
+    <div style="font-size:12px;color:#97a1a6">連續點兩下可以閱讀單字 · 더블클릭하면 단어를 읽어요</div>
+  </div>
+</div>
+<div style="height:76px"></div>
 <div class="appbar"><div class="row" style="justify-content:flex-end;padding-top:0"><div style="font-size:12px;color:#97a1a6">連續點兩下可以閱讀單字 · 더블클릭하면 단어를 읽어요</div></div></div>
 <main class="wrap">
   <div id="gridV" class="grid"></div>

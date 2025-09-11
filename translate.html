@@ -2,7 +2,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>實時翻譯</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
 <link rel="apple-touch-icon" href="icons/icon-512.png"><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
-<header class="appbar"><div class="bar"><h1 class="title"><img src="icons/p3.svg" alt=""></h1></div></header>
+<header class="topbar"><div class="bar"><h1 class="title"><img src="icons/p3.svg" alt=""></h1></div></header>
 <div class="appbar"><div class="row" style="gap:12px;justify-content:center">
   <span id="voiceEn" class="pill">Moira</span>
   <span id="mickey" class="pill"><img src="icons/micky.svg" width="20" height="20" alt=""></span>
@@ -45,7 +45,7 @@ async function doTranslate(text){ let ko="",en=""; try{en=await tMM(text,"zh-TW"
 function hist(){ try{ return JSON.parse(localStorage.getItem('history')||'[]'); }catch(e){ return []; } }
 function saveHist(entry){ const h=hist(); const dedup=h.filter(it=>!(it.zh===entry.zh && it.en===entry.en && it.ko===entry.ko)); dedup.unshift(Object.assign({ts:Date.now()}, entry)); localStorage.setItem('history', JSON.stringify(dedup.slice(0,10))); }
 function renderCard(text,out,starId){ const card=document.createElement('div'); card.className='card'; card.innerHTML=`<div class='ko'>${out.ko||"(韓文失敗)"}</div><div class='en'>${out.en||"(英文失敗)"}</div><div class='zh'>${text}</div><div class='badges'><span class='badge' data-ko='${out.ko}'>韓</span><span class='badge' data-en='${out.en}'>英</span><span class='star' id='${starId}' title='收藏'>☆</span></div>`; const result=document.getElementById('result'); result.innerHTML=''; result.appendChild(card); }
-async function translateAndMaybeSave(save){ const btn=document.getElementById('btnGo'); const text=(document.getElementById('in').value||'').trim(); if(!text) return; const old=btn.innerHTML; btn.classList.add('pulse','busy','amber-temp'); btn.textContent='翻 譯 中'; const out=await doTranslate(text); renderCard(text,out,'fstar'); if(save) saveHist({ko:out.ko,en:out.en,zh:text}); const card=document.querySelector('.card'); if(card) card.classList.add('flash'); setTimeout(()=>{ btn.classList.remove('pulse','busy','amber-temp'); btn.textContent='翻 譯'; if(card) card.classList.remove('flash'); },400); }
+async function translateAndMaybeSave(save){ const btn=document.getElementById('btnGo'); const text=(document.getElementById('in').value||'').trim(); if(!text) return; const old=btn.innerHTML; btn.classList.add('pulse','busy','amber-temp'); btn.textContent='翻 譯 中'; const out=await doTranslate(text); renderCard(text,out,'fstar'); if(save){ saveHist({ko:out.ko,en:out.en,zh:text}); } const card=document.querySelector('.card'); if(card) card.classList.add('flash'); setTimeout(()=>{ btn.classList.remove('pulse','busy','amber-temp'); btn.textContent='翻 譯'; if(card) card.classList.remove('flash'); },400); }
 document.getElementById('btnGo').addEventListener('click',()=>translateAndMaybeSave(true));
  
 function cycleVoice(){ const avail=availableEnVoices().map(v=>v.name); if(!avail.length) return; const idx=avail.indexOf(VOICE_EN_NAME); VOICE_EN_NAME=avail[(idx+1)%avail.length]; localStorage.setItem('voiceEnName', VOICE_EN_NAME); updateVoiceUI(); }
