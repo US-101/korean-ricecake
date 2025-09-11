@@ -2,9 +2,19 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>歷史紀錄</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
 <link rel="apple-touch-icon" href="icons/icon-512.png"><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
-<header class="appbar"><div class="bar"><h1 class="title">歷 史 紀 錄</h1></div></header>
+<header class="appbar"><div class="bar"><h1 class="title"><span class="ico-top ico-p4" aria-hidden="true"></span></h1></div></header>
 <main class="wrap"><div id="box" class="list"></div></main>
 <nav class="tabbar"><div class="in"><a class='' href='index.html'><span class='ico'><img src='icons/p1.svg' alt=''></span>發音練習</a><a class='' href='travel.html'><span class='ico'><img src='icons/p2.svg' alt=''></span>旅行會話</a><a class='' href='translate.html'><span class='ico'><img src='icons/p3.svg' alt=''></span>實時翻譯</a><a class='active' href='history.html'><span class='ico'><img src='icons/p4.svg' alt=''></span>歷史紀錄</a></div></nav>
+<section class="modal" id="pickFolderH" style="display:none"><div class="sheet" style="position:relative">
+  <button class="close" id="pickCloseH" aria-label="關閉">✕</button>
+  <h3 class="title" style="text-align:center;margin:6px 0 12px 0;color:#78bfc0">新增至收藏夾</h3>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <button class="pill" data-folder="餐廳">餐 廳</button>
+    <button class="pill" data-folder="購物">購 物</button>
+    <button class="pill" data-folder="問路">問 路</button>
+    <button class="pill" data-folder="其他">其 他</button>
+  </div>
+</div></section>
 <script>
 function speakKO(t){ const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=0.75; const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); if(v) u.voice=v; speechSynthesis.speak(u);}
 function speakEN(t){ const v=speechSynthesis.getVoices().find(v=>['Daniel','Moira','Samantha','Tessa'].includes(v.name)); const u=new SpeechSynthesisUtterance(t); if(v) u.voice=v; u.rate=0.75; speechSynthesis.speak(u);}
@@ -13,6 +23,11 @@ function favs(){ try{ return JSON.parse(localStorage.getItem('favorites')||'[]')
 function isFav(it){ return favs().some(f=>f.ko===it.ko && f.en===it.en && f.zh===it.zh); }
 function saveFav(entry){ const f=favs(); if(!f.some(x=>x.ko===entry.ko && x.en===entry.en && x.zh===entry.zh)) f.unshift(entry); localStorage.setItem('favorites', JSON.stringify(f)); }
 function render(){ const box=document.getElementById('box'); box.innerHTML=''; const H=hist(); if(!H.length){ box.innerHTML="<div class='card'>尚無歷史。</div>"; return; } H.forEach(it=>{ const starred=isFav(it); const c=document.createElement('div'); c.className='card'; c.innerHTML=`<div class='ko'>${it.ko}</div><div class='en'>${it.en}</div><div class='zh'>${it.zh}</div><div class='badges'><span class='badge' data-ko='${it.ko}'>韓</span><span class='badge' data-en='${it.en}'>英</span><span class='star ${starred?'on':''}' data-star='1'>${starred?'★':'☆'}</span></div>`; box.appendChild(c); }); }
-document.addEventListener('click',(e)=>{ if(e.target.matches('[data-ko]')) return speakKO(e.target.getAttribute('data-ko')); if(e.target.matches('[data-en]')) return speakEN(e.target.getAttribute('data-en')); if(e.target.matches('[data-star]')){ const c=e.target.closest('.card'); saveFav({ko:c.querySelector('.ko').textContent,en:c.querySelector('.en').textContent,zh:c.querySelector('.zh').textContent,folder:'其他',ts:Date.now()}); e.target.classList.add('on'); e.target.textContent='★'; } });
+let PENDING_H=null;
+document.addEventListener('click',(e)=>{ if(e.target.matches('[data-ko]')) return speakKO(e.target.getAttribute('data-ko')); if(e.target.matches('[data-en]')) return speakEN(e.target.getAttribute('data-en')); if(e.target.matches('[data-star]')){ const c=e.target.closest('.card'); PENDING_H={ko:c.querySelector('.ko').textContent,en:c.querySelector('.en').textContent,zh:c.querySelector('.zh').textContent,el:e.target}; document.getElementById('pickFolderH').style.display='block'; }
+  if(e.target.closest('#pickFolderH .sheet') && !e.target.matches('[data-folder]')) return; if(e.target.matches('#pickFolderH')){ document.getElementById('pickFolderH').style.display='none'; }
+  if(e.target.matches('#pickCloseH')){ document.getElementById('pickFolderH').style.display='none'; }
+  if(e.target.matches('#pickFolderH [data-folder]')){ const folder=e.target.getAttribute('data-folder'); if(PENDING_H){ const fav=favs(); if(!fav.some(x=>x.ko===PENDING_H.ko&&x.en===PENDING_H.en&&x.zh===PENDING_H.zh&&x.folder===folder)){ fav.unshift({ko:PENDING_H.ko,en:PENDING_H.en,zh:PENDING_H.zh,folder,ts:Date.now()}); localStorage.setItem('favorites', JSON.stringify(fav)); } PENDING_H.el.classList.add('on'); PENDING_H.el.textContent='★'; PENDING_H=null; document.getElementById('pickFolderH').style.display='none'; }
+});
 render();
 </script></body></html>
