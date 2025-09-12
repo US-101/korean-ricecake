@@ -10,7 +10,9 @@
       <button id="btnV" class="pill teal">母 音</button>
       <button id="btnC" class="pill">子 音</button>
     </div>
-    <span class="pill amber speed">x0.75</span>
+    <div style="display:flex;gap:8px">
+      <span class="pill amber speed">x0.75</span>
+    </div>
   </div>
   <div class="row" style="justify-content:flex-start;max-width:540px;margin:0 auto;padding:0 16px 8px 16px">
     <div style="font-size:12px;color:#97a1a6">按一下有聲音 · 한 번 클릭하면 소리<br>快速點兩下閱讀單字 · 빠르게 두 번 클릭하면 단어 읽기</div>
@@ -40,55 +42,65 @@
 <script>
 const DATA={ 
   vowels:[
-    {sym:"ㅏ", roman:"a", say:"아", words:[["아기","嬰兒","a-gi"],["바다","海","bada"],["사탕","糖果","satang"]]}, 
-    {sym:"ㅑ", roman:"ya", say:"야", words:[["야구","棒球","yagu"],["약","藥","yak"],["양말","襪子","yangmal"]]}, 
-    {sym:"ㅓ", roman:"eo", say:"어", words:[["서울","首爾","seoul"],["버스","公車","beoseu"],["전화","電話","jeonhwa"]]}, 
-    {sym:"ㅕ", roman:"yeo", say:"여", words:[["여자","女人","yeoja"],["여행","旅行","yeohaeng"],["영화","電影","yeonghwa"]]}, 
-    {sym:"ㅗ", roman:"o", say:"오", words:[["오이","小黃瓜","oi"],["손","手","son"],["도로","道路","doro"]]}, 
-    {sym:"ㅛ", roman:"yo", say:"요", words:[["요리","料理","yori"],["교실","教室","gyosil"],["표","票","pyo"]]}, 
-    {sym:"ㅜ", roman:"u", say:"우", words:[["우유","牛奶","uyu"],["문","門","mun"],["구두","皮鞋","gudu"]]}, 
-    {sym:"ㅠ", roman:"yu", say:"유", words:[["유리","玻璃","yuri"],["휴지","衛生紙","hyuji"],["규칙","規則","gyuchik"]]}, 
-    {sym:"ㅡ", roman:"eu", say:"으", words:[["은행","銀行","eunhaeng"],["으깨다","壓碎","eukkaeda"],["으레","理所當然","eure"]]}, 
-    {sym:"ㅣ", roman:"i", say:"이", words:[["이름","名字","ireum"],["시간","時間","sigan"],["비","雨","bi"]]}, 
-    {sym:"ㅐ", roman:"ae", say:"애", words:[["애기","小孩","aegi"],["색","顏色","saek"],["책","書","chaek"]]}, 
-    {sym:"ㅒ", roman:"yae", say:"얘", words:[["얘기","聊天","yaegi"],["계약","契約","gyeyak"],["걔","那個孩子","gyae"]]}, 
-    {sym:"ㅔ", roman:"e", say:"에", words:[["에어컨","冷氣","eeokeon"],["세탁","洗滌","setak"],["메모","備忘","memo"]]}, 
-    {sym:"ㅖ", roman:"ye", say:"예", words:[["예문","例句","yemun"],["예약","預約","yeyak"],["예술","藝術","yesul"]]}, 
-    {sym:"ㅘ", roman:"wa", say:"와", words:[["와인","紅酒","wain"],["과자","餅乾","gwaja"],["좌석","座席","jwaseok"]]}, 
-    {sym:"ㅙ", roman:"wae", say:"왜", words:[["왜요","為什麼","waeyo"],["회사","公司","hoesa"],["쾌적","舒適","kwaejeok"]]}, 
-    {sym:"ㅚ", roman:"oe", say:"외", words:[["외국","外國","oeguk"],["최고","最好","choego"],["쇄골","鎖骨","soegol"]]}, 
-    {sym:"ㅝ", roman:"wo", say:"워", words:[["원","圓/院","won"],["워터","水","woteo"],["원인","原因","wonin"]]}, 
-    {sym:"ㅞ", roman:"we", say:"웨", words:[["웨딩","婚禮","weding"],["스웨터","毛衣","seuweteo"],["웨이브","捲髮","weibeu"]]}, 
-    {sym:"ㅟ", roman:"wi", say:"위", words:[["위치","位置","wichi"],["유위","優位","yuwi"],["귀","耳朵","gwi"]]}, 
-    {sym:"ㅢ", roman:"ui", say:"의", words:[["의자","椅子","uija"],["의사","醫生","uisa"],["의미","意義","uimi"]]}
+    {sym:"ㅏ", roman:"a", say:"아", words:[["아기","嬰兒","a-gi"],["바다","海","bada"],["사탕","糖果","satang"],["가족","家族","gajok"],["학교","學校","hakgyo"]]}, 
+    {sym:"ㅑ", roman:"ya", say:"야", words:[["야구","棒球","yagu"],["약","藥","yak"],["양말","襪子","yangmal"],["야채","蔬菜","yachae"],["야간","夜間","yagan"]]}, 
+    {sym:"ㅓ", roman:"eo", say:"어", words:[["서울","首爾","seoul"],["버스","公車","beoseu"],["전화","電話","jeonhwa"],["어머니","母親","eomeoni"],["어제","昨天","eoje"]]}, 
+    {sym:"ㅕ", roman:"yeo", say:"여", words:[["여자","女人","yeoja"],["여행","旅行","yeohaeng"],["영화","電影","yeonghwa"],["여름","夏天","yeoreum"],["여권","護照","yeogwon"]]}, 
+    {sym:"ㅗ", roman:"o", say:"오", words:[["오이","小黃瓜","oi"],["손","手","son"],["도로","道路","doro"],["오늘","今天","oneul"],["오빠","哥哥","oppa"]]}, 
+    {sym:"ㅛ", roman:"yo", say:"요", words:[["요리","料理","yori"],["교실","教室","gyosil"],["표","票","pyo"],["요일","星期","yoil"],["요가","瑜伽","yoga"]]}, 
+    {sym:"ㅜ", roman:"u", say:"우", words:[["우유","牛奶","uyu"],["문","門","mun"],["구두","皮鞋","gudu"],["우산","雨傘","usan"],["우리","我們","uri"]]}, 
+    {sym:"ㅠ", roman:"yu", say:"유", words:[["유리","玻璃","yuri"],["휴지","衛生紙","hyuji"],["규칙","規則","gyuchik"],["유튜브","YouTube","yutyubeu"],["유치원","幼稚園","yuchiwon"]]}, 
+    {sym:"ㅡ", roman:"eu", say:"으", words:[["은행","銀行","eunhaeng"],["으깨다","壓碎","eukkaeda"],["으레","理所當然","eure"],["음악","音樂","eumak"],["음료","飲料","eumryo"]]}, 
+    {sym:"ㅣ", roman:"i", say:"이", words:[["이름","名字","ireum"],["시간","時間","sigan"],["비","雨","bi"],["친구","朋友","chingu"],["음식","食物","eumsik"]]}, 
+    {sym:"ㅐ", roman:"ae", say:"애", words:[["애기","小孩","aegi"],["색","顏色","saek"],["책","書","chaek"],["애완동물","寵物","aewandongmul"],["새","鳥","sae"]]}, 
+    {sym:"ㅒ", roman:"yae", say:"얘", words:[["얘기","聊天","yaegi"],["계약","契約","gyeyak"],["걔","那個孩子","gyae"],["얘들","他們","yaedeul"],["얘기하다","說話","yaegihada"]]}, 
+    {sym:"ㅔ", roman:"e", say:"에", words:[["에어컨","冷氣","eeokeon"],["세탁","洗滌","setak"],["메모","備忘","memo"],["에너지","能量","eneoji"],["에이즈","愛滋病","eijeu"]]}, 
+    {sym:"ㅖ", roman:"ye", say:"예", words:[["예문","例句","yemun"],["예약","預約","yeyak"],["예술","藝術","yesul"],["예쁘다","漂亮","yeppeuda"],["예방","預防","yebang"]]}, 
+    {sym:"ㅘ", roman:"wa", say:"와", words:[["와인","紅酒","wain"],["과자","餅乾","gwaja"],["좌석","座席","jwaseok"],["와이파이","WiFi","waipai"],["와플","鬆餅","wapeul"]]}, 
+    {sym:"ㅙ", roman:"wae", say:"왜", words:[["왜요","為什麼","waeyo"],["회사","公司","hoesa"],["쾌적","舒適","kwaejeok"],["쾌락","快樂","kwaerak"],["쾌속","快速","kwaesok"]]}, 
+    {sym:"ㅚ", roman:"oe", say:"외", words:[["외국","外國","oeguk"],["최고","最好","choego"],["쇄골","鎖骨","soegol"],["외출","外出","oechul"],["외식","外食","oesik"]]}, 
+    {sym:"ㅝ", roman:"wo", say:"워", words:[["원","圓/院","won"],["워터","水","woteo"],["원인","原因","wonin"],["워크샵","工作坊","wokeusyap"],["원룸","單間","wonrum"]]}, 
+    {sym:"ㅞ", roman:"we", say:"웨", words:[["웨딩","婚禮","weding"],["스웨터","毛衣","seuweteo"],["웨이브","捲髮","weibeu"],["웨스트","西邊","weseuteu"],["웨이퍼","威化餅","weipeo"]]}, 
+    {sym:"ㅟ", roman:"wi", say:"위", words:[["위치","位置","wichi"],["유위","優位","yuwi"],["귀","耳朵","gwi"],["위험","危險","wiheom"],["위생","衛生","wisaeng"]]}, 
+    {sym:"ㅢ", roman:"ui", say:"의", words:[["의자","椅子","uija"],["의사","醫生","uisa"],["의미","意義","uimi"],["의류","服裝","uiryu"],["의견","意見","uigyeon"]]}
   ],
   consonants:[
-    {sym:"ㄱ", roman:"g/k", say:"가", words:[["가다","去","gada"],["고기","肉","gogi"],["가족","家族","gajok"]]}, 
-    {sym:"ㄲ", roman:"kk", say:"까", words:[["꽂다","插","kkotda"],["깎다","削","kkakda"],["꾸다","借/做夢","kkuda"]]}, 
-    {sym:"ㄴ", roman:"n", say:"나", words:[["나라","國家","nara"],["노래","歌曲","norae"],["눈","眼睛","nun"]]}, 
-    {sym:"ㄷ", roman:"d/t", say:"다", words:[["다리","腿","dari"],["도서관","圖書館","doseogwan"],["달","月亮","dal"]]}, 
-    {sym:"ㄸ", roman:"tt", say:"따", words:[["따다","採","ttada"],["땀","汗","ttam"],["때","時候","ttae"]]}, 
-    {sym:"ㄹ", roman:"r/l", say:"라", words:[["라디오","收音機","radio"],["로봇","機器人","robot"],["리본","緞帶","ribon"]]}, 
-    {sym:"ㅁ", roman:"m", say:"마", words:[["머리","頭","meori"],["물","水","mul"],["멀다","遠","meolda"]]}, 
-    {sym:"ㅂ", roman:"b/p", say:"바", words:[["바다","海","bada"],["바보","傻瓜","babo"],["빵","麵包","ppang"]]}, 
-    {sym:"ㅃ", roman:"pp", say:"빠", words:[["빨리","快","ppalli"],["빵","麵包","ppang"],["뿌리","根","ppuri"]]}, 
-    {sym:"ㅅ", roman:"s", say:"사", words:[["사람","人","saram"],["사과","蘋果","sagwa"],["시간","時間","sigan"]]}, 
-    {sym:"ㅆ", roman:"ss", say:"싸", words:[["쌀","米","ssal"],["쓰다","寫/用/苦","sseuda"],["씻다","洗","ssitda"]]}, 
-    {sym:"ㅇ", roman:"ng/Ø", say:"아", words:[["아이","小孩","ai"],["얼굴","臉","eolgul"],["운동","運動","undong"]]}, 
-    {sym:"ㅈ", roman:"j", say:"자", words:[["자다","睡覺","jada"],["지갑","錢包","jigap"],["전화","電話","jeonhwa"]]}, 
-    {sym:"ㅉ", roman:"jj", say:"짜", words:[["짜다","鹹/編","jjada"],["찻집","茶館","chatjip"],["짜증","煩躁","jjajeung"]]}, 
-    {sym:"ㅊ", roman:"ch", say:"차", words:[["차","車","cha"],["친구","朋友","chingu"],["책","書","chaek"]]}, 
-    {sym:"ㅋ", roman:"k", say:"카", words:[["코","鼻子","ko"],["카페","咖啡館","kape"],["쿠키","餅乾","kuki"]]}, 
-    {sym:"ㅌ", roman:"t", say:"타", words:[["토마토","番茄","tomato"],["티셔츠","T恤","tisyeocheu"],["토끼","兔子","tokki"]]}, 
-    {sym:"ㅍ", roman:"p", say:"파", words:[["피자","披薩","pija"],["포도","葡萄","podo"],["편지","信","pyeonji"]]}, 
-    {sym:"ㅎ", roman:"h", say:"하", words:[["하늘","天空","haneul"],["학교","學校","hakgyo"],["하루","一天","haru"]]}
+    {sym:"ㄱ", roman:"g/k", say:"가", words:[["가다","去","gada"],["고기","肉","gogi"],["가족","家族","gajok"],["가방","包包","gabang"],["가격","價格","gagyeok"]]}, 
+    {sym:"ㄲ", roman:"kk", say:"까", words:[["꽂다","插","kkotda"],["깎다","削","kkakda"],["꾸다","借/做夢","kkuda"],["꼬리","尾巴","kkori"],["꼭","一定","kkok"]]}, 
+    {sym:"ㄴ", roman:"n", say:"나", words:[["나라","國家","nara"],["노래","歌曲","norae"],["눈","眼睛","nun"],["나무","樹","namu"],["네","是","ne"]]}, 
+    {sym:"ㄷ", roman:"d/t", say:"다", words:[["다리","腿/橋","dari"],["도시","城市","dosi"],["동물","動物","dongmul"],["딸","女兒","ttal"],["돈","錢","don"]]}, 
+    {sym:"ㄸ", roman:"tt", say:"따", words:[["따뜻하다","溫暖","ttatteushada"],["따라하다","模仿","ttarahada"],["따라가다","跟隨","ttaragada"],["따라서","因此","ttaraseo"],["따라","跟著","ttara"]]}, 
+    {sym:"ㄹ", roman:"r/l", say:"라", words:[["라디오","收音機","radio"],["라면","拉麵","ramyeon"],["라벨","標籤","label"],["라인","線","line"],["라이트","燈","light"]]}, 
+    {sym:"ㅁ", roman:"m", say:"마", words:[["마음","心","maeum"],["물","水","mul"],["먹다","吃","meokda"],["마시다","喝","masida"],["만나다","見面","mannada"]]}, 
+    {sym:"ㅂ", roman:"b/p", say:"바", words:[["바다","海","bada"],["밥","飯","bap"],["비","雨","bi"],["버스","公車","beoseu"],["바람","風","baram"]]}, 
+    {sym:"ㅃ", roman:"pp", say:"빠", words:[["빠르다","快","ppareuda"],["빠지다","掉","ppajida"],["빠뜨리다","掉落","ppatteurida"],["빠져나가다","逃出","ppajyeonagada"],["빠르게","快速地","ppareuge"]]}, 
+    {sym:"ㅅ", roman:"s", say:"사", words:[["사람","人","saram"],["사과","蘋果","sagwa"],["사랑","愛情","sarang"],["사진","照片","sajin"],["사용","使用","sayong"]]}, 
+    {sym:"ㅆ", roman:"ss", say:"싸", words:[["싸다","便宜","ssada"],["싸우다","打架","ssauda"],["싸움","爭吵","ssaum"],["싸다","包","ssada"],["싸다","便宜","ssada"]]}, 
+    {sym:"ㅇ", roman:"ng", say:"아", words:[["아이","孩子","ai"],["아버지","父親","abeoji"],["어머니","母親","eomeoni"],["아들","兒子","adeul"],["아내","妻子","anae"]]}, 
+    {sym:"ㅈ", roman:"j", say:"자", words:[["자동차","汽車","jadongcha"],["자리","位置","jari"],["자주","經常","jaju"],["자다","睡覺","jada"],["자기","自己","jagi"]]}, 
+    {sym:"ㅉ", roman:"jj", say:"짜", words:[["짜다","鹹","jjada"],["짜증","煩躁","jjajeung"],["짜다","編","jjada"],["짜다","擠","jjada"],["짜다","鹹","jjada"]]}, 
+    {sym:"ㅊ", roman:"ch", say:"차", words:[["차","車","cha"],["차다","冷","chada"],["차이","差異","chai"],["차례","順序","charye"],["차분하다","冷靜","chabunhada"]]}, 
+    {sym:"ㅋ", roman:"k", say:"카", words:[["카드","卡片","kadeu"],["카페","咖啡廳","kape"],["카메라","相機","kamera"],["카운터","櫃台","kaunteo"],["카스","啤酒","kaseu"]]}, 
+    {sym:"ㅌ", roman:"t", say:"타", words:[["타다","騎/乘","tada"],["타이","領帶","tai"],["타이어","輪胎","taieo"],["타이머","計時器","taimeo"],["타이프","打字","taipeu"]]}, 
+    {sym:"ㅍ", roman:"p", say:"파", words:[["피자","披薩","pija"],["포도","葡萄","podo"],["편지","信","pyeonji"],["파란색","藍色","paransaek"],["파일","文件","pail"]]}, 
+    {sym:"ㅎ", roman:"h", say:"하", words:[["하늘","天空","haneul"],["학교","學校","hakgyo"],["하루","一天","haru"],["하나","一","hana"],["하얀색","白色","hayansaek"]]}
   ]
 };
 
 let RATE=0.75; const SPEEDS=[0.5,0.75,1.0];
+
 function updateSpeedUI(){ document.querySelectorAll('.speed').forEach(el=>{ el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); }); }
 function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; updateSpeedUI(); }
-function speakKo(t){ const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=RATE; const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); if(v) u.voice=v; speechSynthesis.speak(u);}
+
+function speakKo(t){ 
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang='ko-KR';
+  u.rate=RATE;
+  const v = speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); 
+  if(v) u.voice=v; 
+  speechSynthesis.speak(u);
+}
+
 function tile(it){ 
   const el=document.createElement('div'); 
   el.className='tile'; 
@@ -113,10 +125,12 @@ function tile(it){
   
   return el; 
 }
+
 function render(){
   const gv=document.getElementById('gridV'); gv.innerHTML=""; DATA.vowels.forEach(it=>gv.appendChild(tile(it)));
   const gc=document.getElementById('gridC'); gc.innerHTML=""; DATA.consonants.forEach(it=>gc.appendChild(tile(it)));
 }
+
 function openDetail(item){ 
   document.getElementById('bigSym').textContent=item.sym; 
   
@@ -160,6 +174,7 @@ document.getElementById('back').addEventListener('click',()=>{
 const btnV=document.getElementById('btnV'), btnC=document.getElementById('btnC');
 btnV.addEventListener('click',()=>{btnV.classList.add('teal');btnC.classList.remove('teal');document.getElementById('gridV').style.display='grid';document.getElementById('gridC').style.display='none';});
 btnC.addEventListener('click',()=>{btnC.classList.add('teal');btnV.classList.remove('teal');document.getElementById('gridC').style.display='grid';document.getElementById('gridV').style.display='none';});
+
 updateSpeedUI();
 render();
 </script></body></html>

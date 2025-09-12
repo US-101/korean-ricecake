@@ -12,7 +12,7 @@
 </div></div>
 <main class="wrap">
   
-  <textarea id="in" placeholder="請輸入要翻譯的句子…"></textarea>
+  <textarea id="in" placeholder="請輸入要翻譯的句子（支持中文、韓文、英文）…"></textarea>
   <div style="display:flex;gap:8px;margin-top:10px">
     <button class="pill teal" id="btnGo">翻 譯</button>
   </div>
@@ -60,7 +60,36 @@ function speakEN(t){ const v=speechSynthesis.getVoices().find(v=>v.name===VOICE_
 async function tMM(q,from,to){ const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=${from}|${to}`); const j=await r.json(); return j?.responseData?.translatedText || ""; }
 async function tLibre(q,from,to){ const r=await fetch("https://libretranslate.de/translate", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q,source:from,target:to})}); const j=await r.json(); return j?.translatedText || ""; }
 
-async function doTranslate(text){ let ko="",en=""; try{en=await tMM(text,"zh-TW","en");}catch(e){} try{ko=await tMM(text,"zh-TW","ko");}catch(e){} if(!en){try{en=await tLibre(text,"zh","en");}catch(e){}} if(!ko){try{ko=await tLibre(text,"zh","ko");}catch(e){}} return {ko,en}; }
+async function doTranslate(text){ 
+  let ko="",en="",zh=""; 
+  
+  // 檢測輸入語言
+  const isKorean = /[\uAC00-\uD7AF]/.test(text); // 韓文字符範圍
+  const isChinese = /[\u4E00-\u9FFF]/.test(text); // 中文字符範圍
+  
+  if(isKorean) {
+    // 韓文輸入：翻譯成中文和英文
+    try{zh=await tMM(text,"ko","zh-TW");}catch(e){}
+    try{en=await tMM(text,"ko","en");}catch(e){}
+    if(!zh){try{zh=await tLibre(text,"ko","zh");}catch(e){}}
+    if(!en){try{en=await tLibre(text,"ko","en");}catch(e){}}
+    return {ko:text,en,zh};
+  } else if(isChinese) {
+    // 中文輸入：翻譯成韓文和英文
+    try{en=await tMM(text,"zh-TW","en");}catch(e){}
+    try{ko=await tMM(text,"zh-TW","ko");}catch(e){}
+    if(!en){try{en=await tLibre(text,"zh","en");}catch(e){}}
+    if(!ko){try{ko=await tLibre(text,"zh","ko");}catch(e){}}
+    return {ko,en,zh:text};
+  } else {
+    // 英文或其他語言輸入：翻譯成中文和韓文
+    try{zh=await tMM(text,"en","zh-TW");}catch(e){}
+    try{ko=await tMM(text,"en","ko");}catch(e){}
+    if(!zh){try{zh=await tLibre(text,"en","zh");}catch(e){}}
+    if(!ko){try{ko=await tLibre(text,"en","ko");}catch(e){}}
+    return {ko,en:text,zh};
+  }
+}
 
 function hist(){ try{ return JSON.parse(localStorage.getItem('history')||'[]'); }catch(e){ return []; } }
 function saveHist(entry){ const h=hist(); const dedup=h.filter(it=>!(it.zh===entry.zh && it.en===entry.en && it.ko===entry.ko)); dedup.unshift(Object.assign({ts:Date.now()}, entry)); localStorage.setItem('history', JSON.stringify(dedup.slice(0,10))); }
@@ -79,12 +108,12 @@ function isFav(ko, en, zh){
 
 function renderCard(text,out,starId){ 
   const card=document.createElement('div'); 
-  const isFavorited = isFav(out.ko, out.en, text);
+  const isFavorited = isFav(out.ko, out.en, out.zh || text);
   card.className='card'; 
   card.innerHTML=`
     <div class='ko'>${out.ko||"(韓文失敗)"}</div>
     <div class='en'>${out.en||"(英文失敗)"}</div>
-    <div class='zh'>${text}</div>
+    <div class='zh'>${out.zh||text}</div>
     <div class='badges'>
       <span class='badge' data-ko='${out.ko}'>韓</span>
       <span class='badge' data-en='${out.en}'>英</span>
@@ -105,7 +134,7 @@ async function translateAndMaybeSave(save){
   btn.textContent='翻 譯 中'; 
   const out=await doTranslate(text); 
   renderCard(text,out,'fstar'); 
-  if(save){ saveHist({ko:out.ko,en:out.en,zh:text}); } 
+  if(save){ saveHist({ko:out.ko,en:out.en,zh:out.zh||text}); } 
   const card=document.querySelector('.card'); 
   if(card) card.classList.add('flash'); 
   setTimeout(()=>{ 
