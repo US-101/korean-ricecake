@@ -4,9 +4,11 @@
 <link rel="apple-touch-icon" href="icons/icon-512.png"><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
 <header class="topbar"><div class="bar"><h1 class="title"><img src="icons/p1.svg" alt=""></h1></div></header>
 <div class="subbar">
-  <div class="row" style="justify-content:center;gap:12px;max-width:540px;margin:0 auto;padding:8px 16px">
-    <button id="btnV" class="pill teal">母 音</button>
-    <button id="btnC" class="pill">子 音</button>
+  <div class="row" style="justify-content:space-between;max-width:540px;margin:0 auto;padding:8px 16px">
+    <div style="display:flex;gap:12px">
+      <button id="btnV" class="pill teal">母 音</button>
+      <button id="btnC" class="pill">子 音</button>
+    </div>
     <span class="pill amber speed">x0.75</span>
   </div>
   <div class="row" style="justify-content:flex-start;max-width:540px;margin:0 auto;padding:0 16px 8px 16px">
@@ -20,11 +22,13 @@
 </main>
 <nav class="tabbar"><div class="in"><a class='active' href='index.html'><span class='ico'><img src='icons/p1.svg' alt=''></span>發音練習</a><a class='' href='travel.html'><span class='ico'><img src='icons/p2.svg' alt=''></span>旅行會話</a><a class='' href='translate.html'><span class='ico'><img src='icons/p3.svg' alt=''></span>實時翻譯</a><a class='' href='history.html'><span class='ico'><img src='icons/p4.svg' alt=''></span>歷史紀錄</a></div></nav>
 <section class="modal" id="detail"><div class="sheet">
-  <div style="display:flex;align-items:center;gap:12px">
-    <button class="backbtn" id="back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-    <h3 class="title" style="flex:1;text-align:center;letter-spacing:6px;color:#78bfc0;margin:0">發 音 練 習</h3>
-    <span class="pill amber speed">x0.75</span>
+  <div class="subbar" style="position:static;border-bottom:none;background:transparent">
+    <div class="row" style="justify-content:space-between;max-width:540px;margin:0 auto;padding:8px 16px">
+      <button class="pill teal" id="back">← 上一頁</button>
+      <span class="pill amber speed">x0.75</span>
+    </div>
   </div>
+  <h3 class="title" style="text-align:center;letter-spacing:6px;color:#78bfc0;margin:16px 0">發 音 練 習</h3>
   <div class="big"><span id="bigSym">ㅏ</span></div>
   <div id="words"></div>
 </div></section>
