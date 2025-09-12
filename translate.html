@@ -17,6 +17,8 @@
   <div class="result list" id="result"></div>
 </main>
 <nav class="tabbar"><div class="in"><a class='' href='index.html'><span class='ico'><img src='icons/p1.svg' alt=''></span>發音練習</a><a class='' href='travel.html'><span class='ico'><img src='icons/p2.svg' alt=''></span>旅行會話</a><a class='active' href='translate.html'><span class='ico'><img src='icons/p3.svg' alt=''></span>實時翻譯</a><a class='' href='history.html'><span class='ico'><img src='icons/p4.svg' alt=''></span>歷史紀錄</a></div></nav>
+
+<!-- 統一的收藏彈窗樣式 -->
 <section class="modal" id="pickFolder" style="display:none"><div class="sheet">
   <button class="close" id="pickClose" aria-label="關閉">✕</button>
   <h3 class="title" style="text-align:center;margin:6px 0 12px 0;color:#78bfc0">收藏到哪個資料夾？</h3>
@@ -27,6 +29,7 @@
     <button class="pill" data-folder="其他">其 他</button>
   </div>
 </div></section>
+
 <script>
 const EN=["Daniel","Moira","Samantha","Tessa"]; let VOICE_EN_NAME=localStorage.getItem('voiceEnName')||'Moira';
 function availableEnVoices(){ const all=speechSynthesis.getVoices(); return EN.map(n=>all.find(v=>v.name===n)).filter(Boolean); }
@@ -34,29 +37,139 @@ function updateVoiceUI(){ const el=document.getElementById('voiceEn'); if(el) el
 function ensureVoice(){ const avail=availableEnVoices().map(v=>v.name); if(!avail.includes(VOICE_EN_NAME) && avail.length){ VOICE_EN_NAME=avail[0]; localStorage.setItem('voiceEnName', VOICE_EN_NAME); } updateVoiceUI(); }
 window.speechSynthesis.onvoiceschanged=()=>{ ensureVoice(); };
 document.getElementById('mickey').addEventListener('click',e=>e.currentTarget.classList.toggle('on'));
+
 let RATE=0.75; const SPEEDS=[0.5,0.75,1.0];
 function updateSpeedUI(){ document.querySelectorAll('.speed').forEach(el=>{ el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); }); }
 function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; updateSpeedUI(); }
+
 function speakKO(t){ const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=RATE; const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); if(v) u.voice=v; speechSynthesis.speak(u);} 
 function speakEN(t){ const v=speechSynthesis.getVoices().find(v=>v.name===VOICE_EN_NAME)||speechSynthesis.getVoices().find(v=>/en/i.test(v.lang||'')); const u=new SpeechSynthesisUtterance(t); if(v) u.voice=v; u.rate=RATE; if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; speechSynthesis.speak(u);} 
+
 async function tMM(q,from,to){ const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=${from}|${to}`); const j=await r.json(); return j?.responseData?.translatedText || ""; }
 async function tLibre(q,from,to){ const r=await fetch("https://libretranslate.de/translate", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q,source:from,target:to})}); const j=await r.json(); return j?.translatedText || ""; }
+
 async function doTranslate(text){ let ko="",en=""; try{en=await tMM(text,"zh-TW","en");}catch(e){} try{ko=await tMM(text,"zh-TW","ko");}catch(e){} if(!en){try{en=await tLibre(text,"zh","en");}catch(e){}} if(!ko){try{ko=await tLibre(text,"zh","ko");}catch(e){}} return {ko,en}; }
+
 function hist(){ try{ return JSON.parse(localStorage.getItem('history')||'[]'); }catch(e){ return []; } }
 function saveHist(entry){ const h=hist(); const dedup=h.filter(it=>!(it.zh===entry.zh && it.en===entry.en && it.ko===entry.ko)); dedup.unshift(Object.assign({ts:Date.now()}, entry)); localStorage.setItem('history', JSON.stringify(dedup.slice(0,10))); }
-function renderCard(text,out,starId){ const card=document.createElement('div'); card.className='card'; card.innerHTML=`<div class='ko'>${out.ko||"(韓文失敗)"}</div><div class='en'>${out.en||"(英文失敗)"}</div><div class='zh'>${text}</div><div class='badges'><span class='badge' data-ko='${out.ko}'>韓</span><span class='badge' data-en='${out.en}'>英</span><span class='star' id='${starId}' title='收藏'>☆</span></div>`; const result=document.getElementById('result'); result.innerHTML=''; result.appendChild(card); }
-async function translateAndMaybeSave(save){ const btn=document.getElementById('btnGo'); const text=(document.getElementById('in').value||'').trim(); if(!text) return; const old=btn.innerHTML; btn.classList.add('pulse','busy','amber-temp'); btn.textContent='翻 譯 中'; const out=await doTranslate(text); renderCard(text,out,'fstar'); if(save){ saveHist({ko:out.ko,en:out.en,zh:text}); } const card=document.querySelector('.card'); if(card) card.classList.add('flash'); setTimeout(()=>{ btn.classList.remove('pulse','busy','amber-temp'); btn.textContent='翻 譯'; if(card) card.classList.remove('flash'); },400); }
+
+function renderCard(text,out,starId){ 
+  const card=document.createElement('div'); 
+  card.className='card'; 
+  card.innerHTML=`
+    <div class='ko'>${out.ko||"(韓文失敗)"}</div>
+    <div class='en'>${out.en||"(英文失敗)"}</div>
+    <div class='zh'>${text}</div>
+    <div class='badges'>
+      <span class='badge' data-ko='${out.ko}'>韓</span>
+      <span class='badge' data-en='${out.en}'>英</span>
+      <span class='star' id='${starId}' title='收藏'>☆</span>
+    </div>
+  `; 
+  const result=document.getElementById('result'); 
+  result.innerHTML=''; 
+  result.appendChild(card); 
+}
+
+async function translateAndMaybeSave(save){ 
+  const btn=document.getElementById('btnGo'); 
+  const text=(document.getElementById('in').value||'').trim(); 
+  if(!text) return; 
+  const old=btn.innerHTML; 
+  btn.classList.add('pulse','busy','amber-temp'); 
+  btn.textContent='翻 譯 中'; 
+  const out=await doTranslate(text); 
+  renderCard(text,out,'fstar'); 
+  if(save){ saveHist({ko:out.ko,en:out.en,zh:text}); } 
+  const card=document.querySelector('.card'); 
+  if(card) card.classList.add('flash'); 
+  setTimeout(()=>{ 
+    btn.classList.remove('pulse','busy','amber-temp'); 
+    btn.textContent='翻 譯'; 
+    if(card) card.classList.remove('flash'); 
+  },400); 
+}
+
 document.getElementById('btnGo').addEventListener('click',()=>translateAndMaybeSave(true));
  
-function cycleVoice(){ const avail=availableEnVoices().map(v=>v.name); if(!avail.length) return; const idx=avail.indexOf(VOICE_EN_NAME); VOICE_EN_NAME=avail[(idx+1)%avail.length]; localStorage.setItem('voiceEnName', VOICE_EN_NAME); updateVoiceUI(); }
+function cycleVoice(){ 
+  const avail=availableEnVoices().map(v=>v.name); 
+  if(!avail.length) return; 
+  const idx=avail.indexOf(VOICE_EN_NAME); 
+  VOICE_EN_NAME=avail[(idx+1)%avail.length]; 
+  localStorage.setItem('voiceEnName', VOICE_EN_NAME); 
+  updateVoiceUI(); 
+}
+
 let PENDING_STAR=null; // {ko,en,zh,el}
-document.addEventListener('click', (e)=>{ if(e.target.closest('#voiceEn')) return cycleVoice(); if(e.target.closest('.speed')) return cycleSpeed(); if(e.target.matches('[data-ko]')){ e.target.classList.add('pulse','amber-temp'); setTimeout(()=>e.target.classList.remove('pulse','amber-temp'),350); return speakKO(e.target.getAttribute('data-ko')); } if(e.target.matches('[data-en]')){ e.target.classList.add('pulse','amber-temp'); setTimeout(()=>e.target.classList.remove('pulse','amber-temp'),350); return speakEN(e.target.getAttribute('data-en')); }
-  if(e.target.id==='fstar'){ const c=e.target.closest('.card'); PENDING_STAR={ko:c.querySelector('.ko').textContent,en:c.querySelector('.en').textContent,zh:c.querySelector('.zh').textContent,el:e.target}; document.getElementById('pickFolder').style.display='block'; return; }
-  if(e.target.matches('[data-folder]')){ const folder=e.target.getAttribute('data-folder'); if(PENDING_STAR){ const favs=JSON.parse(localStorage.getItem('favorites')||'[]'); favs.unshift({ko:PENDING_STAR.ko,en:PENDING_STAR.en,zh:PENDING_STAR.zh,folder,ts:Date.now()}); localStorage.setItem('favorites', JSON.stringify(favs)); PENDING_STAR.el.classList.add('on'); PENDING_STAR.el.textContent='★'; PENDING_STAR=null; } document.getElementById('pickFolder').style.display='none'; return; }
-  if(e.target.id==='pickFolder') { document.getElementById('pickFolder').style.display='none'; return; }
-  if(e.target.closest('#pickFolder .sheet') && !e.target.matches('[data-folder]')){ /* swallow clicks inside sheet */ return; }
+
+document.addEventListener('click', (e)=>{ 
+  if(e.target.closest('#voiceEn')) return cycleVoice(); 
+  if(e.target.closest('.speed')) return cycleSpeed(); 
+  
+  if(e.target.matches('[data-ko]')){ 
+    e.target.classList.add('pulse','amber-temp'); 
+    setTimeout(()=>e.target.classList.remove('pulse','amber-temp'),350); 
+    return speakKO(e.target.getAttribute('data-ko')); 
+  } 
+  
+  if(e.target.matches('[data-en]')){ 
+    e.target.classList.add('pulse','amber-temp'); 
+    setTimeout(()=>e.target.classList.remove('pulse','amber-temp'),350); 
+    return speakEN(e.target.getAttribute('data-en')); 
+  }
+
+  // 點擊星號收藏
+  if(e.target.id==='fstar'){ 
+    const c=e.target.closest('.card'); 
+    PENDING_STAR={
+      ko:c.querySelector('.ko').textContent,
+      en:c.querySelector('.en').textContent,
+      zh:c.querySelector('.zh').textContent,
+      el:e.target
+    }; 
+    document.getElementById('pickFolder').style.display='flex'; 
+    return; 
+  }
+
+  // 選擇收藏夾
+  if(e.target.matches('[data-folder]')){ 
+    const folder=e.target.getAttribute('data-folder'); 
+    if(PENDING_STAR){ 
+      const favs=JSON.parse(localStorage.getItem('favorites')||'[]'); 
+      favs.unshift({
+        ko:PENDING_STAR.ko,
+        en:PENDING_STAR.en,
+        zh:PENDING_STAR.zh,
+        folder,
+        ts:Date.now()
+      }); 
+      localStorage.setItem('favorites', JSON.stringify(favs)); 
+      PENDING_STAR.el.classList.add('on'); 
+      PENDING_STAR.el.textContent='★'; 
+      PENDING_STAR=null; 
+    } 
+    document.getElementById('pickFolder').style.display='none'; 
+    return; 
+  }
+
+  // 點擊彈窗背景關閉
+  if(e.target.id==='pickFolder') { 
+    document.getElementById('pickFolder').style.display='none'; 
+    return; 
+  }
+
+  // 防止點擊彈窗內容區域時關閉
+  if(e.target.closest('#pickFolder .sheet') && !e.target.matches('[data-folder]')){ 
+    return; 
+  }
 });
-document.getElementById('pickClose').addEventListener('click',()=>{ document.getElementById('pickFolder').style.display='none'; });
-ensureVoice(); updateSpeedUI();
+
+// 關閉按鈕
+document.getElementById('pickClose').addEventListener('click',()=>{ 
+  document.getElementById('pickFolder').style.display='none'; 
+});
+
+ensureVoice(); 
 updateSpeedUI();
 </script></body></html>
