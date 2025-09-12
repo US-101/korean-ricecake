@@ -109,7 +109,7 @@ textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px
 .ink-amber{color:#FAD162!important}
 
 /* 收藏彈窗置中 - 統一樣式 */
-#pickFolder, #pickFolderH{
+#pickFolder, #pickFolderH, #confirmDelete{
   display:none;
   align-items:center;
   justify-content:center;
@@ -118,7 +118,7 @@ textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px
   background:rgba(0,0,0,.3);
   z-index:3000;
 }
-#pickFolder .sheet, #pickFolderH .sheet{
+#pickFolder .sheet, #pickFolderH .sheet, #confirmDelete .sheet{
   background:rgba(255,255,255,.98);
   border-radius:20px;
   box-shadow:var(--shadow);
@@ -127,12 +127,12 @@ textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px
   max-width:320px;
   width:90%;
 }
-#pickFolder .title, #pickFolderH .title{color:#78bfc0!important}
-#pickFolder .pill, #pickFolderH .pill{border-color:#e6ecef;color:#9aa3a8;background:#fff}
-#pickFolder .pill:active, #pickFolderH .pill:active{background:#8ECFD0;color:#fff;border-color:#8ECFD0}
+#pickFolder .title, #pickFolderH .title, #confirmDelete .title{color:#78bfc0!important}
+#pickFolder .pill, #pickFolderH .pill, #confirmDelete .pill{border-color:#e6ecef;color:#9aa3a8;background:#fff}
+#pickFolder .pill:active, #pickFolderH .pill:active, #confirmDelete .pill:active{background:#8ECFD0;color:#fff;border-color:#8ECFD0}
 
 /* 關閉按鈕 - 放大一倍 */
-#pickFolder .close, #pickFolderH .close{
+#pickFolder .close, #pickFolderH .close, #confirmDelete .close{
   position:absolute;
   top:8px;
   right:8px;
@@ -150,6 +150,6 @@ textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px
   align-items:center;
   justify-content:center;
 }
-#pickFolder .close:hover, #pickFolderH .close:hover{
+#pickFolder .close:hover, #pickFolderH .close:hover, #confirmDelete .close:hover{
   background:#f3f6f8;
 }
