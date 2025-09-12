@@ -91,7 +91,7 @@ textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px
 /* 底部導覽列 */
 .tabbar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:3000}
 .tabbar .in{max-width:540px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
-.tabbar a{padding:10px 6px 12px;text-align:center;color:#9aa3a8;font-size:11px;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;line-height:1;min-height:58px}
+.tabbar a{padding:12px 8px 24px;text-align:center;color:#9aa3a8;font-size:11px;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;line-height:1;min-height:72px}
 .tabbar a .ico{display:flex;align-items:center;justify-content:center;margin:0}
 .tabbar a.active{color:#8ECFD0}
 .tabbar a .ico{width:22px;height:22px}
