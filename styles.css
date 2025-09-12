@@ -18,7 +18,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 .has-subbar .wrap{padding-top:104px}
 
 /* 膠囊按鈕（全域預設） */
-.pill{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1.5px solid var(--teal);background:#fff;color:var(--teal);box-shadow:var(--shadow)}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1.5px solid var(--teal);background:#fff;color:var(--teal);box-shadow:var(--shadow);cursor:pointer}
 .pill.teal{background:var(--teal);color:#fff;border-color:var(--teal)}
 .pill.amber{background:var(--amber);color:#7a5b00;border-color:var(--amber)}
 .pill .dot{width:6px;height:6px;background:#fff;border-radius:999px;display:inline-block}
@@ -108,22 +108,48 @@ textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px
 .modal .btn svg{display:block}
 .ink-amber{color:#FAD162!important}
 
-/* 收藏彈窗置中 */
-#pickFolder{display:none;align-items:center;justify-content:center}
-#pickFolder .sheet{background:rgba(255,255,255,.98);border-radius:20px;box-shadow:var(--shadow);padding:16px;position:relative}
-#pickFolder .title{color:#9aa3a8!important}
-#pickFolder .pill{border-color:#e6ecef;color:#9aa3a8;background:#fff}
-#pickFolder .pill:active{background:#8ECFD0;color:#fff;border-color:#8ECFD0}
+/* 收藏彈窗置中 - 統一樣式 */
+#pickFolder, #pickFolderH{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.3);
+  z-index:3000;
+}
+#pickFolder .sheet, #pickFolderH .sheet{
+  background:rgba(255,255,255,.98);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  padding:16px;
+  position:relative;
+  max-width:320px;
+  width:90%;
+}
+#pickFolder .title, #pickFolderH .title{color:#78bfc0!important}
+#pickFolder .pill, #pickFolderH .pill{border-color:#e6ecef;color:#9aa3a8;background:#fff}
+#pickFolder .pill:active, #pickFolderH .pill:active{background:#8ECFD0;color:#fff;border-color:#8ECFD0}
 
-/* history modal same look */
-#pickFolderH{display:none;align-items:center;justify-content:center}
-#pickFolderH .sheet{background:rgba(255,255,255,.98);border-radius:20px;box-shadow:var(--shadow);padding:16px;position:relative}
-#pickFolderH .title{color:#9aa3a8!important}
-#pickFolderH .pill{border-color:#e6ecef;color:#9aa3a8;background:#fff}
-#pickFolderH .pill:active{background:#8ECFD0;color:#fff;border-color:#8ECFD0}
-#pickFolderH .close{position:absolute;top:10px;right:10px;border:none;background:transparent;color:#9aa3a8;cursor:pointer;padding:6px;border-radius:8px}
-#pickFolderH .close:hover{background:#f3f6f8}
-
-/* close X for pick modal */
-#pickFolder .close{position:absolute;top:10px;right:10px;border:none;background:transparent;color:#9aa3a8;cursor:pointer;padding:6px;border-radius:8px}
-#pickFolder .close:hover{background:#f3f6f8}
+/* 關閉按鈕 - 放大一倍 */
+#pickFolder .close, #pickFolderH .close{
+  position:absolute;
+  top:8px;
+  right:8px;
+  border:none;
+  background:transparent;
+  color:#9aa3a8;
+  cursor:pointer;
+  padding:8px;
+  border-radius:8px;
+  font-size:24px;
+  line-height:1;
+  width:40px;
+  height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#pickFolder .close:hover, #pickFolderH .close:hover{
+  background:#f3f6f8;
+}
