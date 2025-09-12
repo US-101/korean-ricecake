@@ -13,7 +13,7 @@
     <span class="pill amber speed">x0.75</span>
   </div>
   <div class="row" style="justify-content:flex-start;max-width:540px;margin:0 auto;padding:0 16px 8px 16px">
-    <div style="font-size:12px;color:#97a1a6">連續點兩下可以閱讀單字 · 더블클릭하면 단어를 읽어요</div>
+    <div style="font-size:12px;color:#97a1a6">按一下有聲音 · 한 번 클릭하면 소리<br>快速點兩下閱讀單字 · 빠르게 두 번 클릭하면 단어 읽기</div>
   </div>
 </div>
 
@@ -24,17 +24,18 @@
 
 <nav class="tabbar"><div class="in"><a class='active' href='index.html'><span class='ico'><img src='icons/p1.svg' alt=''></span>發音練習</a><a class='' href='travel.html'><span class='ico'><img src='icons/p2.svg' alt=''></span>旅行會話</a><a class='' href='translate.html'><span class='ico'><img src='icons/p3.svg' alt=''></span>實時翻譯</a><a class='' href='history.html'><span class='ico'><img src='icons/p4.svg' alt=''></span>歷史紀錄</a></div></nav>
 
-<section class="modal" id="detail"><div class="sheet">
-  <div class="appbar" style="position:relative;background:transparent;border:none;top:0;z-index:100">
+<section class="modal" id="detail">
+  <div class="appbar" id="detailAppbar" style="position:fixed;top:0;left:0;right:0;z-index:3000;background:var(--bg);border-bottom:1px solid var(--line)">
     <div class="row" style="justify-content:space-between;gap:12px;max-width:540px;margin:0 auto;padding:12px 16px 6px 16px">
       <button class="pill teal" id="back">← 上一頁</button>
       <span class="pill amber speed">x0.75</span>
     </div>
   </div>
-  <h3 class="title" style="text-align:center;letter-spacing:6px;color:#78bfc0;margin:16px 0">發 音 練 習</h3>
-  <div class="big"><span id="bigSym">ㅏ</span></div>
-  <div id="words"></div>
-</div></section>
+  <div class="sheet" style="padding-top:80px;padding-bottom:110px">
+    <div class="big" id="bigLetter"><span id="bigSym">ㅏ</span></div>
+    <div id="words"></div>
+  </div>
+</section>
 
 <script>
 const DATA={ 
@@ -88,13 +89,41 @@ let RATE=0.75; const SPEEDS=[0.5,0.75,1.0];
 function updateSpeedUI(){ document.querySelectorAll('.speed').forEach(el=>{ el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); }); }
 function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; updateSpeedUI(); }
 function speakKo(t){ const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=RATE; const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); if(v) u.voice=v; speechSynthesis.speak(u);}
-function tile(it){ const el=document.createElement('div'); el.className='tile'; el.innerHTML=`<div class='sym'>${it.sym}</div><div class='rom'>${it.roman}</div>`; el.addEventListener('click',()=>speakKo(it.say)); el.addEventListener('dblclick',()=>openDetail(it)); return el; }
+function tile(it){ 
+  const el=document.createElement('div'); 
+  el.className='tile'; 
+  el.innerHTML=`<div class='sym'>${it.sym}</div><div class='rom'>${it.roman}</div>`; 
+  
+  let clickTimer = null;
+  
+  el.addEventListener('click', (e) => {
+    if (clickTimer) {
+      clearTimeout(clickTimer);
+      clickTimer = null;
+      // 這是雙擊，不播放聲音，直接進入詳細頁面
+      openDetail(it);
+    } else {
+      // 這是單擊，設置延遲播放聲音
+      clickTimer = setTimeout(() => {
+        speakKo(it.say);
+        clickTimer = null;
+      }, 200);
+    }
+  });
+  
+  return el; 
+}
 function render(){
   const gv=document.getElementById('gridV'); gv.innerHTML=""; DATA.vowels.forEach(it=>gv.appendChild(tile(it)));
   const gc=document.getElementById('gridC'); gc.innerHTML=""; DATA.consonants.forEach(it=>gc.appendChild(tile(it)));
 }
 function openDetail(item){ 
   document.getElementById('bigSym').textContent=item.sym; 
+  
+  // 為大字母卡片添加點擊事件
+  const bigLetter = document.getElementById('bigLetter');
+  bigLetter.onclick = () => speakKo(item.say);
+  
   const w=document.getElementById('words'); 
   w.innerHTML=''; 
   item.words.forEach(([ko,zh,rom])=>{ 
@@ -104,7 +133,7 @@ function openDetail(item){
     d.innerHTML=`<div class='ko'>${ko}</div><div><div class='zh'>${zh}</div><div class='desc'>${rom}</div></div>`; 
     w.appendChild(d); 
   }); 
-  const appbars = document.querySelectorAll('.appbar:not(#detail .appbar)');
+  const appbars = document.querySelectorAll('.appbar:not(#detailAppbar)');
   appbars.forEach(ab => ab.style.display='none');
   document.getElementById('detail').style.display='block'; 
 }
@@ -124,7 +153,7 @@ document.addEventListener('click',e=>{
 
 document.getElementById('back').addEventListener('click',()=>{ 
   document.getElementById('detail').style.display='none'; 
-  const appbars = document.querySelectorAll('.appbar:not(#detail .appbar)');
+  const appbars = document.querySelectorAll('.appbar:not(#detailAppbar)');
   appbars.forEach(ab => ab.style.display='');
 });
 

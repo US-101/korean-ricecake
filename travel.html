@@ -3,14 +3,26 @@
 <title>旅行會話</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
 <link rel="apple-touch-icon" href="icons/icon-512.png"><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
 <header class="topbar"><div class="bar"><h1 class="title"><img src="icons/p2.svg" alt=""></h1></div></header>
-<div class="appbar"><div class="row" style="gap:12px;justify-content:center">
-  <span id="voiceEn" class="pill">Moira</span>
-  <span id="mickey" class="pill"><img src="icons/micky.svg" width="20" height="20" alt=""></span>
+<div class="appbar"><div class="row" style="justify-content:space-between;gap:12px;max-width:540px;margin:0 auto;padding:12px 16px 6px 16px">
+  <div style="display:flex;gap:12px">
+    <span id="voiceEn" class="pill">Moira</span>
+    <span id="mickey" class="pill"><img src="icons/micky.svg" width="20" height="20" alt=""></span>
+  </div>
   <span class="pill amber speed">x0.75</span>
 </div>
 <div class="tabs"><button class="tab active" data-tab="R">餐廳</button><button class="tab" data-tab="S">購物</button><button class="tab" data-tab="N">問路</button><button class="tab" data-tab="O">其他</button></div></div>
 <main class="wrap"><div id="cards" class="list"></div></main>
 <nav class="tabbar"><div class="in"><a class='' href='index.html'><span class='ico'><img src='icons/p1.svg' alt=''></span>發音練習</a><a class='active' href='travel.html'><span class='ico'><img src='icons/p2.svg' alt=''></span>旅行會話</a><a class='' href='translate.html'><span class='ico'><img src='icons/p3.svg' alt=''></span>實時翻譯</a><a class='' href='history.html'><span class='ico'><img src='icons/p4.svg' alt=''></span>歷史紀錄</a></div></nav>
+
+<!-- 確認刪除彈窗 -->
+<section class="modal" id="confirmDelete" style="display:none"><div class="sheet">
+  <button class="close" id="confirmClose" aria-label="關閉">✕</button>
+  <h3 class="title" style="text-align:center;margin:6px 0 12px 0;color:#78bfc0">確定要從收藏移除嗎？</h3>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <button class="pill" id="confirmYes">確 定</button>
+    <button class="pill" id="confirmNo">取 消</button>
+  </div>
+</div></section>
 <script>
 const EN=["Daniel","Moira","Samantha","Tessa"];
 let RATE=0.75; const SPEEDS=[0.5,0.75,1.0];
@@ -54,7 +66,63 @@ function render(cat){ const box=document.getElementById('cards'); box.innerHTML=
   // append favorites that belong to this folder name
   const folderName = document.querySelector('.tab.active')?.textContent || (cat==='R'?'餐廳':cat==='S'?'購物':cat==='N'?'問路':'其他');
   favs().filter(f=>f.folder===folderName).forEach(f=>{ box.appendChild(cardFav(f)); }); }
-document.addEventListener('click',e=>{ if(e.target.closest('#voiceEn')) return cycleVoice(); if(e.target.closest('.speed')) return cycleSpeed(); if(e.target.matches('[data-ko]')){ e.target.classList.add('pulse','amber-temp'); setTimeout(()=>e.target.classList.remove('pulse','amber-temp'),350); return speakKO(e.target.getAttribute('data-ko')); } if(e.target.matches('[data-en]')){ e.target.classList.add('pulse','amber-temp'); setTimeout(()=>e.target.classList.remove('pulse','amber-temp'),350); return speakEN(e.target.getAttribute('data-en')); } if(e.target.classList.contains('tab')){ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); e.target.classList.add('active'); render(e.target.getAttribute('data-tab')); return; } if(e.target.classList.contains('star')){ const c=e.target.closest('.card'); const folder=document.querySelector('.tab.active').textContent; const ko=c.querySelector('.ko').textContent; const en=c.querySelector('.en').textContent; const zh=c.querySelector('.zh').textContent; if(e.target.hasAttribute('data-fav')){ if(confirm('確定要從收藏移除嗎？')){ const list=favs().filter(x=>!(x.ko===ko && x.en===en && x.zh===zh && x.folder===folder)); localStorage.setItem('favorites', JSON.stringify(list)); render(document.querySelector('.tab.active')?.getAttribute('data-tab')||'R'); } return; } } });
+let PENDING_DELETE = null;
+
+document.addEventListener('click',e=>{ 
+  if(e.target.closest('#voiceEn')) return cycleVoice(); 
+  if(e.target.closest('.speed')) return cycleSpeed(); 
+  if(e.target.matches('[data-ko]')){ 
+    e.target.classList.add('pulse','amber-temp'); 
+    setTimeout(()=>e.target.classList.remove('pulse','amber-temp'),350); 
+    return speakKO(e.target.getAttribute('data-ko')); 
+  } 
+  if(e.target.matches('[data-en]')){ 
+    e.target.classList.add('pulse','amber-temp'); 
+    setTimeout(()=>e.target.classList.remove('pulse','amber-temp'),350); 
+    return speakEN(e.target.getAttribute('data-en')); 
+  } 
+  if(e.target.classList.contains('tab')){ 
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); 
+    e.target.classList.add('active'); 
+    render(e.target.getAttribute('data-tab')); 
+    return; 
+  } 
+  if(e.target.classList.contains('star')){ 
+    const c=e.target.closest('.card'); 
+    const folder=document.querySelector('.tab.active').textContent; 
+    const ko=c.querySelector('.ko').textContent; 
+    const en=c.querySelector('.en').textContent; 
+    const zh=c.querySelector('.zh').textContent; 
+    if(e.target.hasAttribute('data-fav')){ 
+      PENDING_DELETE = {ko, en, zh, folder, el: e.target};
+      document.getElementById('confirmDelete').style.display='flex'; 
+      return; 
+    } 
+  } 
+  
+  // 確認刪除彈窗處理
+  if(e.target.id==='confirmYes' && PENDING_DELETE){ 
+    const list=favs().filter(x=>!(x.ko===PENDING_DELETE.ko && x.en===PENDING_DELETE.en && x.zh===PENDING_DELETE.zh && x.folder===PENDING_DELETE.folder)); 
+    localStorage.setItem('favorites', JSON.stringify(list)); 
+    render(document.querySelector('.tab.active')?.getAttribute('data-tab')||'R'); 
+    PENDING_DELETE = null;
+    document.getElementById('confirmDelete').style.display='none'; 
+    return; 
+  }
+  
+  if(e.target.id==='confirmNo' || e.target.id==='confirmClose'){ 
+    PENDING_DELETE = null;
+    document.getElementById('confirmDelete').style.display='none'; 
+    return; 
+  }
+  
+  // 點擊彈窗背景關閉
+  if(e.target.id==='confirmDelete') { 
+    PENDING_DELETE = null;
+    document.getElementById('confirmDelete').style.display='none'; 
+    return; 
+  }
+});
 ensureVoice(); updateSpeedUI();
 updateSpeedUI();
 render("R");

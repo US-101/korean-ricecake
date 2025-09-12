@@ -4,9 +4,11 @@
 <link rel="apple-touch-icon" href="icons/icon-512.png"><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
 <header class="topbar"><div class="bar"><h1 class="title"><img src="icons/p4.svg" alt="歷史紀錄"></h1></div></header>
 
-<div class="appbar"><div class="row" style="gap:12px;justify-content:center">
-  <span id="voiceEn" class="pill">Moira</span>
-  <span id="mickey" class="pill"><img src="icons/micky.svg" width="20" height="20" alt=""></span>
+<div class="appbar"><div class="row" style="justify-content:space-between;gap:12px;max-width:540px;margin:0 auto;padding:12px 16px 6px 16px">
+  <div style="display:flex;gap:12px">
+    <span id="voiceEn" class="pill">Moira</span>
+    <span id="mickey" class="pill"><img src="icons/micky.svg" width="20" height="20" alt=""></span>
+  </div>
   <span class="pill amber speed">x0.75</span>
 </div></div>
 
@@ -28,6 +30,16 @@
     <button class="pill" data-folder="購物">購 物</button>
     <button class="pill" data-folder="問路">問 路</button>
     <button class="pill" data-folder="其他">其 他</button>
+  </div>
+</div></section>
+
+<!-- 確認刪除彈窗 -->
+<section class="modal" id="confirmDelete" style="display:none"><div class="sheet">
+  <button class="close" id="confirmClose" aria-label="關閉">✕</button>
+  <h3 class="title" style="text-align:center;margin:6px 0 12px 0;color:#78bfc0">確定要從收藏移除嗎？</h3>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <button class="pill" id="confirmYes">確 定</button>
+    <button class="pill" id="confirmNo">取 消</button>
   </div>
 </div></section>
 
@@ -143,6 +155,7 @@ function render(){
 }
 
 let PENDING_H=null;
+let PENDING_DELETE=null;
 
 document.addEventListener('click',(e)=>{ 
   if(e.target.closest('#voiceEn')) return cycleVoice();
@@ -154,26 +167,23 @@ document.addEventListener('click',(e)=>{
   
   if(e.target.matches('[data-star]')){ 
     const c=e.target.closest('.card'); 
-    PENDING_H={
-      ko:c.querySelector('.ko').textContent,
-      en:c.querySelector('.en').textContent,
-      zh:c.querySelector('.zh').textContent,
-      el:e.target
-    }; 
-    document.getElementById('pickFolderH').style.display='flex'; 
+    const ko=c.querySelector('.ko').textContent;
+    const en=c.querySelector('.en').textContent;
+    const zh=c.querySelector('.zh').textContent;
+    
+    if(e.target.classList.contains('on')){ 
+      // 已收藏，顯示確認刪除
+      PENDING_DELETE={ko, en, zh, el:e.target};
+      document.getElementById('confirmDelete').style.display='flex'; 
+    } else { 
+      // 未收藏，顯示選擇資料夾
+      PENDING_H={ko, en, zh, el:e.target};
+      document.getElementById('pickFolderH').style.display='flex'; 
+    }
     return;
   }
 
-  if(e.target.closest('#pickFolderH .sheet') && !e.target.matches('[data-folder]')) return; 
-  
-  if(e.target.matches('#pickFolderH')){ 
-    document.getElementById('pickFolderH').style.display='none'; 
-  }
-  
-  if(e.target.matches('#pickCloseH')){ 
-    document.getElementById('pickFolderH').style.display='none'; 
-  }
-  
+  // 選擇收藏夾
   if(e.target.matches('#pickFolderH [data-folder]')){ 
     const folder=e.target.getAttribute('data-folder'); 
     if(PENDING_H){ 
@@ -193,6 +203,42 @@ document.addEventListener('click',(e)=>{
       PENDING_H=null; 
       document.getElementById('pickFolderH').style.display='none'; 
     }
+    return;
+  }
+  
+  // 確認刪除
+  if(e.target.id==='confirmYes' && PENDING_DELETE){ 
+    const fav=favs(); 
+    const filtered = fav.filter(f=>!(f.ko===PENDING_DELETE.ko && f.en===PENDING_DELETE.en && f.zh===PENDING_DELETE.zh)); 
+    localStorage.setItem('favorites', JSON.stringify(filtered)); 
+    PENDING_DELETE.el.classList.remove('on'); 
+    PENDING_DELETE.el.textContent='☆'; 
+    PENDING_DELETE=null;
+    document.getElementById('confirmDelete').style.display='none'; 
+    return; 
+  }
+  
+  if(e.target.id==='confirmNo' || e.target.id==='confirmClose'){ 
+    PENDING_DELETE=null;
+    document.getElementById('confirmDelete').style.display='none'; 
+    return; 
+  }
+
+  if(e.target.closest('#pickFolderH .sheet') && !e.target.matches('[data-folder]') && !e.target.matches('#pickCloseH')) return; 
+  
+  if(e.target.matches('#pickFolderH')){ 
+    PENDING_H = null;
+    document.getElementById('pickFolderH').style.display='none'; 
+  }
+  
+  if(e.target.matches('#pickCloseH')){ 
+    PENDING_H = null;
+    document.getElementById('pickFolderH').style.display='none'; 
+  }
+  
+  if(e.target.matches('#confirmDelete')){ 
+    PENDING_DELETE=null;
+    document.getElementById('confirmDelete').style.display='none'; 
   }
 });
 
