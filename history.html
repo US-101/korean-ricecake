@@ -19,7 +19,8 @@
 <a class='active' href='history.html'><span class='ico'><img src='icons/p4.svg' alt=''></span>歷史紀錄</a>
 </div></nav>
 
-<section class="modal" id="pickFolderH" style="display:none"><div class="sheet" style="position:relative">
+<!-- 統一的收藏彈窗樣式 -->
+<section class="modal" id="pickFolderH" style="display:none"><div class="sheet">
   <button class="close" id="pickCloseH" aria-label="關閉">✕</button>
   <h3 class="title" style="text-align:center;margin:6px 0 12px 0;color:#78bfc0">新增至收藏夾</h3>
   <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
@@ -111,12 +112,6 @@ function favs(){
 
 function isFav(it){ 
   return favs().some(f=>f.ko===it.ko && f.en===it.en && f.zh===it.zh); 
-}
-
-function saveFav(entry){ 
-  const f=favs(); 
-  if(!f.some(x=>x.ko===entry.ko && x.en===entry.en && x.zh===entry.zh)) f.unshift(entry); 
-  localStorage.setItem('favorites', JSON.stringify(f)); 
 }
 
 function render(){ 
