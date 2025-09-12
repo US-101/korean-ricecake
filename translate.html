@@ -1,4 +1,84 @@
-<!DOCTYPE html><html lang="zh-Hant"><head>
+let PENDING_STAR=null; // {ko,en,zh,el}
+let PENDING_DELETE=null; // {ko,en,zh,el}
+
+document.addEventListener('click', (e)=>{ 
+  if(e.target.closest('#voiceEn')) return cycleVoice(); 
+  if(e.target.closest('.speed')) return cycleSpeed(); 
+  
+  if(e.target.matches('[data-ko]')){ 
+    e.target.classList.add('pulse','amber-temp'); 
+    setTimeout(()=>e.target.classList.remove('pulse','amber-temp'),350); 
+    return speakKO(e.target.getAttribute('data-ko')); 
+  } 
+  
+  if(e.target.matches('[data-en]')){ 
+    e.target.classList.add('pulse','amber-temp'); 
+    setTimeout(()=>e.target.classList.remove('pulse','amber-temp'),350); 
+    return speakEN(e.target.getAttribute('data-en')); 
+  }
+
+  // 點擊星號收藏或取消收藏
+  if(e.target.id==='fstar'){ 
+    const c=e.target.closest('.card'); 
+    const ko = c.querySelector('.ko').textContent;
+    const en = c.querySelector('.en').textContent;
+    const zh = c.querySelector('.zh').textContent;
+    
+    if(e.target.classList.contains('on')) {
+      // 已收藏，顯示確認刪除對話框
+      PENDING_DELETE = {ko, en, zh, el: e.target};
+      document.getElementById('confirmDelete').style.display='flex';
+    } else {
+      // 未收藏，顯示收藏對話框
+      PENDING_STAR = {ko, en, zh, el: e.target};
+      document.getElementById('pickFolder').style.display='flex'; 
+    }
+    return; 
+  }
+
+  // 選擇收藏夾
+  if(e.target.matches('[data-folder]')){ 
+    const folder=e.target.getAttribute('data-folder'); 
+    if(PENDING_STAR){ 
+      const favs=JSON.parse(localStorage.getItem('favorites')||'[]'); 
+      favs.unshift({
+        ko:PENDING_STAR.ko,
+        en:PENDING_STAR.en,
+        zh:PENDING_STAR.zh,
+        folder,
+        ts:Date.now()
+      }); 
+      localStorage.setItem('favorites', JSON.stringify(favs)); 
+      PENDING_STAR.el.classList.add('on'); 
+      PENDING_STAR.el.textContent='★'; 
+      PENDING_STAR=null; 
+    } 
+    document.getElementById('pickFolder').style.display='none'; 
+    return; 
+  }
+  
+  // 確認刪除
+  if(e.target.id === 'confirmYes') {
+    if(PENDING_DELETE) {
+      removeFavorite(PENDING_DELETE.ko, PENDING_DELETE.en, PENDING_DELETE.zh);
+      PENDING_DELETE.el.classList.remove('on');
+      PENDING_DELETE.el.textContent='☆';
+      PENDING_DELETE = null;
+    }
+    document.getElementById('confirmDelete').style.display='none';
+    return;
+  }
+  
+  // 取消刪除
+  if(e.target.id === 'confirmNo') {
+    PENDING_DELETE = null;
+    document.getElementById('confirmDelete').style.display='none';
+    return;
+  }
+
+  // 點擊彈窗背景關閉
+  if(e.target.id==='pickFolder') { 
+    document.getElementById('pickFolder').style.display<!DOCTYPE html><html lang="zh-Hant"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>實時翻譯</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
 <link rel="apple-touch-icon" href="icons/icon-512.png"><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
