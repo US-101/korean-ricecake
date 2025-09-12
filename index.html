@@ -3,8 +3,9 @@
 <title>韓語小工具</title><meta name="description" content="針對旅行的時候臨時可用的方便小物"><meta property="og:type" content="website"><meta property="og:title" content="韓語小工具"><meta property="og:description" content="針對旅行的時候臨時可用的方便小物"><meta property="og:image" content="icons/icon-512.png"><meta property="og:url" content="https://us-101.github.io/korean-pronunciation/index.html"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="韓語小工具"><meta name="twitter:description" content="針對旅行的時候臨時可用的方便小物"><meta name="twitter:image" content="icons/icon-512.png"><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
 <link rel="apple-touch-icon" href="icons/icon-512.png"><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
 <header class="topbar"><div class="bar"><h1 class="title"><img src="icons/p1.svg" alt=""></h1></div></header>
-<div class="subbar">
-  <div class="row" style="justify-content:space-between;max-width:540px;margin:0 auto;padding:8px 16px">
+
+<div class="appbar">
+  <div class="row" style="justify-content:space-between;gap:12px;max-width:540px;margin:0 auto;padding:12px 16px 6px 16px">
     <div style="display:flex;gap:12px">
       <button id="btnV" class="pill teal">母 音</button>
       <button id="btnC" class="pill">子 音</button>
@@ -15,15 +16,17 @@
     <div style="font-size:12px;color:#97a1a6">連續點兩下可以閱讀單字 · 더블클릭하면 단어를 읽어요</div>
   </div>
 </div>
-<div style="height:76px"></div>
+
 <main class="wrap">
   <div id="gridV" class="grid"></div>
   <div id="gridC" class="grid" style="display:none"></div>
 </main>
+
 <nav class="tabbar"><div class="in"><a class='active' href='index.html'><span class='ico'><img src='icons/p1.svg' alt=''></span>發音練習</a><a class='' href='travel.html'><span class='ico'><img src='icons/p2.svg' alt=''></span>旅行會話</a><a class='' href='translate.html'><span class='ico'><img src='icons/p3.svg' alt=''></span>實時翻譯</a><a class='' href='history.html'><span class='ico'><img src='icons/p4.svg' alt=''></span>歷史紀錄</a></div></nav>
+
 <section class="modal" id="detail"><div class="sheet">
-  <div class="subbar" style="position:static;border-bottom:none;background:transparent">
-    <div class="row" style="justify-content:space-between;max-width:540px;margin:0 auto;padding:8px 16px">
+  <div class="appbar" style="position:relative;background:transparent;border:none;top:0;z-index:100">
+    <div class="row" style="justify-content:space-between;gap:12px;max-width:540px;margin:0 auto;padding:12px 16px 6px 16px">
       <button class="pill teal" id="back">← 上一頁</button>
       <span class="pill amber speed">x0.75</span>
     </div>
@@ -90,9 +93,40 @@ function render(){
   const gv=document.getElementById('gridV'); gv.innerHTML=""; DATA.vowels.forEach(it=>gv.appendChild(tile(it)));
   const gc=document.getElementById('gridC'); gc.innerHTML=""; DATA.consonants.forEach(it=>gc.appendChild(tile(it)));
 }
-function openDetail(item){ document.getElementById('bigSym').textContent=item.sym; const w=document.getElementById('words'); w.innerHTML=''; item.words.forEach(([ko,zh,rom])=>{ const d=document.createElement('div'); d.className='word'; d.setAttribute('data-say', ko); d.innerHTML=`<div class='ko'>${ko}</div><div><div class='zh'>${zh}</div><div class='desc'>${rom}</div></div>`; w.appendChild(d); }); const sb=document.querySelector('.subbar'); if(sb) sb.style.display='none'; document.getElementById('detail').style.display='block'; }
-document.addEventListener('click',e=>{ if(e.target.closest('.speed')) return cycleSpeed(); const word=e.target.closest('.word'); if(word && word.getAttribute('data-say')){ word.classList.add('pulse','amber-temp'); setTimeout(()=>word.classList.remove('pulse','amber-temp'),350); speakKo(word.getAttribute('data-say')); return; } const s=e.target.getAttribute('data-say'); if(s) speakKo(s); });
-document.getElementById('back').addEventListener('click',()=>{ document.getElementById('detail').style.display='none'; const ab=document.querySelector('.appbar'); if(ab) ab.style.display=''; });
+function openDetail(item){ 
+  document.getElementById('bigSym').textContent=item.sym; 
+  const w=document.getElementById('words'); 
+  w.innerHTML=''; 
+  item.words.forEach(([ko,zh,rom])=>{ 
+    const d=document.createElement('div'); 
+    d.className='word'; 
+    d.setAttribute('data-say', ko); 
+    d.innerHTML=`<div class='ko'>${ko}</div><div><div class='zh'>${zh}</div><div class='desc'>${rom}</div></div>`; 
+    w.appendChild(d); 
+  }); 
+  const appbars = document.querySelectorAll('.appbar:not(#detail .appbar)');
+  appbars.forEach(ab => ab.style.display='none');
+  document.getElementById('detail').style.display='block'; 
+}
+
+document.addEventListener('click',e=>{ 
+  if(e.target.closest('.speed')) return cycleSpeed(); 
+  const word=e.target.closest('.word'); 
+  if(word && word.getAttribute('data-say')){ 
+    word.classList.add('pulse','amber-temp'); 
+    setTimeout(()=>word.classList.remove('pulse','amber-temp'),350); 
+    speakKo(word.getAttribute('data-say')); 
+    return; 
+  } 
+  const s=e.target.getAttribute('data-say'); 
+  if(s) speakKo(s); 
+});
+
+document.getElementById('back').addEventListener('click',()=>{ 
+  document.getElementById('detail').style.display='none'; 
+  const appbars = document.querySelectorAll('.appbar:not(#detail .appbar)');
+  appbars.forEach(ab => ab.style.display='');
+});
 
 const btnV=document.getElementById('btnV'), btnC=document.getElementById('btnC');
 btnV.addEventListener('click',()=>{btnV.classList.add('teal');btnC.classList.remove('teal');document.getElementById('gridV').style.display='grid';document.getElementById('gridC').style.display='none';});
