@@ -115,8 +115,10 @@ function renderCard(text,out,starId){
     <div class='en'>${out.en||"(英文失敗)"}</div>
     <div class='zh'>${out.zh||text}</div>
     <div class='badges'>
-      <span class='badge' data-ko='${out.ko}'>韓</span>
-      <span class='badge' data-en='${out.en}'>英</span>
+      <div class='language-badges'>
+        <span class='badge' data-ko='${out.ko}'>韓</span>
+        <span class='badge' data-en='${out.en}'>英</span>
+      </div>
       <span class='star ${isFavorited?'on':''}' id='${starId}' title='${isFavorited?'已收藏':'收藏'}'>${isFavorited?'★':'☆'}</span>
     </div>
   `; 

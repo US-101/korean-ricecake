@@ -145,8 +145,10 @@ function render(){
       <div class='en'>${it.en}</div>
       <div class='zh'>${it.zh}</div>
       <div class='badges'>
-        <span class='badge' data-ko='${it.ko}'>韓</span>
-        <span class='badge' data-en='${it.en}'>英</span>
+        <div class='language-badges'>
+          <span class='badge' data-ko='${it.ko}'>韓</span>
+          <span class='badge' data-en='${it.en}'>英</span>
+        </div>
         <span class='star ${starred?'on':''}' data-star='1'>${starred?'★':'☆'}</span>
       </div>
     `; 
