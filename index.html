@@ -41,11 +41,12 @@
       <button id="btnC" class="pill">子 音</button>
     </div>
     <div style="display:flex;gap:8px">
+      <span id="mickey" class="pill"><img src="icons/micky.svg" width="20" height="20" alt=""></span>
       <span class="pill amber speed">x0.75</span>
     </div>
   </div>
   <div class="row" style="justify-content:flex-start;max-width:540px;margin:0 auto;padding:0 16px 8px 16px">
-    <div style="font-size:12px;color:#97a1a6">按一下有聲音 · 한 번 클릭하면 소리<br>快速點兩下閱讀單字 · 빠르게 두 번 클릭하면 단어 읽기</div>
+    <div style="font-size:12px;color:#97a1a6">按一下有聲音 · 한 번 클릭하면 소리<br>快速點兩下閱讀單字 · 빠르게 두 번 클릭하면 단어 읽기<br>按下<img src="icons/micky.svg" style="width:12px;height:12px;vertical-align:middle;margin:0 2px;filter:invert(60%) sepia(5%) saturate(300%) hue-rotate(180deg) brightness(95%) contrast(85%);">切換成米奇模式 · <img src="icons/micky.svg" style="width:12px;height:12px;vertical-align:middle;margin:0 2px;filter:invert(60%) sepia(5%) saturate(300%) hue-rotate(180deg) brightness(95%) contrast(85%);">을 누르면 미키 모드로 바뀝니다</div>
   </div>
 </div>
 
@@ -60,7 +61,10 @@
   <div class="appbar" id="detailAppbar" style="position:fixed;top:0;left:0;right:0;z-index:3000;background:var(--bg);border-bottom:1px solid var(--line)">
     <div class="row" style="justify-content:space-between;gap:12px;max-width:540px;margin:0 auto;padding:12px 16px 6px 16px">
       <button class="pill teal" id="back">← 上一頁</button>
-      <span class="pill amber speed">x0.75</span>
+      <div style="display:flex;gap:8px">
+        <span id="mickeyDetail" class="pill"><img src="icons/micky.svg" width="20" height="20" alt=""></span>
+        <span class="pill amber speed">x0.75</span>
+      </div>
     </div>
   </div>
   <div class="sheet" style="padding-top:80px;padding-bottom:110px">
@@ -117,10 +121,22 @@ const DATA={
   ]
 };
 
-let RATE=0.75; const SPEEDS=[0.5,0.75,1.0];
+let RATE=parseFloat(localStorage.getItem('playbackRate')||'0.75'); const SPEEDS=[0.5,0.75,1.0];
 
 function updateSpeedUI(){ document.querySelectorAll('.speed').forEach(el=>{ el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); }); }
-function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; updateSpeedUI(); }
+function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; localStorage.setItem('playbackRate', RATE.toString()); updateSpeedUI(); }
+
+function loadMickeyState(){ 
+  const mickeyState = localStorage.getItem('mickeyMode') === 'true';
+  const mickey = document.getElementById('mickey');
+  const mickeyDetail = document.getElementById('mickeyDetail');
+  if(mickeyState) {
+    if(mickey) mickey.classList.add('on');
+    if(mickeyDetail) mickeyDetail.classList.add('on');
+  }
+}
+
+function saveMickeyState(isOn){ localStorage.setItem('mickeyMode', isOn.toString()); }
 
 function speakKo(t){ 
   const u=new SpeechSynthesisUtterance(t);
@@ -128,6 +144,9 @@ function speakKo(t){
   u.rate=RATE;
   const v = speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); 
   if(v) u.voice=v; 
+  const mickey = document.getElementById('mickey');
+  const mickeyDetail = document.getElementById('mickeyDetail');
+  if((mickey && mickey.classList.contains('on')) || (mickeyDetail && mickeyDetail.classList.contains('on'))) u.pitch=1.6;
   speechSynthesis.speak(u);
 }
 
@@ -184,6 +203,22 @@ function openDetail(item){
 
 document.addEventListener('click',e=>{ 
   if(e.target.closest('.speed')) return cycleSpeed(); 
+  if(e.target.closest('#mickey')) {
+    const mickey = document.getElementById('mickey');
+    const mickeyDetail = document.getElementById('mickeyDetail');
+    mickey.classList.toggle('on');
+    if(mickeyDetail) mickeyDetail.classList.toggle('on');
+    saveMickeyState(mickey.classList.contains('on'));
+    return;
+  }
+  if(e.target.closest('#mickeyDetail')) {
+    const mickey = document.getElementById('mickey');
+    const mickeyDetail = document.getElementById('mickeyDetail');
+    mickeyDetail.classList.toggle('on');
+    if(mickey) mickey.classList.toggle('on');
+    saveMickeyState(mickeyDetail.classList.contains('on'));
+    return;
+  } 
   const word=e.target.closest('.word'); 
   if(word && word.getAttribute('data-say')){ 
     word.classList.add('pulse','amber-temp'); 
@@ -206,5 +241,6 @@ btnV.addEventListener('click',()=>{btnV.classList.add('teal');btnC.classList.rem
 btnC.addEventListener('click',()=>{btnC.classList.add('teal');btnV.classList.remove('teal');document.getElementById('gridC').style.display='grid';document.getElementById('gridV').style.display='none';});
 
 updateSpeedUI();
+loadMickeyState();
 render();
 </script></body></html>

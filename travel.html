@@ -6,9 +6,11 @@
 <div class="appbar"><div class="row" style="justify-content:space-between;gap:12px;max-width:540px;margin:0 auto;padding:12px 16px 6px 16px">
   <div style="display:flex;gap:12px">
     <span id="voiceEn" class="pill">Moira</span>
-    <span id="mickey" class="pill"><img src="icons/micky.svg" width="20" height="20" alt=""></span>
   </div>
-  <span class="pill amber speed">x0.75</span>
+  <div style="display:flex;gap:8px">
+    <span id="mickey" class="pill"><img src="icons/micky.svg" width="20" height="20" alt=""></span>
+    <span class="pill amber speed">x0.75</span>
+  </div>
 </div>
 <div class="row" style="justify-content:flex-start;max-width:540px;margin:0 auto;padding:0 16px 8px 16px">
   <div style="font-size:12px;color:#97a1a6">英語：點選名字可切換人物 · 영어: 이름 선택 시 음성 전환<br>按下<img src="icons/micky.svg" style="width:12px;height:12px;vertical-align:middle;margin:0 2px;filter:invert(60%) sepia(5%) saturate(300%) hue-rotate(180deg) brightness(95%) contrast(85%);">切換成米奇模式 · <img src="icons/micky.svg" style="width:12px;height:12px;vertical-align:middle;margin:0 2px;filter:invert(60%) sepia(5%) saturate(300%) hue-rotate(180deg) brightness(95%) contrast(85%);">을 누르면 미키 모드로 바뀝니다</div>
@@ -28,7 +30,7 @@
 </div></section>
 <script>
 const EN=["Daniel","Moira","Samantha","Tessa"];
-let RATE=0.75; const SPEEDS=[0.5,0.75,1.0];
+let RATE=parseFloat(localStorage.getItem('playbackRate')||'0.75'); const SPEEDS=[0.5,0.75,1.0];
 let VOICE_EN_NAME = localStorage.getItem('voiceEnName') || 'Moira';
 function updateVoiceUI(){ const el=document.getElementById('voiceEn'); if(el) el.textContent = VOICE_EN_NAME; }
 function availableEnVoices(){ const all=speechSynthesis.getVoices(); return EN.map(n=>all.find(v=>v.name===n)).filter(Boolean); }
@@ -36,10 +38,12 @@ function ensureVoice(){ const avail=availableEnVoices().map(v=>v.name); if(!avai
   updateVoiceUI(); }
 function cycleVoice(){ const avail=availableEnVoices().map(v=>v.name); if(!avail.length) return; const idx=avail.indexOf(VOICE_EN_NAME); VOICE_EN_NAME = avail[(idx+1)%avail.length]; localStorage.setItem('voiceEnName', VOICE_EN_NAME); updateVoiceUI(); }
 function updateSpeedUI(){ document.querySelectorAll('.speed').forEach(el=>{ el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); }); }
-function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; updateSpeedUI(); }
+function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; localStorage.setItem('playbackRate', RATE.toString()); updateSpeedUI(); }
 function loadEn(){ const all=speechSynthesis.getVoices(); const sel=document.getElementById('voiceEn'); const picked=EN.map(n=>all.find(v=>v.name===n)).filter(Boolean); if(picked.length){ sel.innerHTML=picked.map(v=>`<option>${v.name}</option>`).join(""); const saved=localStorage.getItem('voiceEnName'); if(saved&&picked.some(v=>v.name===saved)) sel.value=saved; sel.addEventListener('change',()=>localStorage.setItem('voiceEnName', sel.value)); } }
 window.speechSynthesis.onvoiceschanged = ()=>{ ensureVoice(); };
-document.getElementById('mickey').addEventListener('click',e=>e.currentTarget.classList.toggle('on'));
+function loadMickeyState(){ const mickeyState = localStorage.getItem('mickeyMode') === 'true'; const mickey = document.getElementById('mickey'); if(mickeyState && mickey) mickey.classList.add('on'); }
+function saveMickeyState(isOn){ localStorage.setItem('mickeyMode', isOn.toString()); }
+document.getElementById('mickey').addEventListener('click',e=>{e.currentTarget.classList.toggle('on'); saveMickeyState(e.currentTarget.classList.contains('on'));});
 
 const DATA={R:[
   ["추천 메뉴가 뭐예요?","What do you recommend?","有什麼推薦的嗎？"],
@@ -128,6 +132,6 @@ document.addEventListener('click',e=>{
   }
 });
 ensureVoice(); updateSpeedUI();
-updateSpeedUI();
+loadMickeyState();
 render("R");
 </script></body></html>
