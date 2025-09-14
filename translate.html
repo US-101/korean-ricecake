@@ -118,15 +118,17 @@ function renderCard(text,out,starId){
   const isFavorited = isFav(out.ko, out.en, out.zh || text);
   card.className='card'; 
   card.innerHTML=`
-    <div class='ko'>${out.ko||"(韓文失敗)"}</div>
-    <div class='en'>${out.en||"(英文失敗)"}</div>
-    <div class='zh'>${out.zh||text}</div>
-    <div class='badges'>
-      <div class='language-badges'>
-        <span class='badge' data-ko='${out.ko}'>韓</span>
-        <span class='badge' data-en='${out.en}'>英</span>
+    <div class='card-inner'>
+      <div class='ko'>${out.ko||"(韓文失敗)"}</div>
+      <div class='trans'>
+        <div class='en'>${out.en||"(英文失敗)"}</div>
+        <div class='zh'>${out.zh||text}</div>
       </div>
-      <span class='star ${isFavorited?'on':''}' id='${starId}' title='${isFavorited?'已收藏':'收藏'}'><img src='icons/${isFavorited?'toboki-yellow':'toboki'}.svg' alt='${isFavorited?'已收藏':'收藏'}'></span>
+      <div class='act'>
+        <button class='pill' data-ko='${out.ko}'>韓</button>
+        <button class='pill' data-en='${out.en}'>英</button>
+        <span class='star ${isFavorited?'on':''}' id='${starId}' title='${isFavorited?'已收藏':'收藏'}'><img src='icons/${isFavorited?'toboki-yellow':'toboki'}.svg' alt='${isFavorited?'已收藏':'收藏'}'></span>
+      </div>
     </div>
   `; 
   const result=document.getElementById('result'); 

@@ -148,15 +148,17 @@ function render(){
     const c=document.createElement('div'); 
     c.className='card'; 
     c.innerHTML=`
-      <div class='ko'>${it.ko}</div>
-      <div class='en'>${it.en}</div>
-      <div class='zh'>${it.zh}</div>
-      <div class='badges'>
-        <div class='language-badges'>
-          <span class='badge' data-ko='${it.ko}'>韓</span>
-          <span class='badge' data-en='${it.en}'>英</span>
+      <div class='card-inner'>
+        <div class='ko'>${it.ko}</div>
+        <div class='trans'>
+          <div class='en'>${it.en}</div>
+          <div class='zh'>${it.zh}</div>
         </div>
-        <span class='star ${starred?'on':''}' data-star='1'><img src='icons/${starred?'toboki-yellow':'toboki'}.svg' alt='${starred?'已收藏':'收藏'}'></span>
+        <div class='act'>
+          <button class='pill' data-ko='${it.ko}'>韓</button>
+          <button class='pill' data-en='${it.en}'>英</button>
+          <span class='star ${starred?'on':''}' data-star='1'><img src='icons/${starred?'toboki-yellow':'toboki'}.svg' alt='${starred?'已收藏':'收藏'}'></span>
+        </div>
       </div>
     `; 
     box.appendChild(c); 
