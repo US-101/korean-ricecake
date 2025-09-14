@@ -216,8 +216,8 @@ document.addEventListener('click', (e)=>{
         ts:Date.now()
       }); 
       localStorage.setItem('favorites', JSON.stringify(favsList)); 
-      PENDING_STAR.el.classList.add('on'); 
       PENDING_STAR.el.querySelector('img').src = 'icons/toboki-yellow.svg';
+      PENDING_STAR.el.classList.add('on'); 
       PENDING_STAR.el.title='已收藏';
       PENDING_STAR=null; 
     } 
@@ -230,8 +230,8 @@ document.addEventListener('click', (e)=>{
     const favsList=JSON.parse(localStorage.getItem('favorites')||'[]'); 
     const filtered = favsList.filter(f=>!(f.ko===PENDING_DELETE.ko && f.en===PENDING_DELETE.en && f.zh===PENDING_DELETE.zh)); 
     localStorage.setItem('favorites', JSON.stringify(filtered)); 
-    PENDING_DELETE.el.classList.remove('on'); 
     PENDING_DELETE.el.querySelector('img').src = 'icons/toboki.svg';
+    PENDING_DELETE.el.classList.remove('on'); 
     PENDING_DELETE.el.title='收藏';
     PENDING_DELETE=null;
     document.getElementById('confirmDelete').style.display='none'; 
