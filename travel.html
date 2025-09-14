@@ -10,6 +10,9 @@
   </div>
   <span class="pill amber speed">x0.75</span>
 </div>
+<div class="row" style="justify-content:flex-start;max-width:540px;margin:0 auto;padding:0 16px 8px 16px">
+  <div style="font-size:12px;color:#97a1a6">英語：點選名字可切換人物 · 영어: 이름 선택 시 음성 전환<br>按下<img src="icons/micky.svg" style="width:12px;height:12px;vertical-align:middle;margin:0 2px;filter:invert(60%) sepia(5%) saturate(300%) hue-rotate(180deg) brightness(95%) contrast(85%);">切換成米奇模式 · <img src="icons/micky.svg" style="width:12px;height:12px;vertical-align:middle;margin:0 2px;filter:invert(60%) sepia(5%) saturate(300%) hue-rotate(180deg) brightness(95%) contrast(85%);">을 누르면 미키 모드로 바뀝니다</div>
+</div>
 <div class="tabs"><button class="tab active" data-tab="R">餐廳</button><button class="tab" data-tab="S">購物</button><button class="tab" data-tab="N">問路</button><button class="tab" data-tab="O">其他</button></div></div>
 <main class="wrap"><div id="cards" class="list"></div></main>
 <nav class="tabbar"><div class="in"><a class='' href='index.html'><span class='ico'><img src='icons/p1.svg' alt=''></span>發音練習</a><a class='active' href='travel.html'><span class='ico'><img src='icons/p2.svg' alt=''></span>旅行會話</a><a class='' href='translate.html'><span class='ico'><img src='icons/p3.svg' alt=''></span>實時翻譯</a><a class='' href='history.html'><span class='ico'><img src='icons/p4.svg' alt=''></span>歷史紀錄</a></div></nav>
@@ -53,14 +56,14 @@ const DATA={R:[
   ["여기로 가려면 어떻게 가요?","How do I get here?","要到這裡怎麼走？"],
   ["오른쪽/왼쪽/쭉 가세요.","Go right/left/straight.","往右/往左/直走。"]
 ],O:[
-  ["괜찮아요.","It's okay.","沒關係。"],["감사합니다.","Thank you.","謝謝。"]
+  ["괜찮아요.","Its okay","沒關係。"],["감사합니다.","Thank you.","謝謝。"]
 ]};
 
-function speakKO(t){ const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=RATE; const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); if(v) u.voice=v; speechSynthesis.speak(u);} 
+function speakKO(t){ const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=RATE; const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); if(v) u.voice=v; if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; speechSynthesis.speak(u);} 
 function speakEN(t){ const v=speechSynthesis.getVoices().find(v=>v.name===VOICE_EN_NAME)||speechSynthesis.getVoices().find(v=>/en/i.test(v.lang||'')); const u=new SpeechSynthesisUtterance(t); if(v) u.voice=v; u.rate=RATE; if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; speechSynthesis.speak(u);} 
 
 function cardBase([ko,en,zh]){ const d=document.createElement('div'); d.className='card'; d.innerHTML=`<div class='ko'>${ko}</div><div class='en'>${en}</div><div class='zh'>${zh}</div><div class='badges'><div class='language-badges'><span class='badge' data-ko='${ko}'>韓</span><span class='badge' data-en='${en}'>英</span></div></div>`; return d; }
-function cardFav(f){ const d=document.createElement('div'); d.className='card'; d.innerHTML=`<div class='ko'>${f.ko}</div><div class='en'>${f.en}</div><div class='zh'>${f.zh}</div><div class='badges'><div class='language-badges'><span class='badge' data-ko='${f.ko}'>韓</span><span class='badge' data-en='${f.en}'>英</span></div><span class='star on' data-fav='1' title='已收藏'>★</span></div>`; return d; }
+function cardFav(f){ const d=document.createElement('div'); d.className='card'; d.innerHTML=`<div class='ko'>${f.ko}</div><div class='en'>${f.en}</div><div class='zh'>${f.zh}</div><div class='badges'><div class='language-badges'><span class='badge' data-ko='${f.ko}'>韓</span><span class='badge' data-en='${f.en}'>英</span></div><span class='star on' data-fav='1' title='已收藏'><img src='icons/toboki-yellow.svg' alt='已收藏'></span></div>`; return d; }
 function favs(){ try{ return JSON.parse(localStorage.getItem('favorites')||'[]'); }catch(e){ return []; } }
 function render(cat){ const box=document.getElementById('cards'); box.innerHTML=''; (DATA[cat]||[]).forEach(x=>box.appendChild(cardBase(x)));
   // append favorites that belong to this folder name
@@ -87,14 +90,15 @@ document.addEventListener('click',e=>{
     render(e.target.getAttribute('data-tab')); 
     return; 
   } 
-  if(e.target.classList.contains('star')){ 
-    const c=e.target.closest('.card'); 
+  const starElement = e.target.closest('.star');
+  if(starElement){ 
+    const c=starElement.closest('.card'); 
     const folder=document.querySelector('.tab.active').textContent; 
     const ko=c.querySelector('.ko').textContent; 
     const en=c.querySelector('.en').textContent; 
     const zh=c.querySelector('.zh').textContent; 
-    if(e.target.hasAttribute('data-fav')){ 
-      PENDING_DELETE = {ko, en, zh, folder, el: e.target};
+    if(starElement.hasAttribute('data-fav')){ 
+      PENDING_DELETE = {ko, en, zh, folder, el: starElement};
       document.getElementById('confirmDelete').style.display='flex'; 
       return; 
     } 

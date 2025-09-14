@@ -9,6 +9,9 @@
     <span id="mickey" class="pill"><img src="icons/micky.svg" width="20" height="20" alt=""></span>
   </div>
   <span class="pill amber speed">x0.75</span>
+</div>
+<div class="row" style="justify-content:flex-start;max-width:540px;margin:0 auto;padding:0 16px 8px 16px">
+  <div style="font-size:12px;color:#97a1a6">英語：點選名字可切換人物 · 영어: 이름 선택 시 음성 전환<br>按下<img src="icons/micky.svg" style="width:12px;height:12px;vertical-align:middle;margin:0 2px;filter:invert(60%) sepia(5%) saturate(300%) hue-rotate(180deg) brightness(95%) contrast(85%);">切換成米奇模式 · <img src="icons/micky.svg" style="width:12px;height:12px;vertical-align:middle;margin:0 2px;filter:invert(60%) sepia(5%) saturate(300%) hue-rotate(180deg) brightness(95%) contrast(85%);">을 누르면 미키 모드로 바뀝니다</div>
 </div></div>
 <main class="wrap">
   
@@ -54,7 +57,7 @@ let RATE=0.75; const SPEEDS=[0.5,0.75,1.0];
 function updateSpeedUI(){ document.querySelectorAll('.speed').forEach(el=>{ el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); }); }
 function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; updateSpeedUI(); }
 
-function speakKO(t){ const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=RATE; const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); if(v) u.voice=v; speechSynthesis.speak(u);} 
+function speakKO(t){ const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=RATE; const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); if(v) u.voice=v; if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; speechSynthesis.speak(u);} 
 function speakEN(t){ const v=speechSynthesis.getVoices().find(v=>v.name===VOICE_EN_NAME)||speechSynthesis.getVoices().find(v=>/en/i.test(v.lang||'')); const u=new SpeechSynthesisUtterance(t); if(v) u.voice=v; u.rate=RATE; if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; speechSynthesis.speak(u);} 
 
 async function tMM(q,from,to){ const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=${from}|${to}`); const j=await r.json(); return j?.responseData?.translatedText || ""; }
@@ -119,7 +122,7 @@ function renderCard(text,out,starId){
         <span class='badge' data-ko='${out.ko}'>韓</span>
         <span class='badge' data-en='${out.en}'>英</span>
       </div>
-      <span class='star ${isFavorited?'on':''}' id='${starId}' title='${isFavorited?'已收藏':'收藏'}'>${isFavorited?'★':'☆'}</span>
+      <span class='star ${isFavorited?'on':''}' id='${starId}' title='${isFavorited?'已收藏':'收藏'}'><img src='icons/${isFavorited?'toboki-yellow':'toboki'}.svg' alt='${isFavorited?'已收藏':'收藏'}'></span>
     </div>
   `; 
   const result=document.getElementById('result'); 
@@ -177,19 +180,20 @@ document.addEventListener('click', (e)=>{
   }
 
   // 點擊星號收藏/取消收藏
-  if(e.target.id==='fstar'){ 
-    const c=e.target.closest('.card'); 
+  const starElement = e.target.closest('#fstar');
+  if(starElement){ 
+    const c=starElement.closest('.card'); 
     const ko=c.querySelector('.ko').textContent;
     const en=c.querySelector('.en').textContent;
     const zh=c.querySelector('.zh').textContent;
     
-    if(e.target.classList.contains('on')){ 
+    if(starElement.classList.contains('on')){ 
       // 已收藏，顯示確認刪除
-      PENDING_DELETE={ko, en, zh, el:e.target};
+      PENDING_DELETE={ko, en, zh, el:starElement};
       document.getElementById('confirmDelete').style.display='flex'; 
     } else { 
       // 未收藏，顯示選擇資料夾
-      PENDING_STAR={ko, en, zh, el:e.target};
+      PENDING_STAR={ko, en, zh, el:starElement};
       document.getElementById('pickFolder').style.display='flex'; 
     }
     return; 
@@ -209,7 +213,7 @@ document.addEventListener('click', (e)=>{
       }); 
       localStorage.setItem('favorites', JSON.stringify(favsList)); 
       PENDING_STAR.el.classList.add('on'); 
-      PENDING_STAR.el.textContent='★'; 
+      PENDING_STAR.el.querySelector('img').src = 'icons/toboki-yellow.svg';
       PENDING_STAR.el.title='已收藏';
       PENDING_STAR=null; 
     } 
@@ -223,7 +227,7 @@ document.addEventListener('click', (e)=>{
     const filtered = favsList.filter(f=>!(f.ko===PENDING_DELETE.ko && f.en===PENDING_DELETE.en && f.zh===PENDING_DELETE.zh)); 
     localStorage.setItem('favorites', JSON.stringify(filtered)); 
     PENDING_DELETE.el.classList.remove('on'); 
-    PENDING_DELETE.el.textContent='☆'; 
+    PENDING_DELETE.el.querySelector('img').src = 'icons/toboki.svg';
     PENDING_DELETE.el.title='收藏';
     PENDING_DELETE=null;
     document.getElementById('confirmDelete').style.display='none'; 

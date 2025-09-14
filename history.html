@@ -10,6 +10,9 @@
     <span id="mickey" class="pill"><img src="icons/micky.svg" width="20" height="20" alt=""></span>
   </div>
   <span class="pill amber speed">x0.75</span>
+</div>
+<div class="row" style="justify-content:flex-start;max-width:540px;margin:0 auto;padding:0 16px 8px 16px">
+  <div style="font-size:12px;color:#97a1a6">英語：點選名字可切換人物 · 영어: 이름 선택 시 음성 전환<br>按下<img src="icons/micky.svg" style="width:12px;height:12px;vertical-align:middle;margin:0 2px;filter:invert(60%) sepia(5%) saturate(300%) hue-rotate(180deg) brightness(95%) contrast(85%);">切換成米奇模式 · <img src="icons/micky.svg" style="width:12px;height:12px;vertical-align:middle;margin:0 2px;filter:invert(60%) sepia(5%) saturate(300%) hue-rotate(180deg) brightness(95%) contrast(85%);">을 누르면 미키 모드로 바뀝니다</div>
 </div></div>
 
 <main class="wrap"><div id="box" class="list"></div></main>
@@ -94,6 +97,7 @@ function speakKO(t){
   u.rate=RATE; 
   const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); 
   if(v) u.voice=v; 
+  if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6;
   speechSynthesis.speak(u);
 }
 
@@ -149,7 +153,7 @@ function render(){
           <span class='badge' data-ko='${it.ko}'>韓</span>
           <span class='badge' data-en='${it.en}'>英</span>
         </div>
-        <span class='star ${starred?'on':''}' data-star='1'>${starred?'★':'☆'}</span>
+        <span class='star ${starred?'on':''}' data-star='1'><img src='icons/${starred?'toboki-yellow':'toboki'}.svg' alt='${starred?'已收藏':'收藏'}'></span>
       </div>
     `; 
     box.appendChild(c); 
@@ -167,19 +171,20 @@ document.addEventListener('click',(e)=>{
   if(e.target.matches('[data-ko]')) return speakKO(e.target.getAttribute('data-ko')); 
   if(e.target.matches('[data-en]')) return speakEN(e.target.getAttribute('data-en')); 
   
-  if(e.target.matches('[data-star]')){ 
-    const c=e.target.closest('.card'); 
+  const starElement = e.target.closest('[data-star]');
+  if(starElement){ 
+    const c=starElement.closest('.card'); 
     const ko=c.querySelector('.ko').textContent;
     const en=c.querySelector('.en').textContent;
     const zh=c.querySelector('.zh').textContent;
     
-    if(e.target.classList.contains('on')){ 
+    if(starElement.classList.contains('on')){ 
       // 已收藏，顯示確認刪除
-      PENDING_DELETE={ko, en, zh, el:e.target};
+      PENDING_DELETE={ko, en, zh, el:starElement};
       document.getElementById('confirmDelete').style.display='flex'; 
     } else { 
       // 未收藏，顯示選擇資料夾
-      PENDING_H={ko, en, zh, el:e.target};
+      PENDING_H={ko, en, zh, el:starElement};
       document.getElementById('pickFolderH').style.display='flex'; 
     }
     return;
@@ -201,7 +206,7 @@ document.addEventListener('click',(e)=>{
         localStorage.setItem('favorites', JSON.stringify(fav)); 
       } 
       PENDING_H.el.classList.add('on'); 
-      PENDING_H.el.textContent='★'; 
+      PENDING_H.el.querySelector('img').src = 'icons/toboki-yellow.svg'; 
       PENDING_H=null; 
       document.getElementById('pickFolderH').style.display='none'; 
     }
@@ -214,7 +219,7 @@ document.addEventListener('click',(e)=>{
     const filtered = fav.filter(f=>!(f.ko===PENDING_DELETE.ko && f.en===PENDING_DELETE.en && f.zh===PENDING_DELETE.zh)); 
     localStorage.setItem('favorites', JSON.stringify(filtered)); 
     PENDING_DELETE.el.classList.remove('on'); 
-    PENDING_DELETE.el.textContent='☆'; 
+    PENDING_DELETE.el.querySelector('img').src = 'icons/toboki.svg'; 
     PENDING_DELETE=null;
     document.getElementById('confirmDelete').style.display='none'; 
     return; 

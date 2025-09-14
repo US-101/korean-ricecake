@@ -83,8 +83,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 .badges{display:flex;gap:6px;align-items:center;justify-content:space-between;margin-top:8px}
 .badges .language-badges{display:flex;gap:6px}
 .badge{background:#f0fbfb;border:1px solid #d6efef;color:#6aa;padding:6px 8px;border-radius:999px;font-size:12px;cursor:pointer}
-.star{cursor:pointer;font-size:18px;color:#c3ccd0;margin-left:auto}
-.star.on{color:#f5c14a}
+.star{cursor:pointer;margin-left:auto;width:20px;height:20px;display:inline-block}
+.star img{width:20px;height:20px;display:block;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%)}
+.star.on img{filter:none}
 
 /* 輸入框 */
 textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px;padding:12px;font-size:15px;background:#fff}

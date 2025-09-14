@@ -91,6 +91,7 @@ function speakKO(t){
   const ko = speechSynthesis.getVoices().find(v => /ko/i.test(v.lang||""));
   if(ko) u.voice = ko;
   u.lang='ko-KR'; u.rate = rate();
+  if(document.getElementById('cartoonEn').checked) u.pitch=1.6;
   speechSynthesis.speak(u);
 }
 function speakEN(t){
@@ -120,7 +121,7 @@ function render(){
       <div class="ops">
         <button class="btn" data-ko="${it.ko}">韓文朗讀</button>
         <button class="btn" data-en="${it.en}">英文朗讀</button>
-        <button class="btn del" data-del="${idx}">刪除</button>
+        <button class="btn del star on" data-del="${idx}" title="從收藏移除"><img src='icons/toboki-yellow.svg' alt='移除收藏'></button>
       </div>
     `;
     list.appendChild(div);
