@@ -4,10 +4,11 @@
 <link rel="apple-touch-icon" href="icons/icon-512.png"><meta name="theme-color" content="#F3FCFD" /><meta name="apple-mobile-web-app-status-bar-style" content="default" /><meta name="apple-mobile-web-app-capable" content="yes" /><link rel="apple-touch-startup-image" href="splash.png" /><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script>
 
 <style>
-/* 修復 textarea 的樣式，確保在移動設備上正常顯示 */
+/* PWA 模式下的 textarea 修復 */
 .input-container {
   position: relative;
   width: 100%;
+  z-index: 1;
 }
 
 #in {
@@ -16,37 +17,102 @@
   border: 2px solid #cfe7e7;
   border-radius: 14px;
   padding: 12px;
-  font-size: 16px; /* 在 iOS 上，font-size 小於 16px 會導致縮放 */
+  font-size: 16px;
   background: #fff;
   resize: vertical;
   font-family: ui-rounded, ui-sans-serif, -apple-system, 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
   line-height: 1.4;
-  -webkit-appearance: none; /* 移除 iOS 預設樣式 */
-  -webkit-tap-highlight-color: transparent; /* 移除點擊高亮 */
-  transform: translateZ(0); /* 強制硬體加速 */
   box-sizing: border-box;
+  
+  /* PWA 模式關鍵修復 */
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: text;
+  -webkit-touch-callout: default;
+  -moz-appearance: none;
+  appearance: none;
+  
+  /* 強制觸發鍵盤的屬性 */
+  inputmode: text;
+  autocapitalize: sentences;
+  autocomplete: off;
+  autocorrect: off;
+  spellcheck: false;
+  
+  /* 確保在 PWA 中正確顯示 */
+  position: relative;
+  z-index: 2;
+  cursor: text;
+  
+  /* 防止縮放 */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 #in:focus {
   outline: none;
   border-color: #8ECFD0;
   box-shadow: 0 0 0 3px rgba(142, 207, 208, 0.2);
+  
+  /* PWA 焦點狀態增強 */
+  -webkit-tap-highlight-color: rgba(142, 207, 208, 0.2);
+  position: relative;
+  z-index: 3;
 }
 
-/* 確保在 iOS Safari 中不會被視窗縮放影響 */
-@supports (-webkit-touch-callout: none) {
+/* PWA 模式專用修復 */
+@media all and (display-mode: standalone) {
   #in {
-    font-size: 16px !important;
-    -webkit-text-size-adjust: 100%;
+    /* 在 PWA 模式下使用更積極的設置 */
+    -webkit-appearance: textfield !important;
+    -moz-appearance: textfield !important;
+    appearance: textfield !important;
+    
+    /* 確保觸控事件不被阻攔 */
+    pointer-events: auto;
+    touch-action: manipulation;
+    
+    /* 強制文字選擇 */
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    user-select: text !important;
+  }
+  
+  /* PWA 模式下的容器調整 */
+  .input-container {
+    /* 確保容器不會干擾觸控 */
+    pointer-events: none;
+  }
+  
+  .input-container #in {
+    pointer-events: auto;
   }
 }
 
-/* 修正移動設備上的觸控問題 */
+/* iOS PWA 特殊處理 */
+@supports (-webkit-touch-callout: none) {
+  @media all and (display-mode: standalone) {
+    #in {
+      font-size: 16px !important;
+      -webkit-text-size-adjust: 100% !important;
+      
+      /* iOS PWA 鍵盤觸發關鍵設置 */
+      -webkit-appearance: none !important;
+      -webkit-user-select: text !important;
+      -webkit-touch-callout: default !important;
+      
+      /* 確保能接收觸控事件 */
+      touch-action: manipulation !important;
+      cursor: text !important;
+    }
+  }
+}
+
 .wrap {
   touch-action: manipulation;
 }
 
-/* 確保按鈕可以被正確點擊 */
 .pill {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
