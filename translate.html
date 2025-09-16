@@ -213,21 +213,68 @@ document.getElementById('mickey').addEventListener('click', function(e) {
   saveMickeyState(this.classList.contains('on'));
 });
 
-// 修正 textarea 焦點問題
-document.getElementById('in').addEventListener('touchstart', function(e) {
-  // 確保在觸控時能正確獲得焦點
-  setTimeout(() => {
-    this.focus();
-  }, 100);
-});
+// PWA 模式下的鍵盤修復
+const textarea = document.getElementById('in');
 
-// 防止 iOS 上的縮放問題
-document.getElementById('in').addEventListener('focus', function(e) {
-  // 在某些情況下，滾動到輸入框位置
-  setTimeout(() => {
-    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, 300);
-});
+// 檢測是否在 PWA 模式
+const isPWA = window.matchMedia('(display-mode: standalone)').matches || 
+              window.navigator.standalone === true ||
+              document.referrer.includes('android-app://');
+
+// PWA 模式下的特殊處理
+if (isPWA) {
+  // 方法1：強制觸發輸入框
+  textarea.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // 強制獲得焦點
+    this.focus();
+    
+    // 確保鍵盤彈出
+    setTimeout(() => {
+      this.click();
+    }, 50);
+    
+    setTimeout(() => {
+      this.focus();
+    }, 100);
+  }, { passive: false });
+
+  // 方法2：使用 click 事件作為後備
+  textarea.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    this.focus();
+    
+    // 觸發選擇文字來強制鍵盤彈出
+    setTimeout(() => {
+      this.selectionStart = this.value.length;
+      this.selectionEnd = this.value.length;
+    }, 100);
+  });
+
+  // 方法3：監聽 input 事件確保功能正常
+  textarea.addEventListener('input', function(e) {
+    // 確保 PWA 中能正常輸入
+    console.log('Input working in PWA mode');
+  });
+
+} else {
+  // Safari 瀏覽器模式的處理
+  textarea.addEventListener('touchstart', function(e) {
+    setTimeout(() => {
+      this.focus();
+    }, 100);
+  });
+
+  textarea.addEventListener('focus', function(e) {
+    setTimeout(() => {
+      this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
+  });
+}
 
 let RATE=parseFloat(localStorage.getItem('playbackRate')||'0.75'); 
 const SPEEDS=[0.5,0.75,1.0];
