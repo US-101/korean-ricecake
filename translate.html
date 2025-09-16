@@ -19,7 +19,7 @@
   
   <textarea id="in" placeholder="請輸入要翻譯的句子（支持中文、韓文、英文）…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text"></textarea>
   <!-- PWA鍵盤修復：隱藏的input元素 -->
-  <input type="text" id="keyboard-trigger" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" />
+  <input type="text" id="keyboard-trigger" style="position:absolute;left:-9999px;opacity:0;width:1px;height:1px;" />
   <div style="display:flex;gap:8px;margin-top:10px">
     <button class="pill teal" id="btnGo">翻 譯</button>
   </div>
@@ -176,45 +176,54 @@ function isPWA() {
          document.referrer.includes('android-app://');
 }
 
-// 簡化的iOS PWA鍵盤修復
-document.getElementById('in').addEventListener('click', function() {
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  const isStandalone = window.navigator.standalone === true || 
-                      window.matchMedia('(display-mode: standalone)').matches;
-  
-  if (isIOS && isStandalone) {
-    // iOS PWA模式：使用隱藏的input觸發鍵盤
-    const trigger = document.getElementById('keyboard-trigger');
-    trigger.focus();
-    setTimeout(() => {
-      this.focus();
-      trigger.blur();
-    }, 100);
-  } else {
-    this.focus();
-  }
-});
-
-// 觸摸事件處理
-document.getElementById('in').addEventListener('touchstart', function(e) {
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  const isStandalone = window.navigator.standalone === true || 
-                      window.matchMedia('(display-mode: standalone)').matches;
-  
-  if (isIOS && isStandalone) {
-    e.preventDefault();
-    const trigger = document.getElementById('keyboard-trigger');
-    trigger.focus();
-    setTimeout(() => {
-      this.focus();
-      trigger.blur();
-    }, 100);
-  }
-});
-
-// 頁面載入時執行iOS PWA檢測
+// 頁面載入時執行所有初始化
 document.addEventListener('DOMContentLoaded', function() {
+  // 執行iOS PWA檢測
   markIosPwaIfNeeded();
+  
+  // 確保元素存在後再綁定事件
+  const textarea = document.getElementById('in');
+  const trigger = document.getElementById('keyboard-trigger');
+  
+  if (textarea && trigger) {
+    // iOS PWA鍵盤修復
+    textarea.addEventListener('click', function() {
+      const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      const isStandalone = window.navigator.standalone === true || 
+                          window.matchMedia('(display-mode: standalone)').matches;
+      
+      if (isIOS && isStandalone) {
+        // iOS PWA模式：使用隱藏的input觸發鍵盤
+        trigger.style.pointerEvents = 'auto';
+        trigger.focus();
+        setTimeout(() => {
+          this.focus();
+          trigger.blur();
+          trigger.style.pointerEvents = 'none';
+        }, 150);
+      } else {
+        this.focus();
+      }
+    });
+
+    // 觸摸事件處理
+    textarea.addEventListener('touchstart', function(e) {
+      const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      const isStandalone = window.navigator.standalone === true || 
+                          window.matchMedia('(display-mode: standalone)').matches;
+      
+      if (isIOS && isStandalone) {
+        e.preventDefault();
+        trigger.style.pointerEvents = 'auto';
+        trigger.focus();
+        setTimeout(() => {
+          this.focus();
+          trigger.blur();
+          trigger.style.pointerEvents = 'none';
+        }, 150);
+      }
+    });
+  }
 });
  
 function cycleVoice(){ 
