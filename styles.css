@@ -156,7 +156,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 }
 
 .star{cursor:pointer;width:20px;height:20px;display:inline-block}
-.star img{width:20px;height:20px;display:block;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%)}
+.star img{width:20px;height:20px;display:block;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%);transition:filter 0.15s ease-out}
 .star.on img{filter:none}
 
 /* ---- 舊版卡片樣式（向後相容）---- */

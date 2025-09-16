@@ -223,8 +223,8 @@ document.addEventListener('click',(e)=>{
         }); 
         localStorage.setItem('favorites', JSON.stringify(fav)); 
       } 
-      PENDING_H.el.querySelector('img').src = 'icons/toboki-yellow.svg';
-      PENDING_H.el.classList.add('on'); 
+      PENDING_H.el.classList.add('on');
+      PENDING_H.el.querySelector('img').src = 'icons/toboki-yellow.svg'; 
       PENDING_H=null; 
       document.getElementById('pickFolderH').style.display='none'; 
     }
@@ -236,8 +236,8 @@ document.addEventListener('click',(e)=>{
     const fav=favs(); 
     const filtered = fav.filter(f=>!(f.ko===PENDING_DELETE.ko && f.en===PENDING_DELETE.en && f.zh===PENDING_DELETE.zh)); 
     localStorage.setItem('favorites', JSON.stringify(filtered)); 
-    PENDING_DELETE.el.querySelector('img').src = 'icons/toboki.svg';
-    PENDING_DELETE.el.classList.remove('on'); 
+    PENDING_DELETE.el.classList.remove('on');
+    PENDING_DELETE.el.querySelector('img').src = 'icons/toboki.svg'; 
     PENDING_DELETE=null;
     document.getElementById('confirmDelete').style.display='none'; 
     return; 
