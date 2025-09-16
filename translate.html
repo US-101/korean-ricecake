@@ -176,73 +176,45 @@ function isPWA() {
          document.referrer.includes('android-app://');
 }
 
-// 確保輸入框在PWA模式下能正常彈出鍵盤
+// 簡化的iOS PWA鍵盤修復
 document.getElementById('in').addEventListener('click', function() {
-  this.focus();
-  if (isPWA()) {
-    // PWA模式下使用隱藏的input來觸發鍵盤
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone === true || 
+                      window.matchMedia('(display-mode: standalone)').matches;
+  
+  if (isIOS && isStandalone) {
+    // iOS PWA模式：使用隱藏的input觸發鍵盤
     const trigger = document.getElementById('keyboard-trigger');
+    trigger.focus();
     setTimeout(() => {
-      trigger.focus();
-      setTimeout(() => {
-        this.focus();
-        trigger.blur();
-      }, 50);
-    }, 50);
+      this.focus();
+      trigger.blur();
+    }, 100);
+  } else {
+    this.focus();
   }
 });
 
 // 觸摸事件處理
 document.getElementById('in').addEventListener('touchstart', function(e) {
-  this.focus();
-  if (isPWA()) {
-    const trigger = document.getElementById('keyboard-trigger');
-    setTimeout(() => {
-      trigger.focus();
-      setTimeout(() => {
-        this.focus();
-        trigger.blur();
-      }, 50);
-    }, 50);
-  }
-});
-
-// 鍵盤輔助功能
-function attachKeyboardAssist(el) {
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   const isStandalone = window.navigator.standalone === true || 
                       window.matchMedia('(display-mode: standalone)').matches;
-  if (!(isIOS && isStandalone)) return;
-
-  el.addEventListener('focus', () => {
-    // 延遲讓系統開始彈鍵盤，再把輸入框捲到可視範圍中央
-    setTimeout(() => {
-      try { 
-        el.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' }); 
-      } catch {}
-    }, 250);
-  });
-}
-
-// 頁面載入時確保輸入框可用
-document.addEventListener('DOMContentLoaded', function() {
-  // 執行iOS PWA檢測
-  markIosPwaIfNeeded();
   
-  const input = document.getElementById('in');
-  if (input) {
-    // 添加鍵盤輔助功能
-    attachKeyboardAssist(input);
-    
-    if (isPWA()) {
-      // PWA模式下添加額外的事件監聽
-      input.addEventListener('focus', function() {
-        setTimeout(() => {
-          this.focus();
-        }, 100);
-      });
-    }
+  if (isIOS && isStandalone) {
+    e.preventDefault();
+    const trigger = document.getElementById('keyboard-trigger');
+    trigger.focus();
+    setTimeout(() => {
+      this.focus();
+      trigger.blur();
+    }, 100);
   }
+});
+
+// 頁面載入時執行iOS PWA檢測
+document.addEventListener('DOMContentLoaded', function() {
+  markIosPwaIfNeeded();
 });
  
 function cycleVoice(){ 
