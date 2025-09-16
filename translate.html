@@ -1,7 +1,60 @@
 <!DOCTYPE html><html lang="zh-Hant"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>韓語年糕｜實時翻譯</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
-<link rel="apple-touch-icon" href="icons/icon-512.png"><meta name="theme-color" content="#F3FCFD" /><meta name="apple-mobile-web-app-status-bar-style" content="default" /><meta name="apple-mobile-web-app-capable" content="yes" /><link rel="apple-touch-startup-image" href="splash.png" /><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
+<link rel="apple-touch-icon" href="icons/icon-512.png"><meta name="theme-color" content="#F3FCFD" /><meta name="apple-mobile-web-app-status-bar-style" content="default" /><meta name="apple-mobile-web-app-capable" content="yes" /><link rel="apple-touch-startup-image" href="splash.png" /><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script>
+
+<style>
+/* 修復 textarea 的樣式，確保在移動設備上正常顯示 */
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+#in {
+  width: 100%;
+  min-height: 120px;
+  border: 2px solid #cfe7e7;
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 16px; /* 在 iOS 上，font-size 小於 16px 會導致縮放 */
+  background: #fff;
+  resize: vertical;
+  font-family: ui-rounded, ui-sans-serif, -apple-system, 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  line-height: 1.4;
+  -webkit-appearance: none; /* 移除 iOS 預設樣式 */
+  -webkit-tap-highlight-color: transparent; /* 移除點擊高亮 */
+  transform: translateZ(0); /* 強制硬體加速 */
+  box-sizing: border-box;
+}
+
+#in:focus {
+  outline: none;
+  border-color: #8ECFD0;
+  box-shadow: 0 0 0 3px rgba(142, 207, 208, 0.2);
+}
+
+/* 確保在 iOS Safari 中不會被視窗縮放影響 */
+@supports (-webkit-touch-callout: none) {
+  #in {
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100%;
+  }
+}
+
+/* 修正移動設備上的觸控問題 */
+.wrap {
+  touch-action: manipulation;
+}
+
+/* 確保按鈕可以被正確點擊 */
+.pill {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+</style>
+</head><body>
 <header class="topbar"><div class="bar"><h1 class="title"><img src="icons/p3.svg" alt=""></h1></div></header>
 <div class="appbar"><div class="row" style="justify-content:space-between;gap:12px;max-width:540px;margin:0 auto;padding:12px 16px 6px 16px">
   <div style="display:flex;gap:12px">
@@ -17,7 +70,9 @@
 </div></div>
 <main class="wrap">
   
-  <textarea id="in" placeholder="請輸入要翻譯的句子（支持中文、韓文、英文）…"></textarea>
+  <div class="input-container">
+    <textarea id="in" placeholder="請輸入要翻譯的句子（支持中文、韓文、英文）…" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
+  </div>
   <div style="display:flex;gap:8px;margin-top:10px">
     <button class="pill teal" id="btnGo">翻 譯</button>
   </div>
@@ -48,24 +103,116 @@
 </div></section>
 
 <script>
-const EN=["Daniel","Moira","Samantha","Tessa"]; let VOICE_EN_NAME=localStorage.getItem('voiceEnName')||'Moira';
-function availableEnVoices(){ const all=speechSynthesis.getVoices(); return EN.map(n=>all.find(v=>v.name===n)).filter(Boolean); }
-function updateVoiceUI(){ const el=document.getElementById('voiceEn'); if(el) el.textContent=VOICE_EN_NAME; }
-function ensureVoice(){ const avail=availableEnVoices().map(v=>v.name); if(!avail.includes(VOICE_EN_NAME) && avail.length){ VOICE_EN_NAME=avail[0]; localStorage.setItem('voiceEnName', VOICE_EN_NAME); } updateVoiceUI(); }
-window.speechSynthesis.onvoiceschanged=()=>{ ensureVoice(); };
-function loadMickeyState(){ const mickeyState = localStorage.getItem('mickeyMode') === 'true'; const mickey = document.getElementById('mickey'); if(mickeyState && mickey) mickey.classList.add('on'); }
-function saveMickeyState(isOn){ localStorage.setItem('mickeyMode', isOn.toString()); }
-document.getElementById('mickey').addEventListener('click',e=>{e.currentTarget.classList.toggle('on'); saveMickeyState(e.currentTarget.classList.contains('on'));});
+const EN=["Daniel","Moira","Samantha","Tessa"]; 
+let VOICE_EN_NAME=localStorage.getItem('voiceEnName')||'Moira';
 
-let RATE=parseFloat(localStorage.getItem('playbackRate')||'0.75'); const SPEEDS=[0.5,0.75,1.0];
-function updateSpeedUI(){ document.querySelectorAll('.speed').forEach(el=>{ el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); }); }
-function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; localStorage.setItem('playbackRate', RATE.toString()); updateSpeedUI(); }
+function availableEnVoices(){ 
+  const all=speechSynthesis.getVoices(); 
+  return EN.map(n=>all.find(v=>v.name===n)).filter(Boolean); 
+}
 
-function speakKO(t){ const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=RATE; const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); if(v) u.voice=v; if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; speechSynthesis.speak(u);} 
-function speakEN(t){ const v=speechSynthesis.getVoices().find(v=>v.name===VOICE_EN_NAME)||speechSynthesis.getVoices().find(v=>/en/i.test(v.lang||'')); const u=new SpeechSynthesisUtterance(t); if(v) u.voice=v; u.rate=RATE; if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; speechSynthesis.speak(u);} 
+function updateVoiceUI(){ 
+  const el=document.getElementById('voiceEn'); 
+  if(el) el.textContent=VOICE_EN_NAME; 
+}
 
-async function tMM(q,from,to){ const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=${from}|${to}`); const j=await r.json(); return j?.responseData?.translatedText || ""; }
-async function tLibre(q,from,to){ const r=await fetch("https://libretranslate.de/translate", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q,source:from,target:to})}); const j=await r.json(); return j?.translatedText || ""; }
+function ensureVoice(){ 
+  const avail=availableEnVoices().map(v=>v.name); 
+  if(!avail.includes(VOICE_EN_NAME) && avail.length){ 
+    VOICE_EN_NAME=avail[0]; 
+    localStorage.setItem('voiceEnName', VOICE_EN_NAME); 
+  } 
+  updateVoiceUI(); 
+}
+
+window.speechSynthesis.onvoiceschanged=()=>{ 
+  ensureVoice(); 
+};
+
+function loadMickeyState(){ 
+  const mickeyState = localStorage.getItem('mickeyMode') === 'true'; 
+  const mickey = document.getElementById('mickey'); 
+  if(mickeyState && mickey) mickey.classList.add('on'); 
+}
+
+function saveMickeyState(isOn){ 
+  localStorage.setItem('mickeyMode', isOn.toString()); 
+}
+
+// 修正 Mickey 按鈕事件處理
+document.getElementById('mickey').addEventListener('click', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  this.classList.toggle('on'); 
+  saveMickeyState(this.classList.contains('on'));
+});
+
+// 修正 textarea 焦點問題
+document.getElementById('in').addEventListener('touchstart', function(e) {
+  // 確保在觸控時能正確獲得焦點
+  setTimeout(() => {
+    this.focus();
+  }, 100);
+});
+
+// 防止 iOS 上的縮放問題
+document.getElementById('in').addEventListener('focus', function(e) {
+  // 在某些情況下，滾動到輸入框位置
+  setTimeout(() => {
+    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 300);
+});
+
+let RATE=parseFloat(localStorage.getItem('playbackRate')||'0.75'); 
+const SPEEDS=[0.5,0.75,1.0];
+
+function updateSpeedUI(){ 
+  document.querySelectorAll('.speed').forEach(el=>{ 
+    el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); 
+  }); 
+}
+
+function cycleSpeed(){ 
+  const i=SPEEDS.indexOf(RATE); 
+  RATE=SPEEDS[(i+1)%SPEEDS.length]; 
+  localStorage.setItem('playbackRate', RATE.toString()); 
+  updateSpeedUI(); 
+}
+
+function speakKO(t){ 
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang='ko-KR';
+  u.rate=RATE; 
+  const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); 
+  if(v) u.voice=v; 
+  if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; 
+  speechSynthesis.speak(u);
+} 
+
+function speakEN(t){ 
+  const v=speechSynthesis.getVoices().find(v=>v.name===VOICE_EN_NAME)||speechSynthesis.getVoices().find(v=>/en/i.test(v.lang||'')); 
+  const u=new SpeechSynthesisUtterance(t); 
+  if(v) u.voice=v; 
+  u.rate=RATE; 
+  if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; 
+  speechSynthesis.speak(u);
+} 
+
+async function tMM(q,from,to){ 
+  const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=${from}|${to}`); 
+  const j=await r.json(); 
+  return j?.responseData?.translatedText || ""; 
+}
+
+async function tLibre(q,from,to){ 
+  const r=await fetch("https://libretranslate.de/translate", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({q,source:from,target:to})
+  }); 
+  const j=await r.json(); 
+  return j?.translatedText || ""; 
+}
 
 async function doTranslate(text){ 
   let ko="",en="",zh=""; 
@@ -98,8 +245,20 @@ async function doTranslate(text){
   }
 }
 
-function hist(){ try{ return JSON.parse(localStorage.getItem('history')||'[]'); }catch(e){ return []; } }
-function saveHist(entry){ const h=hist(); const dedup=h.filter(it=>!(it.zh===entry.zh && it.en===entry.en && it.ko===entry.ko)); dedup.unshift(Object.assign({ts:Date.now()}, entry)); localStorage.setItem('history', JSON.stringify(dedup.slice(0,10))); }
+function hist(){ 
+  try{ 
+    return JSON.parse(localStorage.getItem('history')||'[]'); 
+  }catch(e){ 
+    return []; 
+  } 
+}
+
+function saveHist(entry){ 
+  const h=hist(); 
+  const dedup=h.filter(it=>!(it.zh===entry.zh && it.en===entry.en && it.ko===entry.ko)); 
+  dedup.unshift(Object.assign({ts:Date.now()}, entry)); 
+  localStorage.setItem('history', JSON.stringify(dedup.slice(0,10))); 
+}
 
 function favs(){ 
   try{ 
@@ -140,22 +299,49 @@ async function translateAndMaybeSave(save){
   const btn=document.getElementById('btnGo'); 
   const text=(document.getElementById('in').value||'').trim(); 
   if(!text) return; 
+  
   const old=btn.innerHTML; 
   btn.classList.add('pulse','busy','amber-temp'); 
   btn.textContent='翻 譯 中'; 
-  const out=await doTranslate(text); 
-  renderCard(text,out,'fstar'); 
-  if(save){ saveHist({ko:out.ko,en:out.en,zh:out.zh||text}); } 
-  const card=document.querySelector('.card'); 
-  if(card) card.classList.add('flash'); 
-  setTimeout(()=>{ 
-    btn.classList.remove('pulse','busy','amber-temp'); 
-    btn.textContent='翻 譯'; 
-    if(card) card.classList.remove('flash'); 
-  },400); 
+  
+  try {
+    const out=await doTranslate(text); 
+    renderCard(text,out,'fstar'); 
+    if(save){ 
+      saveHist({ko:out.ko,en:out.en,zh:out.zh||text}); 
+    } 
+    const card=document.querySelector('.card'); 
+    if(card) card.classList.add('flash'); 
+    
+    setTimeout(()=>{ 
+      if(card) card.classList.remove('flash'); 
+    }, 400); 
+  } catch (error) {
+    console.error('Translation error:', error);
+    // 顯示錯誤訊息
+    const result=document.getElementById('result'); 
+    result.innerHTML='<div class="card"><div class="card-inner"><div class="ko" style="color:red;">翻譯失敗，請檢查網路連線後重試</div></div></div>';
+  } finally {
+    setTimeout(()=>{ 
+      btn.classList.remove('pulse','busy','amber-temp'); 
+      btn.textContent='翻 譯'; 
+    }, 400);
+  }
 }
 
-document.getElementById('btnGo').addEventListener('click',()=>translateAndMaybeSave(true));
+// 修正翻譯按鈕事件
+document.getElementById('btnGo').addEventListener('click', function(e) {
+  e.preventDefault();
+  translateAndMaybeSave(true);
+});
+
+// 添加 Enter 鍵翻譯功能
+document.getElementById('in').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    translateAndMaybeSave(true);
+  }
+});
  
 function cycleVoice(){ 
   const avail=availableEnVoices().map(v=>v.name); 
@@ -274,7 +460,6 @@ document.getElementById('pickClose').addEventListener('click',()=>{
   PENDING_STAR = null;
   document.getElementById('pickFolder').style.display='none'; 
 });
-
 
 ensureVoice(); 
 updateSpeedUI();
