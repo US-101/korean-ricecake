@@ -3,7 +3,7 @@
   "short_name": "韓語年糕",
   "start_url": "index.html",
   "scope": "./",
-  "display": "minimal-ui",
+  "display": "standalone",
   "background_color": "#F3FCFD",
   "theme_color": "#F3FCFD",
   "orientation": "portrait",

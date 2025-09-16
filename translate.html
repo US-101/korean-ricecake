@@ -168,29 +168,32 @@ function isPWA() {
 
 // 確保輸入框在PWA模式下能正常彈出鍵盤
 document.getElementById('in').addEventListener('click', function() {
+  this.focus();
   if (isPWA()) {
     // PWA模式下使用隱藏的input來觸發鍵盤
     const trigger = document.getElementById('keyboard-trigger');
-    trigger.focus();
     setTimeout(() => {
-      this.focus();
-      trigger.blur();
-    }, 100);
-  } else {
-    this.focus();
+      trigger.focus();
+      setTimeout(() => {
+        this.focus();
+        trigger.blur();
+      }, 50);
+    }, 50);
   }
 });
 
 // 觸摸事件處理
 document.getElementById('in').addEventListener('touchstart', function(e) {
+  this.focus();
   if (isPWA()) {
-    e.preventDefault();
     const trigger = document.getElementById('keyboard-trigger');
-    trigger.focus();
     setTimeout(() => {
-      this.focus();
-      trigger.blur();
-    }, 100);
+      trigger.focus();
+      setTimeout(() => {
+        this.focus();
+        trigger.blur();
+      }, 50);
+    }, 50);
   }
 });
 
