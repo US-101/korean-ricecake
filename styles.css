@@ -258,3 +258,31 @@ textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px
   color:var(--muted);
   line-height:1.5;
 }
+
+/* iOS PWA 專用樣式 - 僅限iOS PWA狀態 */
+.ios-pwa, .ios-pwa body, .ios-pwa #app {
+  height: 100%;
+  min-height: -webkit-fill-available;
+}
+
+.ios-pwa body {
+  /* 允許畫面在鍵盤彈出時能正確捲動 */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 僅在 iOS PWA 生效，避免影響其他平台與 Safari */
+.ios-pwa .wrap {
+  position: relative;
+  transform: none !important;  /* 避免父層 transform 影響焦點/鍵盤 */
+  will-change: auto;
+}
+
+/* 確保輸入框自身沒有 transform/fixed，避免 iOS 焦點問題 */
+.ios-pwa .wrap textarea,
+.ios-pwa .wrap input[type="text"] {
+  position: relative;
+  transform: none !important;
+}

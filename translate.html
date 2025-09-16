@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="zh-Hant"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,minimum-scale=1,user-scalable=yes">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,minimum-scale=1,user-scalable=yes,viewport-fit=cover">
 <title>韓語年糕｜實時翻譯</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
 <link rel="apple-touch-icon" href="icons/icon-512.png"><meta name="theme-color" content="#F3FCFD" /><meta name="apple-mobile-web-app-status-bar-style" content="default" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="apple-mobile-web-app-status-bar-style" content="default" /><meta name="format-detection" content="telephone=no" /><link rel="apple-touch-startup-image" href="splash.png" /><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
 <header class="topbar"><div class="bar"><h1 class="title"><img src="icons/p3.svg" alt=""></h1></div></header>
@@ -159,6 +159,16 @@ async function translateAndMaybeSave(save){
 
 document.getElementById('btnGo').addEventListener('click',()=>translateAndMaybeSave(true));
 
+// iOS PWA檢測與標記
+function markIosPwaIfNeeded() {
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone === true || 
+                      window.matchMedia('(display-mode: standalone)').matches;
+  if (isIOS && isStandalone) {
+    document.documentElement.classList.add('ios-pwa');
+  }
+}
+
 // PWA模式下的鍵盤修復
 function isPWA() {
   return window.matchMedia('(display-mode: standalone)').matches || 
@@ -197,16 +207,41 @@ document.getElementById('in').addEventListener('touchstart', function(e) {
   }
 });
 
+// 鍵盤輔助功能
+function attachKeyboardAssist(el) {
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone === true || 
+                      window.matchMedia('(display-mode: standalone)').matches;
+  if (!(isIOS && isStandalone)) return;
+
+  el.addEventListener('focus', () => {
+    // 延遲讓系統開始彈鍵盤，再把輸入框捲到可視範圍中央
+    setTimeout(() => {
+      try { 
+        el.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' }); 
+      } catch {}
+    }, 250);
+  });
+}
+
 // 頁面載入時確保輸入框可用
 document.addEventListener('DOMContentLoaded', function() {
+  // 執行iOS PWA檢測
+  markIosPwaIfNeeded();
+  
   const input = document.getElementById('in');
-  if (input && isPWA()) {
-    // PWA模式下添加額外的事件監聽
-    input.addEventListener('focus', function() {
-      setTimeout(() => {
-        this.focus();
-      }, 100);
-    });
+  if (input) {
+    // 添加鍵盤輔助功能
+    attachKeyboardAssist(input);
+    
+    if (isPWA()) {
+      // PWA模式下添加額外的事件監聽
+      input.addEventListener('focus', function() {
+        setTimeout(() => {
+          this.focus();
+        }, 100);
+      });
+    }
   }
 });
  
