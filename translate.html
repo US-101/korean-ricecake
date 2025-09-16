@@ -17,7 +17,7 @@
 </div></div>
 <main class="wrap">
   
-  <textarea id="in" placeholder="請輸入要翻譯的句子（支持中文、韓文、英文）…"></textarea>
+  <textarea id="in" placeholder="請輸入要翻譯的句子（支持中文、韓文、英文）…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text"></textarea>
   <div style="display:flex;gap:8px;margin-top:10px">
     <button class="pill teal" id="btnGo">翻 譯</button>
   </div>
@@ -156,6 +156,26 @@ async function translateAndMaybeSave(save){
 }
 
 document.getElementById('btnGo').addEventListener('click',()=>translateAndMaybeSave(true));
+
+// 確保輸入框在PWA模式下能正常彈出鍵盤
+document.getElementById('in').addEventListener('click', function() {
+  this.focus();
+  // 強制觸發輸入事件
+  setTimeout(() => {
+    this.click();
+    this.focus();
+  }, 100);
+});
+
+// 頁面載入時確保輸入框可用
+document.addEventListener('DOMContentLoaded', function() {
+  const input = document.getElementById('in');
+  if (input) {
+    input.addEventListener('touchstart', function() {
+      this.focus();
+    });
+  }
+});
  
 function cycleVoice(){ 
   const avail=availableEnVoices().map(v=>v.name); 
