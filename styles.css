@@ -259,90 +259,30 @@ textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px
   line-height:1.5;
 }
 
-/* ===== PWA 模式全域修復 ===== */
-/* PWA 模式檢測和修復 */
-@media all and (display-mode: standalone) {
-  /* 確保所有輸入元素在 PWA 中正常工作 */
-  input[type="text"],
-  input[type="search"], 
-  input[type="email"],
-  input[type="password"],
-  textarea {
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    appearance: none !important;
-    
-    -webkit-user-select: text !important;
-    -moz-user-select: text !important;
-    user-select: text !important;
-    
-    -webkit-touch-callout: default !important;
-    touch-action: manipulation !important;
-    
-    cursor: text !important;
-    pointer-events: auto !important;
-    
-    /* 確保字體大小不會觸發縮放 */
-    font-size: 16px !important;
-    -webkit-text-size-adjust: 100% !important;
-  }
+/* ==== PWA iOS 鍵盤修復 ==== */
+input, textarea, [contenteditable] {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
   
-  /* PWA 模式下的 body 調整 */
-  body {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    
-    /* 防止整體頁面縮放 */
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-  }
-  
-  /* 但允許文字輸入區域的選擇 */
-  input, textarea, [contenteditable] {
-    -webkit-user-select: text !important;
-    user-select: text !important;
-    -webkit-touch-callout: default !important;
-  }
+  /* PWA專用：確保輸入框可見 */
+  position: relative !important;
+  z-index: 9999 !important;
 }
 
-/* iOS PWA 特殊處理 */
-@supports (-webkit-touch-callout: none) {
-  @media all and (display-mode: standalone) {
-    /* iOS 在 PWA 模式下的特殊處理 */
-    html {
-      -webkit-text-size-adjust: 100% !important;
-    }
-    
-    body {
-      /* 防止反彈滾動但保持基本觸控 */
-      overscroll-behavior: contain;
-      -webkit-overflow-scrolling: touch;
-    }
-    
-    /* 確保輸入框在 iOS PWA 中可用 */
-    textarea, input {
-      -webkit-appearance: none !important;
-      appearance: none !important;
-      border-radius: 0 !important; /* 暫時移除圓角避免渲染問題 */
-      border-radius: 14px !important; /* 然後重新應用 */
-      
-      /* iOS PWA 鍵盤觸發的關鍵設定 */
-      -webkit-user-select: text !important;
-      user-select: text !important;
-      -webkit-touch-callout: default !important;
-      cursor: text !important;
-    }
-  }
+/* 修復PWA中的transform問題 */
+body, html {
+  transform: none !important;
+  -webkit-transform: none !important;
 }
 
-/* 非 PWA 模式保持原有行為 */
-@media not all and (display-mode: standalone) {
-  input, textarea {
-    /* 正常瀏覽器模式的設定 */
-    -webkit-appearance: none;
-    appearance: none;
-    touch-action: manipulation;
-  }
+/* PWA中的全屏遮罩問題 */
+.overlay, .backdrop, .modal-scrim {
+  pointer-events: none !important;
+}
+
+/* PWA專用：確保輸入時頁面不縮放 */
+input:focus, textarea:focus {
+  font-size: 16px !important; /* 防止iOS自動縮放 */
 }

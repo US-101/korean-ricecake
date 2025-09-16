@@ -1,168 +1,7 @@
 <!DOCTYPE html><html lang="zh-Hant"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=3,minimum-scale=1,user-scalable=yes,viewport-fit=cover">
 <title>韓語年糕｜實時翻譯</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
-<link rel="apple-touch-icon" href="icons/icon-512.png"><meta name="theme-color" content="#F3FCFD" /><meta name="apple-mobile-web-app-status-bar-style" content="default" /><meta name="apple-mobile-web-app-capable" content="yes" /><link rel="apple-touch-startup-image" href="splash.png" /><script>
-  // 替換所有 HTML 文件中的 Service Worker 註冊代碼
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', async () => {
-      try {
-        const registration = await navigator.serviceWorker.register('./sw.js', {
-          scope: './',
-          updateViaCache: 'none' // 確保 SW 更新
-        });
-        
-        console.log('ServiceWorker registered successfully');
-        
-        // PWA 安裝提示處理
-        window.addEventListener('beforeinstallprompt', (e) => {
-          e.preventDefault();
-          window.deferredPrompt = e;
-        });
-        
-        // PWA 模式檢測
-        if (window.matchMedia('(display-mode: standalone)').matches || 
-            window.navigator.standalone === true) {
-          // PWA 模式下的特殊處理
-          document.body.classList.add('pwa-mode');
-          
-          // 確保輸入框在 PWA 模式下正常工作
-          setTimeout(() => {
-            const textareas = document.querySelectorAll('textarea');
-            const inputs = document.querySelectorAll('input[type="text"], input[type="search"]');
-            
-            [...textareas, ...inputs].forEach(element => {
-              element.style.webkitAppearance = 'none';
-              element.style.webkitUserSelect = 'text';
-              element.style.webkitTouchCallout = 'default';
-            });
-          }, 1000);
-        }
-        
-      } catch (error) {
-        console.log('ServiceWorker registration failed: ', error);
-      }
-    });
-  }
-</script>
-
-<style>
-/* PWA 模式下的 textarea 修復 */
-.input-container {
-  position: relative;
-  width: 100%;
-  z-index: 1;
-}
-
-#in {
-  width: 100%;
-  min-height: 120px;
-  border: 2px solid #cfe7e7;
-  border-radius: 14px;
-  padding: 12px;
-  font-size: 16px;
-  background: #fff;
-  resize: vertical;
-  font-family: ui-rounded, ui-sans-serif, -apple-system, 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-  line-height: 1.4;
-  box-sizing: border-box;
-  
-  /* PWA 模式關鍵修復 */
-  -webkit-appearance: none;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-user-select: text;
-  -webkit-touch-callout: default;
-  -moz-appearance: none;
-  appearance: none;
-  
-  /* 強制觸發鍵盤的屬性 */
-  inputmode: text;
-  autocapitalize: sentences;
-  autocomplete: off;
-  autocorrect: off;
-  spellcheck: false;
-  
-  /* 確保在 PWA 中正確顯示 */
-  position: relative;
-  z-index: 2;
-  cursor: text;
-  
-  /* 防止縮放 */
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-}
-
-#in:focus {
-  outline: none;
-  border-color: #8ECFD0;
-  box-shadow: 0 0 0 3px rgba(142, 207, 208, 0.2);
-  
-  /* PWA 焦點狀態增強 */
-  -webkit-tap-highlight-color: rgba(142, 207, 208, 0.2);
-  position: relative;
-  z-index: 3;
-}
-
-/* PWA 模式專用修復 */
-@media all and (display-mode: standalone) {
-  #in {
-    /* 在 PWA 模式下使用更積極的設置 */
-    -webkit-appearance: textfield !important;
-    -moz-appearance: textfield !important;
-    appearance: textfield !important;
-    
-    /* 確保觸控事件不被阻攔 */
-    pointer-events: auto;
-    touch-action: manipulation;
-    
-    /* 強制文字選擇 */
-    -webkit-user-select: text !important;
-    -moz-user-select: text !important;
-    user-select: text !important;
-  }
-  
-  /* PWA 模式下的容器調整 */
-  .input-container {
-    /* 確保容器不會干擾觸控 */
-    pointer-events: none;
-  }
-  
-  .input-container #in {
-    pointer-events: auto;
-  }
-}
-
-/* iOS PWA 特殊處理 */
-@supports (-webkit-touch-callout: none) {
-  @media all and (display-mode: standalone) {
-    #in {
-      font-size: 16px !important;
-      -webkit-text-size-adjust: 100% !important;
-      
-      /* iOS PWA 鍵盤觸發關鍵設置 */
-      -webkit-appearance: none !important;
-      -webkit-user-select: text !important;
-      -webkit-touch-callout: default !important;
-      
-      /* 確保能接收觸控事件 */
-      touch-action: manipulation !important;
-      cursor: text !important;
-    }
-  }
-}
-
-.wrap {
-  touch-action: manipulation;
-}
-
-.pill {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  -webkit-user-select: none;
-}
-</style>
-</head><body>
+<link rel="apple-touch-icon" href="icons/icon-512.png"><meta name="theme-color" content="#F3FCFD" /><meta name="apple-mobile-web-app-status-bar-style" content="default" /><meta name="apple-mobile-web-app-capable" content="yes" /><link rel="apple-touch-startup-image" href="splash.png" /><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
 <header class="topbar"><div class="bar"><h1 class="title"><img src="icons/p3.svg" alt=""></h1></div></header>
 <div class="appbar"><div class="row" style="justify-content:space-between;gap:12px;max-width:540px;margin:0 auto;padding:12px 16px 6px 16px">
   <div style="display:flex;gap:12px">
@@ -178,9 +17,7 @@
 </div></div>
 <main class="wrap">
   
-  <div class="input-container">
-    <textarea id="in" placeholder="請輸入要翻譯的句子（支持中文、韓文、英文）…" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
-  </div>
+  <textarea id="in" placeholder="請輸入要翻譯的句子（支持中文、韓文、英文）…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" tabindex="0" style="font-size: 16px;"></textarea>
   <div style="display:flex;gap:8px;margin-top:10px">
     <button class="pill teal" id="btnGo">翻 譯</button>
   </div>
@@ -211,163 +48,24 @@
 </div></section>
 
 <script>
-const EN=["Daniel","Moira","Samantha","Tessa"]; 
-let VOICE_EN_NAME=localStorage.getItem('voiceEnName')||'Moira';
+const EN=["Daniel","Moira","Samantha","Tessa"]; let VOICE_EN_NAME=localStorage.getItem('voiceEnName')||'Moira';
+function availableEnVoices(){ const all=speechSynthesis.getVoices(); return EN.map(n=>all.find(v=>v.name===n)).filter(Boolean); }
+function updateVoiceUI(){ const el=document.getElementById('voiceEn'); if(el) el.textContent=VOICE_EN_NAME; }
+function ensureVoice(){ const avail=availableEnVoices().map(v=>v.name); if(!avail.includes(VOICE_EN_NAME) && avail.length){ VOICE_EN_NAME=avail[0]; localStorage.setItem('voiceEnName', VOICE_EN_NAME); } updateVoiceUI(); }
+window.speechSynthesis.onvoiceschanged=()=>{ ensureVoice(); };
+function loadMickeyState(){ const mickeyState = localStorage.getItem('mickeyMode') === 'true'; const mickey = document.getElementById('mickey'); if(mickeyState && mickey) mickey.classList.add('on'); }
+function saveMickeyState(isOn){ localStorage.setItem('mickeyMode', isOn.toString()); }
+document.getElementById('mickey').addEventListener('click',e=>{e.currentTarget.classList.toggle('on'); saveMickeyState(e.currentTarget.classList.contains('on'));});
 
-function availableEnVoices(){ 
-  const all=speechSynthesis.getVoices(); 
-  return EN.map(n=>all.find(v=>v.name===n)).filter(Boolean); 
-}
+let RATE=parseFloat(localStorage.getItem('playbackRate')||'0.75'); const SPEEDS=[0.5,0.75,1.0];
+function updateSpeedUI(){ document.querySelectorAll('.speed').forEach(el=>{ el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); }); }
+function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; localStorage.setItem('playbackRate', RATE.toString()); updateSpeedUI(); }
 
-function updateVoiceUI(){ 
-  const el=document.getElementById('voiceEn'); 
-  if(el) el.textContent=VOICE_EN_NAME; 
-}
+function speakKO(t){ const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=RATE; const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); if(v) u.voice=v; if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; speechSynthesis.speak(u);} 
+function speakEN(t){ const v=speechSynthesis.getVoices().find(v=>v.name===VOICE_EN_NAME)||speechSynthesis.getVoices().find(v=>/en/i.test(v.lang||'')); const u=new SpeechSynthesisUtterance(t); if(v) u.voice=v; u.rate=RATE; if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; speechSynthesis.speak(u);} 
 
-function ensureVoice(){ 
-  const avail=availableEnVoices().map(v=>v.name); 
-  if(!avail.includes(VOICE_EN_NAME) && avail.length){ 
-    VOICE_EN_NAME=avail[0]; 
-    localStorage.setItem('voiceEnName', VOICE_EN_NAME); 
-  } 
-  updateVoiceUI(); 
-}
-
-window.speechSynthesis.onvoiceschanged=()=>{ 
-  ensureVoice(); 
-};
-
-function loadMickeyState(){ 
-  const mickeyState = localStorage.getItem('mickeyMode') === 'true'; 
-  const mickey = document.getElementById('mickey'); 
-  if(mickeyState && mickey) mickey.classList.add('on'); 
-}
-
-function saveMickeyState(isOn){ 
-  localStorage.setItem('mickeyMode', isOn.toString()); 
-}
-
-// 修正 Mickey 按鈕事件處理
-document.getElementById('mickey').addEventListener('click', function(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  this.classList.toggle('on'); 
-  saveMickeyState(this.classList.contains('on'));
-});
-
-// PWA 模式下的鍵盤修復
-const textarea = document.getElementById('in');
-
-// 檢測是否在 PWA 模式
-const isPWA = window.matchMedia('(display-mode: standalone)').matches || 
-              window.navigator.standalone === true ||
-              document.referrer.includes('android-app://');
-
-// PWA 模式下的特殊處理
-if (isPWA) {
-  // 方法1：強制觸發輸入框
-  textarea.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    // 強制獲得焦點
-    this.focus();
-    
-    // 確保鍵盤彈出
-    setTimeout(() => {
-      this.click();
-    }, 50);
-    
-    setTimeout(() => {
-      this.focus();
-    }, 100);
-  }, { passive: false });
-
-  // 方法2：使用 click 事件作為後備
-  textarea.addEventListener('click', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    this.focus();
-    
-    // 觸發選擇文字來強制鍵盤彈出
-    setTimeout(() => {
-      this.selectionStart = this.value.length;
-      this.selectionEnd = this.value.length;
-    }, 100);
-  });
-
-  // 方法3：監聽 input 事件確保功能正常
-  textarea.addEventListener('input', function(e) {
-    // 確保 PWA 中能正常輸入
-    console.log('Input working in PWA mode');
-  });
-
-} else {
-  // Safari 瀏覽器模式的處理
-  textarea.addEventListener('touchstart', function(e) {
-    setTimeout(() => {
-      this.focus();
-    }, 100);
-  });
-
-  textarea.addEventListener('focus', function(e) {
-    setTimeout(() => {
-      this.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 300);
-  });
-}
-
-let RATE=parseFloat(localStorage.getItem('playbackRate')||'0.75'); 
-const SPEEDS=[0.5,0.75,1.0];
-
-function updateSpeedUI(){ 
-  document.querySelectorAll('.speed').forEach(el=>{ 
-    el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); 
-  }); 
-}
-
-function cycleSpeed(){ 
-  const i=SPEEDS.indexOf(RATE); 
-  RATE=SPEEDS[(i+1)%SPEEDS.length]; 
-  localStorage.setItem('playbackRate', RATE.toString()); 
-  updateSpeedUI(); 
-}
-
-function speakKO(t){ 
-  const u=new SpeechSynthesisUtterance(t);
-  u.lang='ko-KR';
-  u.rate=RATE; 
-  const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); 
-  if(v) u.voice=v; 
-  if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; 
-  speechSynthesis.speak(u);
-} 
-
-function speakEN(t){ 
-  const v=speechSynthesis.getVoices().find(v=>v.name===VOICE_EN_NAME)||speechSynthesis.getVoices().find(v=>/en/i.test(v.lang||'')); 
-  const u=new SpeechSynthesisUtterance(t); 
-  if(v) u.voice=v; 
-  u.rate=RATE; 
-  if(document.getElementById('mickey').classList.contains('on')) u.pitch=1.6; 
-  speechSynthesis.speak(u);
-} 
-
-async function tMM(q,from,to){ 
-  const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=${from}|${to}`); 
-  const j=await r.json(); 
-  return j?.responseData?.translatedText || ""; 
-}
-
-async function tLibre(q,from,to){ 
-  const r=await fetch("https://libretranslate.de/translate", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({q,source:from,target:to})
-  }); 
-  const j=await r.json(); 
-  return j?.translatedText || ""; 
-}
+async function tMM(q,from,to){ const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=${from}|${to}`); const j=await r.json(); return j?.responseData?.translatedText || ""; }
+async function tLibre(q,from,to){ const r=await fetch("https://libretranslate.de/translate", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q,source:from,target:to})}); const j=await r.json(); return j?.translatedText || ""; }
 
 async function doTranslate(text){ 
   let ko="",en="",zh=""; 
@@ -400,20 +98,8 @@ async function doTranslate(text){
   }
 }
 
-function hist(){ 
-  try{ 
-    return JSON.parse(localStorage.getItem('history')||'[]'); 
-  }catch(e){ 
-    return []; 
-  } 
-}
-
-function saveHist(entry){ 
-  const h=hist(); 
-  const dedup=h.filter(it=>!(it.zh===entry.zh && it.en===entry.en && it.ko===entry.ko)); 
-  dedup.unshift(Object.assign({ts:Date.now()}, entry)); 
-  localStorage.setItem('history', JSON.stringify(dedup.slice(0,10))); 
-}
+function hist(){ try{ return JSON.parse(localStorage.getItem('history')||'[]'); }catch(e){ return []; } }
+function saveHist(entry){ const h=hist(); const dedup=h.filter(it=>!(it.zh===entry.zh && it.en===entry.en && it.ko===entry.ko)); dedup.unshift(Object.assign({ts:Date.now()}, entry)); localStorage.setItem('history', JSON.stringify(dedup.slice(0,10))); }
 
 function favs(){ 
   try{ 
@@ -454,49 +140,22 @@ async function translateAndMaybeSave(save){
   const btn=document.getElementById('btnGo'); 
   const text=(document.getElementById('in').value||'').trim(); 
   if(!text) return; 
-  
   const old=btn.innerHTML; 
   btn.classList.add('pulse','busy','amber-temp'); 
   btn.textContent='翻 譯 中'; 
-  
-  try {
-    const out=await doTranslate(text); 
-    renderCard(text,out,'fstar'); 
-    if(save){ 
-      saveHist({ko:out.ko,en:out.en,zh:out.zh||text}); 
-    } 
-    const card=document.querySelector('.card'); 
-    if(card) card.classList.add('flash'); 
-    
-    setTimeout(()=>{ 
-      if(card) card.classList.remove('flash'); 
-    }, 400); 
-  } catch (error) {
-    console.error('Translation error:', error);
-    // 顯示錯誤訊息
-    const result=document.getElementById('result'); 
-    result.innerHTML='<div class="card"><div class="card-inner"><div class="ko" style="color:red;">翻譯失敗，請檢查網路連線後重試</div></div></div>';
-  } finally {
-    setTimeout(()=>{ 
-      btn.classList.remove('pulse','busy','amber-temp'); 
-      btn.textContent='翻 譯'; 
-    }, 400);
-  }
+  const out=await doTranslate(text); 
+  renderCard(text,out,'fstar'); 
+  if(save){ saveHist({ko:out.ko,en:out.en,zh:out.zh||text}); } 
+  const card=document.querySelector('.card'); 
+  if(card) card.classList.add('flash'); 
+  setTimeout(()=>{ 
+    btn.classList.remove('pulse','busy','amber-temp'); 
+    btn.textContent='翻 譯'; 
+    if(card) card.classList.remove('flash'); 
+  },400); 
 }
 
-// 修正翻譯按鈕事件
-document.getElementById('btnGo').addEventListener('click', function(e) {
-  e.preventDefault();
-  translateAndMaybeSave(true);
-});
-
-// 添加 Enter 鍵翻譯功能
-document.getElementById('in').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    translateAndMaybeSave(true);
-  }
-});
+document.getElementById('btnGo').addEventListener('click',()=>translateAndMaybeSave(true));
  
 function cycleVoice(){ 
   const avail=availableEnVoices().map(v=>v.name); 
@@ -619,4 +278,61 @@ document.getElementById('pickClose').addEventListener('click',()=>{
 ensureVoice(); 
 updateSpeedUI();
 loadMickeyState();
+
+// PWA iOS 鍵盤修復
+(function () {
+  const isiOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isPWA = window.matchMedia('(display-mode: standalone)').matches || 
+                window.navigator.standalone === true;
+  
+  if (!isiOS || !isPWA) return;
+
+  // 1) 修復PWA中的preventDefault問題
+  document.addEventListener('touchstart', (e) => {
+    const el = e.target;
+    if (el && el.closest('input, textarea, [contenteditable]')) {
+      // PWA中不要preventDefault，讓事件自然傳遞
+      return;
+    }
+  }, { capture: true, passive: true });
+
+  // 2) 強制聚焦和鍵盤顯示
+  document.addEventListener('touchend', (e) => {
+    const el = e.target?.closest('input, textarea, [contenteditable]');
+    if (el instanceof HTMLElement) {
+      // 立即聚焦
+      el.focus();
+      
+      // PWA專用：觸發虛擬鍵盤
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        // 創建一個臨時的input來觸發鍵盤
+        const tempInput = document.createElement('input');
+        tempInput.style.position = 'absolute';
+        tempInput.style.left = '-9999px';
+        tempInput.style.opacity = '0';
+        document.body.appendChild(tempInput);
+        
+        setTimeout(() => {
+          tempInput.focus();
+          setTimeout(() => {
+            document.body.removeChild(tempInput);
+            el.focus();
+          }, 100);
+        }, 50);
+      }
+    }
+  }, { passive: true });
+
+  // 3) 修復PWA中的focus問題
+  document.addEventListener('DOMContentLoaded', () => {
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+      input.addEventListener('click', function() {
+        this.focus();
+        // 強制觸發input事件
+        this.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    });
+  });
+})();
 </script></body></html>
