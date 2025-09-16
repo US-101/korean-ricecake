@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="zh-Hant"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,minimum-scale=1,user-scalable=yes">
 <title>韓語年糕｜實時翻譯</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
-<link rel="apple-touch-icon" href="icons/icon-512.png"><meta name="theme-color" content="#F3FCFD" /><meta name="apple-mobile-web-app-status-bar-style" content="default" /><meta name="apple-mobile-web-app-capable" content="yes" /><link rel="apple-touch-startup-image" href="splash.png" /><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
+<link rel="apple-touch-icon" href="icons/icon-512.png"><meta name="theme-color" content="#F3FCFD" /><meta name="apple-mobile-web-app-status-bar-style" content="default" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="apple-mobile-web-app-status-bar-style" content="default" /><meta name="format-detection" content="telephone=no" /><link rel="apple-touch-startup-image" href="splash.png" /><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
 <header class="topbar"><div class="bar"><h1 class="title"><img src="icons/p3.svg" alt=""></h1></div></header>
 <div class="appbar"><div class="row" style="justify-content:space-between;gap:12px;max-width:540px;margin:0 auto;padding:12px 16px 6px 16px">
   <div style="display:flex;gap:12px">
@@ -18,6 +18,8 @@
 <main class="wrap">
   
   <textarea id="in" placeholder="請輸入要翻譯的句子（支持中文、韓文、英文）…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text"></textarea>
+  <!-- PWA鍵盤修復：隱藏的input元素 -->
+  <input type="text" id="keyboard-trigger" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" />
   <div style="display:flex;gap:8px;margin-top:10px">
     <button class="pill teal" id="btnGo">翻 譯</button>
   </div>
@@ -157,22 +159,50 @@ async function translateAndMaybeSave(save){
 
 document.getElementById('btnGo').addEventListener('click',()=>translateAndMaybeSave(true));
 
+// PWA模式下的鍵盤修復
+function isPWA() {
+  return window.matchMedia('(display-mode: standalone)').matches || 
+         window.navigator.standalone === true ||
+         document.referrer.includes('android-app://');
+}
+
 // 確保輸入框在PWA模式下能正常彈出鍵盤
 document.getElementById('in').addEventListener('click', function() {
-  this.focus();
-  // 強制觸發輸入事件
-  setTimeout(() => {
-    this.click();
+  if (isPWA()) {
+    // PWA模式下使用隱藏的input來觸發鍵盤
+    const trigger = document.getElementById('keyboard-trigger');
+    trigger.focus();
+    setTimeout(() => {
+      this.focus();
+      trigger.blur();
+    }, 100);
+  } else {
     this.focus();
-  }, 100);
+  }
+});
+
+// 觸摸事件處理
+document.getElementById('in').addEventListener('touchstart', function(e) {
+  if (isPWA()) {
+    e.preventDefault();
+    const trigger = document.getElementById('keyboard-trigger');
+    trigger.focus();
+    setTimeout(() => {
+      this.focus();
+      trigger.blur();
+    }, 100);
+  }
 });
 
 // 頁面載入時確保輸入框可用
 document.addEventListener('DOMContentLoaded', function() {
   const input = document.getElementById('in');
-  if (input) {
-    input.addEventListener('touchstart', function() {
-      this.focus();
+  if (input && isPWA()) {
+    // PWA模式下添加額外的事件監聽
+    input.addEventListener('focus', function() {
+      setTimeout(() => {
+        this.focus();
+      }, 100);
     });
   }
 });
