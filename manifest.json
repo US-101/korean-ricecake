@@ -4,14 +4,22 @@
   "start_url": "index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#F3FCFD",
+  "theme_color": "#F3FCFD",
   "icons": [
     {
       "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "splash_screens": [
+    {
+      "src": "splash.png",
+      "sizes": "1284x2778",
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ]
 }
