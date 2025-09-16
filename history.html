@@ -1,7 +1,74 @@
 <!DOCTYPE html><html lang="zh-Hant"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
-<title>韓語年糕｜歷史紀錄</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
-<link rel="apple-touch-icon" href="icons/icon-512.png"><meta name="theme-color" content="#F3FCFD" /><meta name="apple-mobile-web-app-status-bar-style" content="default" /><meta name="apple-mobile-web-app-capable" content="yes" /><link rel="apple-touch-startup-image" href="splash.png" /><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,minimum-scale=1,user-scalable=yes,viewport-fit=cover">
+
+<!-- PWA 和 iOS 兼容性改進 -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no">
+
+<!-- 防止 iOS 自動縮放 -->
+<meta name="apple-mobile-web-app-title" content="韓語年糕">
+
+<!-- PWA 主題色彩 -->
+<meta name="theme-color" content="#F3FCFD">
+<meta name="msapplication-navbutton-color" content="#F3FCFD">
+<meta name="apple-mobile-web-app-status-bar-style" content="light-content">
+
+<!-- iOS Safari 特殊處理 -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+
+<title>韓語年糕｜歷史紀錄</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="styles.css">
+<link rel="apple-touch-icon" href="icons/icon-512.png">
+<link rel="apple-touch-startup-image" href="splash.png">
+<script>
+  // 替換所有 HTML 文件中的 Service Worker 註冊代碼
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async () => {
+      try {
+        const registration = await navigator.serviceWorker.register('./sw.js', {
+          scope: './',
+          updateViaCache: 'none' // 確保 SW 更新
+        });
+        
+        console.log('ServiceWorker registered successfully');
+        
+        // PWA 安裝提示處理
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          window.deferredPrompt = e;
+        });
+        
+        // PWA 模式檢測
+        if (window.matchMedia('(display-mode: standalone)').matches || 
+            window.navigator.standalone === true) {
+          // PWA 模式下的特殊處理
+          document.body.classList.add('pwa-mode');
+          
+          // 確保輸入框在 PWA 模式下正常工作
+          setTimeout(() => {
+            const textareas = document.querySelectorAll('textarea');
+            const inputs = document.querySelectorAll('input[type="text"], input[type="search"]');
+            
+            [...textareas, ...inputs].forEach(element => {
+              element.style.webkitAppearance = 'none';
+              element.style.webkitUserSelect = 'text';
+              element.style.webkitTouchCallout = 'default';
+            });
+          }, 1000);
+        }
+        
+      } catch (error) {
+        console.log('ServiceWorker registration failed: ', error);
+      }
+    });
+  }
+</script>
+</head><body>
 <header class="topbar"><div class="bar"><h1 class="title"><img src="icons/p4.svg" alt="歷史紀錄"></h1></div></header>
 
 <div class="appbar"><div class="row" style="justify-content:space-between;gap:12px;max-width:540px;margin:0 auto;padding:12px 16px 6px 16px">
