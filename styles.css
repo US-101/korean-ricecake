@@ -44,7 +44,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 
 /* 大母音框：改為圓角方形，並避免遮擋點擊 */
 .speed{margin-left:auto}
-.big{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:32px;margin:16px 0 24px 0;width:140px;height:140px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
+.big{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:32px;margin:32px 0 24px 0;width:140px;height:140px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
 .big span{font-size:56px;color:#78bfc0;font-weight:800}
 
 /* 單字卡片 */
