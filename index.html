@@ -137,7 +137,7 @@ const DATA={
   ]
 };
 
-let RATE=parseFloat(localStorage.getItem('playbackRate')||'1.0'); const SPEEDS=[0.75,1.0,1.25];
+let RATE=parseFloat(localStorage.getItem('playbackRate')||'0.75'); const SPEEDS=[0.5,0.75,1.0];
 
 function updateSpeedUI(){ document.querySelectorAll('.speed').forEach(el=>{ el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); }); }
 function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; localStorage.setItem('playbackRate', RATE.toString()); updateSpeedUI(); }
