@@ -275,6 +275,56 @@ document.getElementById('pickClose').addEventListener('click',()=>{
   document.getElementById('pickFolder').style.display='none'; 
 });
 
+// iOS PWA 修復：確保輸入框可以正確聚焦
+document.querySelectorAll("input, textarea").forEach(el => {
+  // 主要修復：touchend 事件處理
+  el.addEventListener("touchend", (e) => {
+    e.preventDefault();
+    el.focus();
+    // 確保游標在文字末尾
+    setTimeout(() => {
+      el.setSelectionRange(el.value.length, el.value.length);
+    }, 0);
+  });
+  
+  // 防止 touchstart 事件干擾
+  el.addEventListener("touchstart", (e) => {
+    e.stopPropagation();
+  });
+  
+  // 額外修復：點擊事件處理
+  el.addEventListener("click", (e) => {
+    e.preventDefault();
+    el.focus();
+    setTimeout(() => {
+      el.setSelectionRange(el.value.length, el.value.length);
+    }, 0);
+  });
+  
+  // 防止其他元素攔截觸摸事件
+  el.addEventListener("touchmove", (e) => {
+    e.stopPropagation();
+  });
+});
+
+// iOS PWA 特定修復：檢測是否在 PWA 模式
+function isPWAMode() {
+  return window.matchMedia('(display-mode: standalone)').matches || 
+         window.navigator.standalone === true;
+}
+
+// 如果是 PWA 模式，添加額外的修復
+if (isPWAMode()) {
+  // 強制重新計算輸入框位置
+  setTimeout(() => {
+    const textarea = document.getElementById('in');
+    if (textarea) {
+      textarea.style.position = 'relative';
+      textarea.style.zIndex = '9999';
+    }
+  }, 100);
+}
+
 ensureVoice(); 
 updateSpeedUI();
 loadMickeyState();

@@ -168,8 +168,54 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 .badges .language-badges{display:flex;gap:6px}
 .badge{background:#f0fbfb;border:1px solid #d6efef;color:#6aa;padding:6px 8px;border-radius:999px;font-size:12px;cursor:pointer}
 
-/* 輸入框 */
-textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px;padding:12px;font-size:15px;background:#fff}
+/* 輸入框 - iOS PWA 修復 */
+textarea, input {
+  width: 100%;
+  min-height: 120px;
+  border: 2px solid #cfe7e7;
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 15px;
+  background: #fff;
+  /* iOS PWA 修復：避免 fixed 定位造成的鍵盤問題 */
+  position: relative !important;
+  -webkit-user-select: text;
+  user-select: text;
+  /* 確保輸入框可以正確聚焦 */
+  -webkit-appearance: none;
+  appearance: none;
+  /* 防止 iOS 自動縮放 */
+  font-size: 16px;
+  /* iOS Safari 特定修復 */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  /* 確保輸入框在 iOS PWA 中正常工作 */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* iOS PWA 特定修復 */
+@supports (-webkit-touch-callout: none) {
+  textarea, input {
+    /* 在 iOS 設備上強制使用相對定位 */
+    position: relative !important;
+    /* 確保觸摸事件正常 */
+    touch-action: manipulation;
+    /* 防止 iOS 自動縮放 */
+    font-size: 16px !important;
+  }
+  
+  /* 修復 iOS PWA 中的鍵盤問題 */
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* 確保輸入框父容器不會干擾 */
+  .wrap {
+    position: relative;
+    overflow: visible;
+  }
+}
 
 /* 底部導覽列 */
 .tabbar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:3000}
