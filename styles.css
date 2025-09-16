@@ -2,13 +2,13 @@
 body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sans-serif,-apple-system,'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;padding-top:72px}
 
 /* 頂列（固定在最上、層級最高） */
-.topbar{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--bg)}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:2000;background:var(--bg)}
 .topbar .bar{background:var(--bg);padding:14px 16px;border-bottom:1px solid var(--line)}
 .topbar .title{text-align:center;margin:0;letter-spacing:0;color:#78bfc0;font-weight:700;display:flex;align-items:center;justify-content:center;min-height:44px}
 .topbar .title img{width:44px;height:44px;display:block;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%)}
 
 /* 次頂列（貼齊 topbar 下緣 72px，不再頂到最上面） */
-.appbar{position:sticky;top:72px;z-index:90;background:var(--bg)}
+.appbar{position:sticky;top:72px;z-index:95;background:var(--bg)}
 .appbar .bar{background:var(--bg);padding:14px 16px;border-bottom:1px solid var(--line)}
 .appbar .title{text-align:center;margin:0;letter-spacing:0;color:#78bfc0;font-weight:700;display:flex;align-items:center;justify-content:center;min-height:32px}
 .appbar .row{display:flex;align-items:center;gap:10px;justify-content:center;padding:12px 16px 6px 16px}
@@ -28,7 +28,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 /* transient amber state */
 .amber-temp{background:var(--amber)!important;color:#7a5b00!important;border-color:var(--amber)!important}
 
-.wrap{max-width:540px;margin:0 auto;padding:12px 16px 80px 16px;scroll-margin-top:72px}
+.wrap{max-width:540px;margin:0 auto;padding:12px 16px 110px 16px;scroll-margin-top:72px}
 
 .grid{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
 .tile{background:#fff;border-radius:18px;padding:22px 10px;text-align:center;box-shadow:var(--shadow)}
@@ -44,7 +44,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 
 /* 大母音框：改為圓角方形，並避免遮擋點擊 */
 .speed{margin-left:auto}
-.big{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:32px;margin:32px 0 24px 0;width:140px;height:140px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
+.big{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:32px;margin:16px 0 24px 0;width:140px;height:140px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
 .big span{font-size:56px;color:#78bfc0;font-weight:800}
 
 /* 單字卡片 */
@@ -156,7 +156,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 }
 
 .star{cursor:pointer;width:20px;height:20px;display:inline-block}
-.star img{width:20px;height:20px;display:block;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%);transition:filter 0.15s ease-out}
+.star img{width:20px;height:20px;display:block;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%)}
 .star.on img{filter:none}
 
 /* ---- 舊版卡片樣式（向後相容）---- */
@@ -172,7 +172,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px;padding:12px;font-size:15px;background:#fff}
 
 /* 底部導覽列 */
-.tabbar{position:sticky;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:100}
+.tabbar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:3000}
 .tabbar .in{max-width:540px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
 .tabbar a{padding:12px 8px 24px;text-align:center;color:#9aa3a8;font-size:11px;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;line-height:1;min-height:72px}
 .tabbar a .ico{display:flex;align-items:center;justify-content:center;margin:0}
@@ -257,37 +257,4 @@ textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px
   font-size:14px;
   color:var(--muted);
   line-height:1.5;
-}
-
-/* iOS PWA 專用樣式 - 僅限iOS PWA狀態 */
-.ios-pwa {
-  /* 確保PWA模式下的視窗高度正確 */
-  height: 100vh;
-  height: -webkit-fill-available;
-}
-
-.ios-pwa body {
-  /* 允許鍵盤彈出時正確調整 */
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
-  overflow-x: hidden;
-}
-
-.ios-pwa textarea {
-  /* 確保輸入框在iOS PWA下能正常獲得焦點 */
-  -webkit-appearance: none;
-  -webkit-tap-highlight-color: transparent;
-  /* 確保輸入框不被其他元素遮擋 */
-  position: relative;
-  z-index: 10;
-}
-
-.ios-pwa .tabbar {
-  /* PWA模式下使用更低的z-index */
-  z-index: 50 !important;
-}
-
-.ios-pwa .topbar {
-  /* PWA模式下使用更低的z-index */
-  z-index: 150 !important;
 }

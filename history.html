@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="zh-Hant"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
 <title>韓語年糕｜歷史紀錄</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
 <link rel="apple-touch-icon" href="icons/icon-512.png"><meta name="theme-color" content="#F3FCFD" /><meta name="apple-mobile-web-app-status-bar-style" content="default" /><meta name="apple-mobile-web-app-capable" content="yes" /><link rel="apple-touch-startup-image" href="splash.png" /><script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head><body>
 <header class="topbar"><div class="bar"><h1 class="title"><img src="icons/p4.svg" alt="歷史紀錄"></h1></div></header>
@@ -223,8 +223,8 @@ document.addEventListener('click',(e)=>{
         }); 
         localStorage.setItem('favorites', JSON.stringify(fav)); 
       } 
-      PENDING_H.el.classList.add('on');
-      PENDING_H.el.querySelector('img').src = 'icons/toboki-yellow.svg'; 
+      PENDING_H.el.querySelector('img').src = 'icons/toboki-yellow.svg';
+      PENDING_H.el.classList.add('on'); 
       PENDING_H=null; 
       document.getElementById('pickFolderH').style.display='none'; 
     }
@@ -236,8 +236,8 @@ document.addEventListener('click',(e)=>{
     const fav=favs(); 
     const filtered = fav.filter(f=>!(f.ko===PENDING_DELETE.ko && f.en===PENDING_DELETE.en && f.zh===PENDING_DELETE.zh)); 
     localStorage.setItem('favorites', JSON.stringify(filtered)); 
-    PENDING_DELETE.el.classList.remove('on');
-    PENDING_DELETE.el.querySelector('img').src = 'icons/toboki.svg'; 
+    PENDING_DELETE.el.querySelector('img').src = 'icons/toboki.svg';
+    PENDING_DELETE.el.classList.remove('on'); 
     PENDING_DELETE=null;
     document.getElementById('confirmDelete').style.display='none'; 
     return; 

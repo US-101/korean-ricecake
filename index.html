@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="zh-Hant"><head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
 
   <title>韓語年糕｜發音練習</title>
   <meta name="description" content="針對旅行的時候臨時可用的方便小物" />
@@ -137,7 +137,7 @@ const DATA={
   ]
 };
 
-let RATE=parseFloat(localStorage.getItem('playbackRate')||'0.75'); const SPEEDS=[0.5,0.75,1.0];
+let RATE=parseFloat(localStorage.getItem('playbackRate')||'1.0'); const SPEEDS=[0.75,1.0,1.25];
 
 function updateSpeedUI(){ document.querySelectorAll('.speed').forEach(el=>{ el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); }); }
 function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; localStorage.setItem('playbackRate', RATE.toString()); updateSpeedUI(); }
