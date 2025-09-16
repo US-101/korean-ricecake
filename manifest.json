@@ -20,6 +20,18 @@
       "sizes": "1284x2778",
       "type": "image/png",
       "form_factor": "narrow"
+    },
+    {
+      "src": "splash.png", 
+      "sizes": "1170x2532",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "splash.png",
+      "sizes": "750x1334", 
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ]
 }

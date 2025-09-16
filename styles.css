@@ -237,3 +237,29 @@ textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px
 #pickFolder .close:hover, #pickFolderH .close:hover, #confirmDelete .close:hover{
   background:#f3f6f8;
 }
+
+/* 空狀態樣式 */
+.empty-state{
+  background:#fff;
+  border-radius:20px;
+  padding:40px 24px;
+  text-align:center;
+  box-shadow:var(--shadow);
+  margin:20px 0;
+}
+.empty-icon{
+  font-size:48px;
+  margin-bottom:16px;
+  opacity:0.8;
+}
+.empty-text{
+  font-size:18px;
+  font-weight:600;
+  color:var(--ink);
+  margin-bottom:8px;
+}
+.empty-subtext{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.5;
+}
