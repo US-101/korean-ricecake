@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="zh-Hant"><head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
 
   <title>韓語年糕｜發音練習</title>
   <meta name="description" content="針對旅行的時候臨時可用的方便小物" />
@@ -24,6 +24,8 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="apple-touch-icon" href="https://us-101.github.io/korean-ricecake/icons/icon-512.png?v=3" />
+  <meta name="theme-color" content="#F3FCFD" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
   <script>
     if ('serviceWorker' in navigator) {
@@ -58,7 +60,11 @@
 <nav class="tabbar"><div class="in"><a class='active' href='index.html'><span class='ico'><img src='icons/p1.svg' alt=''></span>發音練習</a><a class='' href='travel.html'><span class='ico'><img src='icons/p2.svg' alt=''></span>旅行會話</a><a class='' href='translate.html'><span class='ico'><img src='icons/p3.svg' alt=''></span>實時翻譯</a><a class='' href='history.html'><span class='ico'><img src='icons/p4.svg' alt=''></span>歷史紀錄</a></div></nav>
 
 <section class="modal" id="detail">
-  <div class="appbar" id="detailAppbar" style="position:fixed;top:0;left:0;right:0;z-index:3000;background:var(--bg);border-bottom:1px solid var(--line)">
+  <!-- 頂部發音練習圖標 -->
+  <header class="topbar" style="position:fixed;top:env(safe-area-inset-top);left:0;right:0;z-index:3001;background:var(--bg);border-bottom:1px solid var(--line)"><div class="bar"><h1 class="title"><img src="icons/p1.svg" alt=""></h1></div></header>
+  
+  <!-- 詳細頁面控制欄 -->
+  <div class="appbar" id="detailAppbar" style="position:fixed;top:calc(72px + env(safe-area-inset-top));left:0;right:0;z-index:3000;background:var(--bg);border-bottom:1px solid var(--line)">
     <div class="row" style="justify-content:space-between;gap:12px;max-width:540px;margin:0 auto;padding:12px 16px 6px 16px">
       <button class="pill teal" id="back">← 上一頁</button>
       <div style="display:flex;gap:8px">
@@ -67,10 +73,15 @@
       </div>
     </div>
   </div>
-  <div class="sheet" style="padding-top:80px;padding-bottom:110px">
+  
+  <!-- 詳細頁面內容 -->
+  <div class="sheet" style="padding-top:calc(120px + env(safe-area-inset-top));padding-bottom:110px">
     <div class="big" id="bigLetter"><span id="bigSym">ㅏ</span></div>
     <div id="words"></div>
   </div>
+  
+  <!-- 底部菜單欄 -->
+  <nav class="tabbar" style="position:fixed;bottom:0;left:0;right:0;z-index:3000;background:var(--bg);border-top:1px solid var(--line)"><div class="in"><a class='active' href='index.html'><span class='ico'><img src='icons/p1.svg' alt=''></span>發音練習</a><a class='' href='travel.html'><span class='ico'><img src='icons/p2.svg' alt=''></span>旅行會話</a><a class='' href='translate.html'><span class='ico'><img src='icons/p3.svg' alt=''></span>實時翻譯</a><a class='' href='history.html'><span class='ico'><img src='icons/p4.svg' alt=''></span>歷史紀錄</a></div></nav>
 </section>
 
 <script>
@@ -88,7 +99,7 @@ const DATA={
     {sym:"ㅣ", roman:"i", say:"이", words:[["이름","名字","ireum"],["시간","時間","sigan"],["비","雨","bi"],["친구","朋友","chingu"],["음식","食物","eumsik"]]}, 
     {sym:"ㅐ", roman:"ae", say:"애", words:[["애기","小孩","aegi"],["색","顏色","saek"],["책","書","chaek"],["애완동물","寵物","aewandongmul"],["새","鳥","sae"]]}, 
     {sym:"ㅒ", roman:"yae", say:"얘", words:[["얘기","聊天","yaegi"],["계약","契約","gyeyak"],["걔","那個孩子","gyae"],["얘들","他們","yaedeul"],["얘기하다","說話","yaegihada"]]}, 
-    {sym:"ㅔ", roman:"e", say:"에", words:[["에어컨","冷氣","eeokeon"],["세탁","洗滌","setak"],["메모","備忘","memo"],["에너지","能量","eneoji"],["에이즈","愛滋病","eijeu"]]}, 
+    {sym:"ㅔ", roman:"e", say:"에", words:[["에어컨","冷氣","eeokeon"],["세탁","洗滌","setak"],["메모","備忘","memo"],["에너지","能量","eneoji"],["에스컬레이터","電扶梯","eseukeulleiteo"]]}, 
     {sym:"ㅖ", roman:"ye", say:"예", words:[["예문","例句","yemun"],["예약","預約","yeyak"],["예술","藝術","yesul"],["예쁘다","漂亮","yeppeuda"],["예방","預防","yebang"]]}, 
     {sym:"ㅘ", roman:"wa", say:"와", words:[["와인","紅酒","wain"],["과자","餅乾","gwaja"],["좌석","座席","jwaseok"],["와이파이","WiFi","waipai"],["와플","鬆餅","wapeul"]]}, 
     {sym:"ㅙ", roman:"wae", say:"왜", words:[["왜요","為什麼","waeyo"],["회사","公司","hoesa"],["쾌적","舒適","kwaejeok"],["쾌락","快樂","kwaerak"],["쾌속","快速","kwaesok"]]}, 
@@ -121,7 +132,7 @@ const DATA={
   ]
 };
 
-let RATE=parseFloat(localStorage.getItem('playbackRate')||'0.75'); const SPEEDS=[0.5,0.75,1.0];
+let RATE=parseFloat(localStorage.getItem('playbackRate')||'1.0'); const SPEEDS=[0.75,1.0,1.25];
 
 function updateSpeedUI(){ document.querySelectorAll('.speed').forEach(el=>{ el.textContent='x'+RATE.toFixed(2).replace(/\.00$/,''); }); }
 function cycleSpeed(){ const i=SPEEDS.indexOf(RATE); RATE=SPEEDS[(i+1)%SPEEDS.length]; localStorage.setItem('playbackRate', RATE.toString()); updateSpeedUI(); }
@@ -142,8 +153,21 @@ function speakKo(t){
   const u=new SpeechSynthesisUtterance(t);
   u.lang='ko-KR';
   u.rate=RATE;
-  const v = speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang||'')); 
-  if(v) u.voice=v; 
+  // 優先選擇女聲韓語語音
+  const voices = speechSynthesis.getVoices();
+  const koreanVoices = voices.filter(v => /ko/i.test(v.lang||''));
+  
+  // 優先選擇特定的女聲韓語語音名稱
+  const preferredFemaleVoices = ['Yuna', 'Sora', 'Nara', 'Korean Female', 'Korean Woman'];
+  const femaleVoice = koreanVoices.find(v => 
+    preferredFemaleVoices.some(name => v.name.includes(name)) ||
+    v.name.toLowerCase().includes('female') || 
+    v.name.toLowerCase().includes('woman') || 
+    v.name.toLowerCase().includes('girl')
+  );
+  
+  const voice = femaleVoice || koreanVoices[0] || voices.find(v=>/ko/i.test(v.lang||''));
+  if(voice) u.voice = voice;
   const mickey = document.getElementById('mickey');
   const mickeyDetail = document.getElementById('mickeyDetail');
   if((mickey && mickey.classList.contains('on')) || (mickeyDetail && mickeyDetail.classList.contains('on'))) u.pitch=1.6;
