@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
+  
+  <title>測試啟動畫面</title>
+  
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#F3FCFD" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  
+  <!-- 簡化的啟動畫面配置 -->
+  <link rel="apple-touch-startup-image" href="splash.png" />
+  
+  <style>
+    body {
+      margin: 0;
+      background: #F3FCFD;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .test-image {
+      max-width: 300px;
+      max-height: 300px;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(40,48,54,.08);
+      margin-bottom: 30px;
+    }
+    
+    .instructions {
+      text-align: center;
+      color: #2b2f33;
+      line-height: 1.6;
+    }
+    
+    .step {
+      background: white;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(40,48,54,.05);
+    }
+  </style>
+</head>
+<body>
+  <img src="splash.png" alt="啟動畫面測試" class="test-image">
+  
+  <div class="instructions">
+    <h1>啟動畫面測試</h1>
+    
+    <div class="step">
+      <strong>步驟 1:</strong> 在手機瀏覽器中打開此頁面
+    </div>
+    
+    <div class="step">
+      <strong>步驟 2:</strong> 點擊瀏覽器選單 → "添加到主畫面"
+    </div>
+    
+    <div class="step">
+      <strong>步驟 3:</strong> 從主畫面點擊圖標啟動
+    </div>
+    
+    <div class="step">
+      <strong>步驟 4:</strong> 應該會看到啟動畫面（上方圖片）
+    </div>
+    
+    <p style="margin-top: 30px; color: #8b8f94;">
+      如果還是看不到，請嘗試：
+      <br>• 清除瀏覽器快取
+      <br>• 重新安裝 PWA
+      <br>• 檢查網路連線
+    </p>
+  </div>
+</body>
+</html>

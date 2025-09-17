@@ -6,7 +6,14 @@
   "display": "standalone",
   "background_color": "#F3FCFD",
   "theme_color": "#F3FCFD",
+  "orientation": "portrait",
   "icons": [
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "icons/icon-512.png",
       "sizes": "512x512",
@@ -22,14 +29,14 @@
       "form_factor": "narrow"
     },
     {
-      "src": "splash.png", 
+      "src": "splash.png",
       "sizes": "1170x2532",
       "type": "image/png",
       "form_factor": "narrow"
     },
     {
       "src": "splash.png",
-      "sizes": "750x1334", 
+      "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "narrow"
     },

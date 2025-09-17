@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>調試啟動畫面</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #F3FCFD;
+      font-family: Arial, sans-serif;
+    }
+    
+    .debug-info {
+      background: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .image-test {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .splash-image {
+      max-width: 200px;
+      max-height: 200px;
+      border: 2px solid #8ECFD0;
+      border-radius: 10px;
+    }
+    
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+    
+    .success {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>調試啟動畫面</h1>
+  
+  <div class="debug-info">
+    <h2>圖片載入測試</h2>
+    <div class="image-test">
+      <img src="splash.png" alt="啟動畫面" class="splash-image" 
+           onload="document.getElementById('image-status').innerHTML='<span class=success>✅ 圖片載入成功</span>'"
+           onerror="document.getElementById('image-status').innerHTML='<span class=error>❌ 圖片載入失敗</span>'">
+      <div id="image-status">載入中...</div>
+    </div>
+  </div>
+  
+  <div class="debug-info">
+    <h2>PWA 配置測試</h2>
+    <p><strong>背景色:</strong> #F3FCFD</p>
+    <p><strong>主題色:</strong> #F3FCFD</p>
+    <p><strong>顯示模式:</strong> standalone</p>
+  </div>
+  
+  <div class="debug-info">
+    <h2>測試步驟</h2>
+    <ol>
+      <li>確認上方圖片是否顯示</li>
+      <li>如果圖片顯示正常，嘗試添加到主畫面</li>
+      <li>從主畫面啟動 PWA</li>
+      <li>檢查是否看到啟動畫面</li>
+    </ol>
+  </div>
+  
+  <div class="debug-info">
+    <h2>故障排除</h2>
+    <p>如果啟動畫面還是黑屏：</p>
+    <ul>
+      <li>清除瀏覽器快取</li>
+      <li>重新安裝 PWA</li>
+      <li>檢查網路連線</li>
+      <li>嘗試不同的瀏覽器</li>
+    </ul>
+  </div>
+</body>
+</html>
