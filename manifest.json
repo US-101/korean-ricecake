@@ -32,6 +32,18 @@
       "sizes": "750x1334", 
       "type": "image/png",
       "form_factor": "narrow"
+    },
+    {
+      "src": "splash.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "splash.png",
+      "sizes": "428x926",
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ]
 }
