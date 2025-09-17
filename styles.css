@@ -1,0 +1,288 @@
+:root{--bg:#F3FCFD;--card:#fff;--ink:#2b2f33;--muted:#8b8f94;--line:#e9eef2;--teal:#8ECFD0;--amber:#FAD162;--shadow:0 6px 18px rgba(40,48,54,.08),0 1px 3px rgba(40,48,54,.05);}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sans-serif,-apple-system,'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;padding-top:72px}
+
+/* 頂列（固定在最上、層級最高） */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:2000;background:var(--bg)}
+.topbar .bar{background:var(--bg);padding:14px 16px}
+.topbar .title{text-align:center;margin:0;letter-spacing:0;color:#78bfc0;font-weight:700;display:flex;align-items:center;justify-content:center;min-height:44px}
+.topbar .title img{width:44px;height:44px;display:block;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%)}
+
+/* 次頂列（貼齊 topbar 下緣 72px，不再頂到最上面） */
+.appbar{position:sticky;top:72px;z-index:95;background:var(--bg)}
+.appbar .bar{background:var(--bg);padding:14px 16px}
+.appbar .title{text-align:center;margin:0;letter-spacing:0;color:#78bfc0;font-weight:700;display:flex;align-items:center;justify-content:center;min-height:32px}
+.appbar .row{display:flex;align-items:center;gap:10px;justify-content:center;padding:12px 16px 6px 16px}
+
+/* 可能存在的次級固定列（維持原本貼齊 topbar） */
+.subbar{position:fixed;left:0;right:0;top:72px;background:var(--bg);z-index:85;border-bottom:1px solid var(--line)}
+.has-subbar .wrap{padding-top:116px}
+
+/* 膠囊按鈕（全域預設） */
+.pill{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1.5px solid var(--teal);background:#fff;color:var(--teal);box-shadow:var(--shadow);cursor:pointer}
+.pill.teal{background:var(--teal);color:#fff;border-color:var(--teal)}
+.pill.amber{background:var(--amber);color:#7a5b00;border-color:var(--amber)}
+.pill .dot{width:6px;height:6px;background:#fff;border-radius:999px;display:inline-block}
+/* 讓 appbar 的「母音 / 子音 / 0.75」尺寸一致 */
+.appbar .pill{height:40px;padding:0 16px;border-radius:999px;display:inline-flex;align-items:center;font-size:16px;line-height:1}
+
+/* transient amber state */
+.amber-temp{background:var(--amber)!important;color:#7a5b00!important;border-color:var(--amber)!important}
+
+.wrap{max-width:540px;margin:0 auto;padding:12px 16px 110px 16px;scroll-margin-top:72px}
+
+.grid{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
+.tile{background:#fff;border-radius:18px;padding:22px 10px;text-align:center;box-shadow:var(--shadow)}
+.tile .sym{font-size:34px;font-weight:800;color:#3e4246;letter-spacing:2px}
+.tile .rom{font-size:12px;color:var(--muted);margin-top:6px}
+
+/* 詳細頁／彈窗 */
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(243,252,253,.95);display:none;z-index:2000}
+.sheet{max-width:540px;margin:0 auto;padding:14px 16px 96px 16px;position:relative}
+
+/* 返回上一頁：層級提高，確保可點擊 */
+.backbtn{width:48px;height:48px;border-radius:16px;background:var(--teal);color:#fff;border:none;display:inline-flex;align-items:center;justify-content:center;box-shadow:var(--shadow);cursor:pointer;position:relative;z-index:2100;pointer-events:auto}
+
+/* 大母音框：改為圓角方形，並避免遮擋點擊 */
+.speed{margin-left:auto}
+.big{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:32px;margin:16px 0 24px 0;width:140px;height:140px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
+.big span{font-size:56px;color:#78bfc0;font-weight:800}
+
+/* 單字卡片 */
+.word{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:12px 16px;margin-top:14px;display:flex;align-items:center;gap:16px}
+.word .ko{font-weight:800;font-size:22px;color:#8ECFD0}
+.word .zh{font-size:14px;color:var(--ink);margin-bottom:4px}
+.word .desc{font-size:12px;color:var(--muted);letter-spacing:2px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;background:#fff;border:1px solid var(--line);cursor:pointer}
+
+/* Translate CTA feedback */
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+.pill.pulse{animation:pulse .35s ease-out}
+.pill.busy{opacity:.9;pointer-events:none}
+@keyframes flash{0%{background:#fffbe6}100%{background:#fff}}
+.card.flash{animation:flash .8s ease-out 1}
+
+/* Small spinner for loading */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:16px;height:16px;border:2px solid #e9eef2;border-top-color:#8ECFD0;border-radius:50%;display:inline-block;animation:spin .7s linear infinite;vertical-align:middle}
+
+/* Badge pulse for KO/EN click */
+.badge.pulse{animation:pulse .35s ease-out}
+
+/* 分頁籤 */
+.tabs{display:flex;gap:18px;justify-content:center;margin-top:6px}
+.tab{border:none;background:transparent;color:#7c8b8c;cursor:pointer;position:relative;padding:12px 4px;font-size:18px}
+.tab.active{color:#78bfc0}
+.tab + .tab::before{content:'';position:absolute;left:-9px;top:50%;transform:translateY(-50%);width:1px;height:14px;background:#cbd5d6}
+
+/* 列表卡 */
+.list{display:flex;flex-direction:column;gap:14px;margin-top:14px}
+
+/* ---- 新版卡片設計（參考 japanese-onigiri）---- */
+.card{
+  border-radius:18px;
+  box-shadow:var(--shadow);
+  background:#fff;
+  overflow:hidden;
+}
+
+.card-inner{
+  display:grid;
+  grid-template-columns:1fr;
+  grid-template-areas:
+    "ko"
+    "tr"
+    "btn";
+  align-items:start;
+}
+
+/* 韓文區域 */
+.card-inner .ko{ 
+  grid-area:ko; 
+  padding:24px 16px 8px 16px;
+  font-weight:800; 
+  line-height:1.4; 
+  white-space:normal; 
+  overflow-wrap:normal; 
+  word-break:normal; 
+}
+
+/* 翻譯區域 */
+.card-inner .trans{ 
+  grid-area:tr; 
+  padding:0 16px 8px 16px; 
+}
+.card-inner .trans .en{ 
+  font-size:13px; 
+  color:#5a6166; 
+  margin-top:6px; 
+}
+.card-inner .trans .zh{ 
+  font-size:12px; 
+  color:#8b8f94; 
+  margin-top:4px;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* 按鈕區域 */
+.card-inner .act{
+  grid-area:btn;
+  padding:0 16px 16px 16px;
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  align-items:center;
+}
+
+/* ---- 圓形按鈕樣式 ---- */
+.card-inner .act .pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  min-width:34px;
+  padding:0;
+  border-radius:50%;
+  border:1.5px solid var(--teal);
+  background:#F3FCFD;
+  color:var(--teal);
+  font-size:13px;
+  font-weight:600;
+  line-height:1;
+  box-shadow:var(--shadow);
+  cursor:pointer;
+}
+
+.star{cursor:pointer;width:20px;height:20px;display:inline-block}
+.star img{width:20px;height:20px;display:block;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%)}
+.star.on img{filter:none}
+
+/* ---- 舊版卡片樣式（向後相容）---- */
+.card.legacy{background:#fff;border-radius:18px;box-shadow:var(--shadow);padding:14px 16px;position:relative;overflow:hidden}
+.card.legacy .ko{font-weight:800;word-wrap:break-word;word-break:break-all;line-height:1.4;margin-bottom:6px}
+.card.legacy .en{font-size:13px;color:#5a6166;margin-top:6px;word-wrap:break-word;word-break:break-all;line-height:1.3}
+.card.legacy .zh{font-size:12px;color:#97a1a6;word-wrap:break-word;word-break:break-all;line-height:1.3;margin-bottom:8px}
+.badges{display:flex;gap:6px;align-items:center;justify-content:space-between;margin-top:8px}
+.badges .language-badges{display:flex;gap:6px}
+.badge{background:#f0fbfb;border:1px solid #d6efef;color:#6aa;padding:6px 8px;border-radius:999px;font-size:12px;cursor:pointer}
+
+/* 輸入框 */
+textarea{width:100%;min-height:120px;border:2px solid #cfe7e7;border-radius:14px;padding:12px;font-size:15px;background:#fff}
+
+/* 底部導覽列 */
+.tabbar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:3000}
+.tabbar .in{max-width:540px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.tabbar a{padding:12px 8px 24px;text-align:center;color:#9aa3a8;font-size:11px;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;line-height:1;min-height:72px}
+.tabbar a .ico{display:flex;align-items:center;justify-content:center;margin:0}
+.tabbar a.active{color:#8ECFD0}
+.tabbar a .ico{width:22px;height:22px}
+/* 顯示 <img> 並用濾鏡調整顏色，避免遮罩導致看不到 */
+.tabbar a .ico img{width:22px;height:22px;display:block;opacity:.9;filter:grayscale(100%) brightness(0) invert(70%)}
+.tabbar a.active .ico img{opacity:1;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%)}
+
+/* Mickey 開關樣式：無邊框、簡潔設計 */
+#mickey, #mickeyDetail{border:none;background:transparent;box-shadow:none;cursor:pointer;padding:8px 10px}
+#mickey img, #mickeyDetail img{display:block;width:28px;height:28px;opacity:.9;filter:grayscale(100%) brightness(0) invert(70%)}
+#mickey.on img, #mickeyDetail.on img{opacity:1;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%)}
+
+/* 詳細頁播放按鈕：icon 顏色為 #8ECFD0，按下短暫變 #FAD162 */
+.modal .btn{border:1px solid transparent;background:transparent;color:#8ECFD0}
+.modal .btn svg{display:block}
+.ink-amber{color:#FAD162!important}
+
+/* 收藏彈窗置中 - 統一樣式 */
+#pickFolder, #pickFolderH, #confirmDelete{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.3);
+  z-index:3000;
+}
+#pickFolder .sheet, #pickFolderH .sheet, #confirmDelete .sheet{
+  background:rgba(255,255,255,.98);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  padding:16px;
+  position:relative;
+  max-width:320px;
+  width:90%;
+}
+#pickFolder .title, #pickFolderH .title, #confirmDelete .title{color:#78bfc0!important}
+#pickFolder .pill, #pickFolderH .pill, #confirmDelete .pill{border-color:#e6ecef;color:#9aa3a8;background:#fff}
+#pickFolder .pill:active, #pickFolderH .pill:active, #confirmDelete .pill:active{background:#8ECFD0;color:#fff;border-color:#8ECFD0}
+
+/* 關閉按鈕 - 放大一倍 */
+#pickFolder .close, #pickFolderH .close, #confirmDelete .close{
+  position:absolute;
+  top:8px;
+  right:8px;
+  border:none;
+  background:transparent;
+  color:#9aa3a8;
+  cursor:pointer;
+  padding:8px;
+  border-radius:8px;
+  font-size:24px;
+  line-height:1;
+  width:40px;
+  height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#pickFolder .close:hover, #pickFolderH .close:hover, #confirmDelete .close:hover{
+  background:#f3f6f8;
+}
+
+/* 空狀態樣式 */
+.empty-state{
+  background:#fff;
+  border-radius:20px;
+  padding:32px 24px;
+  text-align:center;
+  box-shadow:var(--shadow);
+  margin:20px 0;
+}
+.empty-text{
+  font-size:18px;
+  font-weight:600;
+  color:var(--ink);
+  margin-bottom:8px;
+}
+.empty-subtext{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+/* ==== PWA iOS 鍵盤修復 ==== */
+input, textarea, [contenteditable] {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
+  
+  /* PWA專用：確保輸入框可見 */
+  position: relative !important;
+  z-index: 9999 !important;
+}
+
+/* 修復PWA中的transform問題 */
+body, html {
+  transform: none !important;
+  -webkit-transform: none !important;
+}
+
+/* PWA中的全屏遮罩問題 */
+.overlay, .backdrop, .modal-scrim {
+  pointer-events: none !important;
+}
+
+/* PWA專用：確保輸入時頁面不縮放 */
+input:focus, textarea:focus {
+  font-size: 16px !important; /* 防止iOS自動縮放 */
+}

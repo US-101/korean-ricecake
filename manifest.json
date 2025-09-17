@@ -1,0 +1,37 @@
+{
+  "name": "韓語年糕",
+  "short_name": "韓語年糕",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F3FCFD",
+  "theme_color": "#F3FCFD",
+  "icons": [
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "splash_screens": [
+    {
+      "src": "splash.png",
+      "sizes": "1284x2778",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "splash.png", 
+      "sizes": "1170x2532",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "splash.png",
+      "sizes": "750x1334", 
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}
