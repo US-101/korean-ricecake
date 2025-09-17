@@ -3,13 +3,13 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,ui-sa
 
 /* 頂列（固定在最上、層級最高） */
 .topbar{position:fixed;top:0;left:0;right:0;z-index:2000;background:var(--bg)}
-.topbar .bar{background:var(--bg);padding:14px 16px;border-bottom:1px solid var(--line)}
+.topbar .bar{background:var(--bg);padding:14px 16px}
 .topbar .title{text-align:center;margin:0;letter-spacing:0;color:#78bfc0;font-weight:700;display:flex;align-items:center;justify-content:center;min-height:44px}
 .topbar .title img{width:44px;height:44px;display:block;filter:invert(79%) sepia(14%) saturate(1036%) hue-rotate(130deg) brightness(92%) contrast(88%)}
 
 /* 次頂列（貼齊 topbar 下緣 72px，不再頂到最上面） */
 .appbar{position:sticky;top:72px;z-index:95;background:var(--bg)}
-.appbar .bar{background:var(--bg);padding:14px 16px;border-bottom:1px solid var(--line)}
+.appbar .bar{background:var(--bg);padding:14px 16px}
 .appbar .title{text-align:center;margin:0;letter-spacing:0;color:#78bfc0;font-weight:700;display:flex;align-items:center;justify-content:center;min-height:32px}
 .appbar .row{display:flex;align-items:center;gap:10px;justify-content:center;padding:12px 16px 6px 16px}
 
